@@ -9,37 +9,67 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  {
-    href: "https://www.instagram.com/maplewood_porchfest/",
-    label: "Instagram",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`
-  },
-  {
-    href: "https://www.facebook.com/maplewoodporchfest",
-    label: "Facebook",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`
-  },
-  {
-    href: "https://www.youtube.com/@maplewoodporchfest5068/videos",
-    label: "YouTube",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.94C18.88 4 12 4 12 4s-6.88 0-8.6.48A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 1.94C5.12 20 12 20 12 20s6.88 0 8.6-.48a2.78 2.78 0 0 0 1.94-1.94A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>`
-  },
+  { href: "https://www.instagram.com/maplewood_porchfest/", label: "Instagram", abbr: "IG" },
+  { href: "https://www.facebook.com/maplewoodporchfest",    label: "Facebook",  abbr: "FB" },
+  { href: "https://www.youtube.com/@maplewoodporchfest5068/videos", label: "YouTube", abbr: "YT" },
 ];
 ---
 
 <footer class="site-footer">
-  <div class="footer-top">
-    <div class="container footer-top-inner">
-      <!-- Branding -->
+
+  <!-- Top rule -->
+  <div class="footer-top-rule"></div>
+
+  <!-- Newsletter strip -->
+  <div class="footer-newsletter-strip">
+    <div class="container newsletter-inner">
+      <div class="newsletter-text">
+        <span class="label">Stay in the loop</span>
+        <p>Updates on performers, schedule, and rain dates — before everyone else.</p>
+      </div>
+      <form class="newsletter-form" action="#" method="post">
+        <label for="footer-email" class="sr-only">Email address</label>
+        <input
+          type="email"
+          id="footer-email"
+          name="email"
+          class="newsletter-input"
+          placeholder="your@email.com"
+          autocomplete="email"
+          required
+        />
+        <button type="submit" class="btn btn--primary newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-rule"></div>
+
+  <!-- Main footer body -->
+  <div class="footer-body">
+    <div class="container footer-grid">
+
+      <!-- Brand -->
       <div class="footer-brand">
-        <a href="/" class="footer-logo-text" aria-label="Maplewood Porchfest home">
-          Maplewood<br/><em>Porchfest</em>
+        <a href="/" class="footer-logo">
+          <span class="footer-logo-small">Maplewood</span>
+          <span class="footer-logo-large">Porchfest</span>
         </a>
-        <p class="footer-tagline">Free · All-volunteer · Commercial-free<br/>Labor Day Sunday · Hilton Neighborhood · Maplewood, NJ</p>
+        <p class="footer-description">
+          Free · All-volunteer · Commercial-free<br/>
+          Labor Day Sunday · Hilton Neighborhood<br/>
+          Maplewood, NJ
+        </p>
         <div class="footer-social">
           {socialLinks.map(s => (
-            <a href={s.href} class="social-link" aria-label={s.label} target="_blank" rel="noopener noreferrer">
-              <Fragment set:html={s.icon} />
+            <a
+              href={s.href}
+              class="social-tag"
+              aria-label={s.label}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {s.abbr}
             </a>
           ))}
         </div>
@@ -47,7 +77,7 @@ const socialLinks = [
 
       <!-- Nav -->
       <nav class="footer-nav" aria-label="Footer navigation">
-        <h4 class="footer-nav-heading">Pages</h4>
+        <span class="label footer-nav-label">Pages</span>
         <ul class="footer-nav-list">
           {navLinks.map(link => (
             <li><a href={link.href} class="footer-nav-link">{link.label}</a></li>
@@ -55,240 +85,281 @@ const socialLinks = [
         </ul>
       </nav>
 
-      <!-- Newsletter -->
-      <div class="footer-newsletter">
-        <h4 class="footer-nav-heading">Stay in the loop</h4>
-        <p>Get updates on performers, schedule, and events before the crowd.</p>
-        <form class="newsletter-form" action="#" method="post" aria-label="Newsletter signup">
-          <div class="newsletter-fields">
-            <label for="footer-email" class="sr-only">Email address</label>
-            <input
-              type="email"
-              id="footer-email"
-              name="email"
-              placeholder="your@email.com"
-              class="newsletter-input"
-              autocomplete="email"
-              required
-            />
-            <button type="submit" class="btn btn--gold newsletter-btn">Subscribe</button>
-          </div>
-          <p class="newsletter-disclaimer">No spam. Unsubscribe anytime.</p>
-        </form>
+      <!-- Partners -->
+      <div class="footer-partners">
+        <span class="label footer-nav-label">Presented by</span>
+        <a href="http://www.maplewoodcommunitymusic.org/" target="_blank" rel="noopener noreferrer" class="partner-link">
+          Maplewood Community Music
+        </a>
+
+        <span class="label footer-nav-label" style="margin-top: 1.5rem;">Supported by</span>
+        <a href="https://hnamaplewood.com/" target="_blank" rel="noopener noreferrer" class="partner-link">
+          Hilton Neighborhood Association
+        </a>
+
+        <span class="label footer-nav-label" style="margin-top: 1.5rem;">Donate</span>
+        <a href="https://givebutter.com/maplewoodporchfest" target="_blank" rel="noopener noreferrer" class="partner-link partner-link--cta">
+          givebutter.com/maplewoodporchfest →
+        </a>
       </div>
+
     </div>
   </div>
 
-  <div class="footer-bottom">
-    <div class="container footer-bottom-inner">
-      <p class="copyright">&copy; 2026 Maplewood Community Music</p>
-      <p class="footer-credits">
-        Photos credited to: John Munson, Sarah Fielding, Tom DeVita &amp; community volunteers
-      </p>
-      <div class="footer-partners">
-        <span>Presented by <a href="http://www.maplewoodcommunitymusic.org/" target="_blank" rel="noopener noreferrer">Maplewood Community Music</a></span>
-        <span>Supported by <a href="https://hnamaplewood.com/" target="_blank" rel="noopener noreferrer">Hilton Neighborhood Assoc.</a></span>
-      </div>
+  <div class="footer-rule"></div>
+
+  <!-- Colophon -->
+  <div class="footer-colophon">
+    <div class="container colophon-inner">
+      <p>&copy; 2026 Maplewood Community Music</p>
+      <p>Photos: John Munson · Tom Malee · George Burrus · Steve LeBlanc · Tracy Sham · community volunteers</p>
     </div>
   </div>
+
 </footer>
 
 <style>
 .site-footer {
-  background: var(--charcoal);
-  color: var(--cream);
+  background: var(--ink);
+  color: var(--paper);
   margin-top: auto;
 }
 
-.footer-top { padding: 4rem 0 3rem; }
-
-.footer-top-inner {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1.5fr;
-  gap: 3rem;
+.footer-top-rule {
+  height: 3px;
+  background: var(--red);
 }
 
-/* Brand */
-.footer-logo-text {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.4rem;
-  line-height: 1.2;
-  color: var(--cream);
-  text-decoration: none;
-  margin-bottom: .75rem;
-}
-.footer-logo-text em {
-  font-style: italic;
-  color: var(--gold-light);
-  font-size: 1.6rem;
+/* Newsletter strip */
+.footer-newsletter-strip {
+  background: var(--ink-mid);
+  padding: 2rem 0;
 }
 
-.footer-tagline {
-  font-size: .85rem;
-  color: rgba(250,246,238,.65);
-  line-height: 1.6;
-  margin-bottom: 1.25rem;
-  max-width: 100%;
-}
-
-.footer-social {
-  display: flex;
-  gap: .75rem;
-}
-
-.social-link {
+.newsletter-inner {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.08);
-  color: var(--cream);
-  transition: background 150ms, color 150ms, transform 150ms;
-}
-.social-link:hover {
-  background: var(--gold);
-  color: var(--charcoal);
-  transform: translateY(-2px);
-}
-.social-link svg { width: 18px; height: 18px; }
-
-/* Nav */
-.footer-nav-heading {
-  font-family: var(--font-display);
-  font-size: .85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--gold-light);
-  margin-bottom: 1rem;
+  gap: 3rem;
+  flex-wrap: wrap;
 }
 
-.footer-nav-list { display: flex; flex-direction: column; gap: .5rem; }
-
-.footer-nav-link {
-  color: rgba(250,246,238,.75);
-  font-size: .9rem;
-  text-decoration: none;
-  transition: color 150ms;
+.newsletter-text .label {
+  color: var(--yellow);
+  margin-bottom: .35rem;
+  display: block;
+  opacity: 1;
 }
-.footer-nav-link:hover { color: var(--cream); }
-
-/* Newsletter */
-.footer-newsletter p {
-  font-size: .9rem;
-  color: rgba(250,246,238,.75);
-  margin-bottom: 1rem;
+.newsletter-text p {
+  font-size: .88rem;
+  color: rgba(239,231,210,.6);
   max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-.newsletter-fields {
+.newsletter-form {
   display: flex;
-  gap: .5rem;
+  gap: 0;
+  flex: 1;
+  min-width: 280px;
 }
 
 .newsletter-input {
   flex: 1;
-  min-width: 0;
-  padding: .6rem 1rem;
-  border: 1.5px solid rgba(255,255,255,.2);
-  border-radius: 50px;
-  background: rgba(255,255,255,.07);
-  color: var(--cream);
+  padding: .6rem .9rem;
+  background: transparent;
+  border: 2px solid rgba(239,231,210,.25);
+  border-right: none;
+  color: var(--paper);
   font-family: var(--font-body);
   font-size: .9rem;
-  transition: border-color 150ms, background 150ms;
+  transition: border-color var(--transition);
 }
-.newsletter-input::placeholder { color: rgba(250,246,238,.4); }
+.newsletter-input::placeholder { color: rgba(239,231,210,.3); }
 .newsletter-input:focus {
   outline: none;
-  border-color: var(--gold);
-  background: rgba(255,255,255,.1);
+  border-color: var(--red);
 }
 
 .newsletter-btn {
   flex-shrink: 0;
-  padding: .6rem 1.25rem;
-  font-size: .85rem;
-  border-radius: 50px;
+  font-size: .78rem;
+  padding: .6rem 1.2rem;
 }
 
-.newsletter-disclaimer {
-  font-size: .75rem;
-  color: rgba(250,246,238,.4);
-  margin-top: .5rem;
+/* Footer rule */
+.footer-rule {
+  height: 1px;
+  background: rgba(239,231,210,.1);
+}
+
+/* Footer body */
+.footer-body { padding: 3rem 0; }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.4fr;
+  gap: 3rem;
+}
+
+/* Brand */
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  margin-bottom: 1.25rem;
+  line-height: 1;
+}
+
+.footer-logo-small {
+  font-family: var(--font-body);
+  font-size: .55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  color: rgba(239,231,210,.4);
+}
+
+.footer-logo-large {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: var(--paper);
+}
+
+.footer-description {
+  font-size: .82rem;
+  color: rgba(239,231,210,.45);
+  line-height: 1.7;
   max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-bottom: 1.25rem;
 }
 
-/* Bottom */
-.footer-bottom {
-  border-top: 1px solid rgba(255,255,255,.08);
-  padding: 1.25rem 0;
+.footer-social {
+  display: flex;
+  gap: .5rem;
 }
 
-.footer-bottom-inner {
+.social-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 28px;
+  border: 1.5px solid rgba(239,231,210,.2);
+  font-family: var(--font-body);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: rgba(239,231,210,.5);
+  text-decoration: none;
+  transition: border-color var(--transition), color var(--transition), background var(--transition);
+}
+.social-tag:hover {
+  border-color: var(--red);
+  color: var(--paper);
+  background: var(--red);
+}
+
+/* Nav */
+.footer-nav-label {
+  display: block;
+  color: rgba(239,231,210,.35);
+  margin-bottom: .9rem;
+}
+
+.footer-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.footer-nav-link {
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  color: rgba(239,231,210,.6);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.footer-nav-link:hover { color: var(--paper); }
+
+/* Partners */
+.footer-partners {
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-link {
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  color: rgba(239,231,210,.65);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(239,231,210,.2);
+  transition: color var(--transition), text-decoration-color var(--transition);
+  margin-bottom: .25rem;
+}
+.partner-link:hover {
+  color: var(--paper);
+  text-decoration-color: var(--red);
+}
+
+.partner-link--cta {
+  color: var(--yellow);
+  text-decoration-color: rgba(240,216,74,.3);
+}
+.partner-link--cta:hover {
+  color: var(--yellow);
+  text-decoration-color: var(--yellow);
+}
+
+/* Colophon */
+.footer-colophon { padding: 1.25rem 0; }
+
+.colophon-inner {
   display: flex;
   flex-wrap: wrap;
-  gap: .75rem 2rem;
-  align-items: center;
+  gap: .5rem 2rem;
   justify-content: space-between;
 }
 
-.copyright {
-  font-size: .8rem;
-  color: rgba(250,246,238,.5);
+.colophon-inner p {
+  font-size: .72rem;
+  color: rgba(239,231,210,.3);
   max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
-
-.footer-credits {
-  font-size: .8rem;
-  color: rgba(250,246,238,.4);
-  max-width: 100%;
-}
-
-.footer-partners {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: .8rem;
-  color: rgba(250,246,238,.5);
-}
-.footer-partners a {
-  color: var(--gold-light);
-  text-decoration: none;
-  transition: color 150ms;
-}
-.footer-partners a:hover { color: var(--gold); }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px;
   padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  clip: rect(0,0,0,0); border: 0;
 }
 
-/* Responsive */
 @media (max-width: 900px) {
-  .footer-top-inner {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
   .footer-brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 600px) {
-  .footer-top-inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .footer-bottom-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .5rem;
-  }
-  .newsletter-fields { flex-direction: column; }
-  .newsletter-btn { width: 100%; justify-content: center; }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .newsletter-inner { flex-direction: column; gap: 1.25rem; }
+  .newsletter-form { flex-direction: column; min-width: unset; }
+  .newsletter-input { border-right: 2px solid rgba(239,231,210,.25); }
+  .newsletter-input:focus { border-color: var(--red); }
+  .colophon-inner { flex-direction: column; gap: .35rem; }
 }
 </style>

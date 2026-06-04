@@ -9,35 +9,52 @@ const { title, subtitle, align = "left" } = Astro.props;
 ---
 
 <section class:list={["page-hero", `page-hero--${align}`]}>
+  <div class="page-hero-rule page-hero-rule--top"></div>
   <div class="container page-hero-inner">
+    <span class="page-hero-eyebrow label">Maplewood Porchfest · 2026</span>
     <h1 class="page-hero-title">{title}</h1>
     {subtitle && <p class="page-hero-subtitle">{subtitle}</p>}
     <slot />
   </div>
-  <div class="page-hero-wave" aria-hidden="true">
-    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="var(--cream)">
-      <path d="M0,60 C360,0 1080,60 1440,20 L1440,60 Z"/>
-    </svg>
-  </div>
+  <div class="page-hero-rule page-hero-rule--bottom"></div>
 </section>
 
 <style>
 .page-hero {
-  background: var(--green);
-  color: var(--cream);
-  padding: 8rem 0 4rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 7rem 0 4.5rem;
   position: relative;
   overflow: hidden;
 }
 
+/* Subtle halftone-like accent behind title */
 .page-hero::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 80% at 10% 100%, rgba(200,146,42,.15) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 90% 0%, rgba(200,146,42,.1) 0%, transparent 50%);
+  right: -5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 55%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(232,73,42,.08) 0%, transparent 70%);
   pointer-events: none;
+}
+
+.page-hero-rule--top {
+  position: absolute;
+  top: 64px; /* sits at bottom of header */
+  left: 0; right: 0;
+  height: 3px;
+  background: var(--red);
+}
+
+.page-hero-rule--bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 1px;
+  background: rgba(239,231,210,.12);
 }
 
 .page-hero-inner {
@@ -48,31 +65,33 @@ const { title, subtitle, align = "left" } = Astro.props;
 .page-hero--center .page-hero-inner { text-align: center; }
 .page-hero--center .page-hero-inner p { margin-inline: auto; }
 
+.page-hero-eyebrow {
+  display: block;
+  margin-bottom: 1rem;
+  color: rgba(239,231,210,.45);
+}
+
 .page-hero-title {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  color: var(--cream);
-  line-height: 1.1;
-  margin-bottom: .75rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  color: var(--paper);
+  line-height: .95;
   letter-spacing: -.02em;
+  margin-bottom: 1.25rem;
 }
 
 .page-hero-subtitle {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: rgba(250,246,238,.8);
-  max-width: 60ch;
-  line-height: 1.55;
+  font-family: var(--font-body);
+  font-size: clamp(.95rem, 1.8vw, 1.1rem);
+  color: rgba(239,231,210,.65);
+  max-width: 58ch;
+  line-height: 1.6;
+  font-weight: 400;
+  text-transform: none;
+  font-style: normal;
+  letter-spacing: 0;
 }
-
-/* Decorative wave at the bottom */
-.page-hero-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 60px;
-  line-height: 0;
-}
-.page-hero-wave svg { width: 100%; height: 100%; }
 </style>

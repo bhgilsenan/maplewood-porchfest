@@ -3,84 +3,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 
 const photos = [
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1S7A8932-final-FB+copy.jpg?format=1000w",
-    caption: "Performers light up a packed Hilton porch",
-    credit: "John Munson",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/7583f04f-c0fb-4a40-8321-ae78b484eabb/Honk-A-Photo-Tom_Melee.jpg?format=1000w",
-    caption: "The Honk Parade rolls through the Hilton neighborhood",
-    credit: "Tom Malee",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/eff7e5ba-c0ed-4fd2-8464-9d0de630c170/PhotobyGeorgeBurrus-4.jpg?format=1000w",
-    caption: "Crowds gather on the lawn for a porch performance",
-    credit: "George Burrus",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/ea4f9a23-fdb5-408f-96e7-d366184624a4/PhotobyScottK-5.jpg?format=1000w",
-    caption: "Musicians playing to an appreciative street crowd",
-    credit: "Scott K.",
-    year: 2023,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/4be9c2e8-d531-49f5-8d18-bc4a70623220/mikechoi-daughter-21.jpg?format=1000w",
-    caption: "A young Porchfest fan enjoys the music",
-    credit: "Community volunteer",
-    year: 2021,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/37d9c634-64c9-4e8d-aed6-ee4212ed4f0a/1S7A8730-FINAL-FB.jpg?format=1000w",
-    caption: "Full-swing performance at a shaded porch",
-    credit: "John Munson",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/01548231-a8ad-4e27-8043-a0c3cb60bd3d/1S7A8647-FINAL-2400PX-2.jpg?format=1000w",
-    caption: "Golden afternoon light on a porch performance",
-    credit: "John Munson",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/522e9323-7dab-4677-a219-b6a71882efee/1S7A8639-FINAL-2400PX.jpg?format=1000w",
-    caption: "Band bringing the energy to a backyard crowd",
-    credit: "John Munson",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/869e9de9-fddc-42d9-b418-e8c5f97c67cf/1S7A8816-Rites-of-Springfield-FINAL-2400-PX.jpg?format=1000w",
-    caption: "Rites of Springfield performing at Porchfest",
-    credit: "John Munson",
-    year: 2024,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/b3e6c527-7ba8-4cb1-adec-048c229aebb4/Steve+LeBlanc+-+IMG_2471.jpg?format=1000w",
-    caption: "Neighbor audience enjoying the street-side performance",
-    credit: "Steve LeBlanc",
-    year: 2023,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/52ff32a4-cb9e-4e2f-8ae0-cd67eaa6f342/LemonadeStand-2-PhotobyTracySham-px.jpg?format=1000w",
-    caption: "The lemonade stand in action on a warm Porchfest afternoon",
-    credit: "Tracy Sham",
-    year: 2022,
-  },
-  {
-    src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/d8093de0-8eab-4c4d-be1a-f062532e5f10/Porchresters+at+the+very+first+Maplewood+Porchfest+in+2017+-+Photo+%C2%A9+Tracy+Sham+Photography.jpg?format=1000w",
-    caption: "The Porchresters at the very first Maplewood Porchfest, 2017",
-    credit: "Tracy Sham Photography",
-    year: 2017,
-  },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1S7A8932-final-FB+copy.jpg?format=1000w",            caption: "Performers light up a packed Hilton porch",                             credit: "John Munson",       year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/7583f04f-c0fb-4a40-8321-ae78b484eabb/Honk-A-Photo-Tom_Melee.jpg?format=1000w", caption: "The Honk Parade rolls through the Hilton neighborhood", credit: "Tom Malee",          year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/eff7e5ba-c0ed-4fd2-8464-9d0de630c170/PhotobyGeorgeBurrus-4.jpg?format=1000w", caption: "Crowds gather on the lawn for a porch performance",    credit: "George Burrus",     year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/ea4f9a23-fdb5-408f-96e7-d366184624a4/PhotobyScottK-5.jpg?format=1000w",       caption: "Musicians playing to an appreciative street crowd",   credit: "Scott K.",          year: 2023 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/4be9c2e8-d531-49f5-8d18-bc4a70623220/mikechoi-daughter-21.jpg?format=1000w",  caption: "A young Porchfest fan enjoys the music",              credit: "Community volunteer", year: 2021 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/37d9c634-64c9-4e8d-aed6-ee4212ed4f0a/1S7A8730-FINAL-FB.jpg?format=1000w",    caption: "Full-swing performance at a shaded porch",            credit: "John Munson",       year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/01548231-a8ad-4e27-8043-a0c3cb60bd3d/1S7A8647-FINAL-2400PX-2.jpg?format=1000w", caption: "Golden afternoon light on a porch performance",      credit: "John Munson",       year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/522e9323-7dab-4677-a219-b6a71882efee/1S7A8639-FINAL-2400PX.jpg?format=1000w", caption: "Band bringing the energy to a backyard crowd",       credit: "John Munson",       year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/869e9de9-fddc-42d9-b418-e8c5f97c67cf/1S7A8816-Rites-of-Springfield-FINAL-2400-PX.jpg?format=1000w", caption: "Rites of Springfield at Porchfest", credit: "John Munson", year: 2024 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/b3e6c527-7ba8-4cb1-adec-048c229aebb4/Steve+LeBlanc+-+IMG_2471.jpg?format=1000w", caption: "Neighbors enjoying the street-side performance",      credit: "Steve LeBlanc",    year: 2023 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/52ff32a4-cb9e-4e2f-8ae0-cd67eaa6f342/LemonadeStand-2-PhotobyTracySham-px.jpg?format=1000w", caption: "The lemonade stand on a warm Porchfest afternoon", credit: "Tracy Sham", year: 2022 },
+  { src: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/d8093de0-8eab-4c4d-be1a-f062532e5f10/Porchresters+at+the+very+first+Maplewood+Porchfest+in+2017+-+Photo+%C2%A9+Tracy+Sham+Photography.jpg?format=1000w", caption: "The Porchresters at the very first Maplewood Porchfest, 2017", credit: "Tracy Sham Photography", year: 2017 },
 ];
 ---
 
 <BaseLayout
   title="Photos"
-  description="Browse photos from past Maplewood Porchfest events, captured by community photographers."
+  description="Browse photos from past Maplewood Porchfest events."
 >
 
   <PageHero
@@ -88,43 +28,39 @@ const photos = [
     subtitle="Nine years of music, porches, and community — captured by John Munson, Tom Malee, George Burrus, Steve LeBlanc, Tracy Sham, and community volunteers."
   />
 
-  <section class="section">
+  <section class="section section--ink">
     <div class="container">
-
       <div class="photo-grid">
-        {photos.map((photo) => (
+        {photos.map((photo, i) => (
           <figure class="photo-card">
             <div class="photo-img-wrap">
               <img
                 src={photo.src}
                 alt={photo.caption}
                 class="photo-img"
-                loading="lazy"
+                loading={i < 6 ? "eager" : "lazy"}
               />
             </div>
-            <figcaption class="photo-caption">
+            <figcaption class="photo-cap">
               <p class="photo-desc">{photo.caption}</p>
-              <p class="photo-meta">
-                <span class="photo-year">{photo.year}</span>
-                <span class="photo-credit">Photo: {photo.credit}</span>
-              </p>
+              <div class="photo-meta">
+                <span class="photo-year label">{photo.year}</span>
+                <span class="photo-credit">{photo.credit}</span>
+              </div>
             </figcaption>
           </figure>
         ))}
       </div>
 
-      <div class="photo-credits-block">
-        <h3>Photo Credits</h3>
+      <div class="credits-block">
+        <span class="label" style="color: rgba(239,231,210,.35); opacity: 1; margin-bottom: .75rem; display: block;">Photo Credits</span>
         <p>
-          Photography by <strong>John Munson</strong>, <strong>Tom Malee</strong>,
-          <strong>George Burrus</strong>, <strong>Scott K.</strong>, <strong>Steve LeBlanc</strong>,
-          <strong>Tracy Sham Photography</strong>, and Maplewood Porchfest community volunteers.
-          All images &copy; their respective photographers. Used with permission.
-          To submit photos or inquire about usage rights, please
-          <a href="/contact" class="text-link">contact us</a>.
+          Photography by John Munson · Tom Malee · George Burrus · Scott K. ·
+          Steve LeBlanc · Tracy Sham Photography · community volunteers.
+          All images © their respective photographers. Used with permission.
+          To submit photos, <a href="/contact" class="credits-link">contact us</a>.
         </p>
       </div>
-
     </div>
   </section>
 
@@ -134,25 +70,22 @@ const photos = [
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  gap: 2px;
+  margin-bottom: 3rem;
 }
 
 .photo-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
+  background: var(--ink-mid);
+  display: flex;
+  flex-direction: column;
+  position: relative;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition), transform var(--transition);
-}
-.photo-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-3px) scale(1.01);
 }
 
 .photo-img-wrap {
   aspect-ratio: 4/3;
   overflow: hidden;
-  background: var(--cream-dark);
+  background: var(--ink-raise);
 }
 
 .photo-img {
@@ -160,84 +93,84 @@ const photos = [
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 350ms ease;
+  filter: saturate(.85) contrast(1.05);
+  transition: transform 400ms ease, filter 300ms ease;
 }
 
 .photo-card:hover .photo-img {
   transform: scale(1.04);
+  filter: saturate(1) contrast(1.02);
 }
 
-.photo-caption {
-  padding: .75rem 1rem;
+.photo-cap {
+  padding: .85rem 1rem;
+  border-top: 1px solid rgba(239,231,210,.08);
 }
 
 .photo-desc {
-  font-size: .85rem;
-  color: var(--charcoal);
+  font-size: .82rem;
+  color: rgba(239,231,210,.7);
   margin-bottom: .4rem;
   line-height: 1.4;
   max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .photo-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 100%;
+  gap: .5rem;
 }
 
 .photo-year {
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--gold-dark);
-  background: var(--cream-dark);
-  padding: .15rem .5rem;
-  border-radius: 50px;
+  color: var(--red);
+  opacity: 1;
 }
 
 .photo-credit {
-  font-size: .75rem;
-  color: var(--gray-light);
+  font-size: .7rem;
+  color: rgba(239,231,210,.35);
+  font-family: var(--font-body);
+  font-weight: 400;
   font-style: italic;
 }
 
-.photo-credits-block {
-  margin-top: 3rem;
-  padding: 2rem;
-  background: var(--cream-dark);
-  border-radius: var(--radius-lg);
-  border-left: 4px solid var(--gold);
+/* Credits block */
+.credits-block {
+  border-top: 1px solid rgba(239,231,210,.1);
+  padding-top: 2rem;
 }
 
-.photo-credits-block h3 {
-  font-size: 1.1rem;
-  margin-bottom: .75rem;
+.credits-block p {
+  font-size: .82rem;
+  color: rgba(239,231,210,.4);
+  max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-.photo-credits-block p {
-  font-size: .9rem;
-  color: var(--gray);
-  max-width: 70ch;
-}
-
-.text-link {
-  color: var(--green);
+.credits-link {
+  color: var(--yellow);
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-weight: 600;
 }
-.text-link:hover { color: var(--green-light); }
 
 @media (max-width: 900px) {
   .photo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 600px) {
-  .photo-grid { grid-template-columns: 1fr; }
+@media (max-width: 520px) {
+  .photo-grid { grid-template-columns: 1fr; gap: 1px; }
 }
 
 @media print {
   .photo-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem; }
-  .photo-card:hover { transform: none; box-shadow: none; }
+  .photo-img { filter: none; }
 }
 </style>

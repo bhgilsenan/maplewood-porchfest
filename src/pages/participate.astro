@@ -4,47 +4,59 @@ import PageHero from "../components/PageHero.astro";
 
 const categories = [
   {
+    num: "01",
     icon: "🏡",
-    title: "Hilton Porch Signup",
-    description:
-      "Hilton neighbors, lend us your porch, front steps, stoop, yard, or driveway. Performers will be matched to your space based on size and suitability. You don't need to do anything except be a gracious host — we handle the rest.",
+    title: "Porch",
+    fullTitle: "Hilton Porch Signup",
+    description: "Hilton neighbors, lend us your porch, front steps, stoop, yard, or driveway. We match performers to your space. You just need to show up and be a gracious host.",
     details: [
       "Must be located in the Hilton neighborhood of Maplewood",
-      "We'll match you with one or more performers",
-      "You're welcome to set out chairs or blankets for guests",
-      "No amplification required — we bring the gear",
+      "We match you with one or more performers",
+      "No amplification required — we handle sound",
+      "Chairs and blankets for guests are a nice touch",
     ],
     ctaLabel: "Sign Up Your Porch",
-    color: "green",
+    accent: "sage",
   },
   {
+    num: "02",
     icon: "🎤",
-    title: "Performer Signup",
-    description:
-      "Musicians, DJs, comedians, poets, dancers — perform to an appreciative community audience. This is a pass-the-hat event: there's no performance fee, but you keep everything in the hat.",
+    title: "Perform",
+    fullTitle: "Performer Signup",
+    description: "Musicians, DJs, comedians, poets, dancers — perform to an appreciative community audience. Pass-the-hat: no fee, but you keep everything in the hat.",
     details: [
-      "Must perform a continuous set of at least 45 minutes",
-      "All genres welcome — from classical to funk to hip-hop",
-      "We'll provide a porch assignment and basic sound support",
+      "Minimum 45-minute continuous set required",
+      "All genres welcome — classical to hip-hop",
+      "Basic sound support provided",
       "Must be able to perform outdoors in summer weather",
     ],
     ctaLabel: "Sign Up to Perform",
-    color: "gold",
+    accent: "red",
   },
   {
+    num: "03",
     icon: "🍋",
-    title: "Lemonade Stand & Volunteer",
-    description:
-      "Help make Porchfest happen! Run a lemonade stand along the route, volunteer during the event, or march in the Honk Parade at noon. No experience required — just enthusiasm.",
+    title: "Volunteer",
+    fullTitle: "Lemonade Stand & Volunteer",
+    description: "Help make Porchfest happen. Run a lemonade stand along the route, volunteer on event day, or march in the Honk Parade at noon. No experience needed.",
     details: [
-      "Volunteer shifts: event day setup, during-event support, and cleanup",
-      "Lemonade stands: we provide the stand, you provide the fun",
-      "Honk Parade: gather at DeHart Community Center at 12 noon",
-      "All ages welcome for volunteering",
+      "Event day setup, support, and cleanup shifts",
+      "Lemonade stand: we provide the stand",
+      "Honk Parade: DeHart Community Center, 12 noon",
+      "All ages welcome",
     ],
     ctaLabel: "Sign Up to Volunteer",
-    color: "coral",
+    accent: "yellow",
   },
+];
+
+const faqs = [
+  { q: "Is there a cost to participate?", a: "No. Porchfest is entirely free — to attend, to perform, and to volunteer. Performers pass the hat; tips go directly to the artists." },
+  { q: "Do I need to be a professional musician?", a: "Absolutely not. We welcome performers of all skill levels. Porchfest is about community, not credentials." },
+  { q: "What if it rains?", a: "We shift to the rain date: Monday, September 7th. Watch our Instagram and Facebook for updates." },
+  { q: "Can I perform solo?", a: "Yes — solos, duos, trios, full bands. The 45-minute minimum applies to everyone." },
+  { q: "What neighborhoods can host a porch?", a: "Porchfest is in the Hilton neighborhood of Maplewood. Include your address in the signup if you're unsure." },
+  { q: "How are performers matched to porches?", a: "Organizers hand-match by musical style, porch size, and acoustics. Assignments go out mid-August." },
 ];
 ---
 
@@ -55,48 +67,54 @@ const categories = [
 
   <PageHero
     title="Participate"
-    subtitle="Lend your porch. Share your music. Volunteer your afternoon. There are so many ways to be part of Porchfest."
+    subtitle="There are three ways in. Pick one — or all three."
   />
 
-  <!-- STATUS BANNER -->
-  <div class="status-banner" role="alert" aria-live="polite">
-    <div class="container status-banner-inner">
-      <span class="status-icon" aria-hidden="true">🗓️</span>
-      <p>
-        <strong>Registration opens mid-June.</strong>
-        Check back soon — all signup forms will be active by June 15, 2026.
-      </p>
+  <!-- Status banner -->
+  <div class="status-banner">
+    <div class="container status-inner">
+      <span class="label" style="color: var(--yellow); opacity: 1;">Registration</span>
+      <p>All signup forms open mid-June 2026. Check back soon — or follow <a href="https://www.instagram.com/maplewood_porchfest/" target="_blank" rel="noopener noreferrer" class="banner-link">@maplewood_porchfest</a> for the announcement.</p>
     </div>
   </div>
 
-  <!-- CATEGORIES -->
-  <section class="section">
+  <!-- Participation options -->
+  <section class="section section--paper">
     <div class="container">
-      <div class="divider"></div>
-      <h2 class="section-heading">How to participate</h2>
-      <div class="category-grid">
-        {categories.map((cat) => (
-          <div class:list={["category-card", `category-card--${cat.color}`]}>
-            <div class="category-icon">{cat.icon}</div>
-            <h3 class="category-title">{cat.title}</h3>
-            <p class="category-desc">{cat.description}</p>
-            <ul class="category-details">
-              {cat.details.map((d) => (
+      <div class="categories-grid">
+        {categories.map(cat => (
+          <div class:list={["cat-card", `cat-card--${cat.accent}`]}>
+            <div class="cat-header">
+              <span class="cat-num label">{cat.num}</span>
+              <span class="cat-icon">{cat.icon}</span>
+            </div>
+            <h2 class="cat-title">{cat.title}</h2>
+            <p class="cat-full-title">{cat.fullTitle}</p>
+            <div class="cat-rule"></div>
+            <p class="cat-desc">{cat.description}</p>
+            <ul class="cat-details">
+              {cat.details.map(d => (
                 <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="detail-marker" aria-hidden="true">—</span>
                   {d}
                 </li>
               ))}
             </ul>
-            <button
-              class:list={["btn", cat.color === "gold" ? "btn--gold" : cat.color === "coral" ? "btn--primary" : "btn--green", "category-cta"]}
-              disabled
-              aria-label={`${cat.ctaLabel} — opens mid-June`}
-              title="Registration opens mid-June"
-            >
-              {cat.ctaLabel}
-            </button>
-            <p class="category-cta-note">Opens mid-June</p>
+            <div class="cat-footer">
+              <button
+                class:list={[
+                  "btn",
+                  cat.accent === "red" ? "btn--primary" :
+                  cat.accent === "yellow" ? "btn--yellow" : "btn--sage",
+                  "cat-cta"
+                ]}
+                disabled
+                title="Registration opens mid-June"
+              >
+                {cat.ctaLabel}
+              </button>
+              <span class="cat-cta-note label">Opens mid-June</span>
+            </div>
           </div>
         ))}
       </div>
@@ -104,163 +122,242 @@ const categories = [
   </section>
 
   <!-- FAQ -->
-  <section class="section section--cream-dark faq-section">
-    <div class="container faq-inner">
-      <div class="divider"></div>
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4>Is there a cost to participate?</h4>
-          <p>No. Porchfest is entirely free — to attend, to perform, and to volunteer. Performers pass the hat; tips go directly to the artists.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Do I need to be a professional musician?</h4>
-          <p>Absolutely not. We welcome performers of all skill levels. Porchfest is about community, not credentials.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What if it rains?</h4>
-          <p>If rain is forecast, we'll shift to the rain date: Monday, September 7th. We'll announce changes via Instagram and Facebook.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Can I perform solo?</h4>
-          <p>Yes — solo artists, duos, trios, and full bands are all welcome. The 45-minute minimum set applies to all performers.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What neighborhoods are eligible for porch hosting?</h4>
-          <p>Porchfest takes place in the Hilton neighborhood of Maplewood. If you're unsure whether your address qualifies, include your address in the signup form.</p>
-        </div>
-        <div class="faq-item">
-          <h4>How are performers matched to porches?</h4>
-          <p>Organizers hand-match performers to porches based on musical style, porch size, and acoustics. You'll receive your assignment by mid-August.</p>
-        </div>
+  <section class="section section--ink">
+    <div class="container faq-layout">
+      <div class="faq-left">
+        <span class="eyebrow" style="color: var(--yellow); opacity: 1;">FAQ</span>
+        <h2>Questions</h2>
+      </div>
+      <div class="faq-right">
+        {faqs.map((item, i) => (
+          <div class="faq-item">
+            <div class="faq-q-row">
+              <span class="faq-num label">{String(i + 1).padStart(2, '0')}</span>
+              <h4 class="faq-q">{item.q}</h4>
+            </div>
+            <p class="faq-a">{item.a}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- CLOSING CTA -->
-  <section class="section section--dark">
+  <!-- CTA -->
+  <section class="section section--red" style="padding-block: 3rem;">
     <div class="container closing-cta">
-      <h2 style="color: var(--cream);">Questions?</h2>
-      <p style="color: rgba(250,246,238,.75); max-width: 50ch; margin-top: .75rem;">
-        Can't find what you're looking for? Reach out via the contact page —
-        we try to respond within 48 hours.
-      </p>
-      <a href="/contact" class="btn btn--gold" style="margin-top: 1.5rem;">Get in Touch</a>
+      <h2>Still have questions?</h2>
+      <p>Reach out via the contact page. We respond within 48 hours.</p>
+      <a href="/contact" class="btn btn--outline-dark">Get in Touch</a>
     </div>
   </section>
 
 </BaseLayout>
 
 <style>
-/* Status Banner */
+/* Status banner */
 .status-banner {
-  background: var(--gold);
-  padding: 1rem 0;
+  background: var(--ink-mid);
+  border-bottom: 1px solid rgba(239,231,210,.1);
+  padding: 1.1rem 0;
 }
-.status-banner-inner {
+.status-inner {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: baseline;
+  gap: 1.25rem;
+  flex-wrap: wrap;
 }
-.status-icon { font-size: 1.25rem; flex-shrink: 0; }
-.status-banner p { font-size: .95rem; max-width: 100%; color: var(--charcoal); }
+.status-inner p {
+  font-size: .88rem;
+  color: rgba(239,231,210,.65);
+  max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.banner-link {
+  color: var(--yellow);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 700;
+}
 
-/* Section heading */
-.section-heading { margin-bottom: 2.5rem; }
-
-/* Category Grid */
-.category-grid {
+/* Categories */
+.categories-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  align-items: start;
+  border: 2px solid var(--ink);
 }
 
-.category-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 2.25rem 2rem;
-  box-shadow: var(--shadow-sm);
+.cat-card {
+  padding: 2.5rem 2rem;
+  border-right: 2px solid var(--ink);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border-top: 5px solid var(--gold);
-  transition: box-shadow var(--transition), transform var(--transition);
 }
-.category-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+.cat-card:last-child { border-right: none; }
+
+.cat-card--red   { background: var(--paper); }
+.cat-card--sage  { background: var(--paper-mid); }
+.cat-card--yellow { background: var(--paper); }
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.category-card--green { border-top-color: var(--green); }
-.category-card--gold  { border-top-color: var(--gold); }
-.category-card--coral { border-top-color: var(--coral); }
+.cat-num { color: rgba(12,11,9,.3); opacity: 1; }
+.cat-icon { font-size: 2rem; }
 
-.category-icon { font-size: 2.5rem; }
-.category-title { font-size: 1.3rem; }
-.category-desc { color: var(--gray); font-size: .95rem; max-width: 100%; }
+.cat-title {
+  font-size: clamp(3rem, 5vw, 4rem);
+  color: var(--ink);
+  line-height: .9;
+  margin-bottom: -.5rem;
+}
 
-.category-details {
-  list-style: none;
+.cat-full-title {
+  font-family: var(--font-body);
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: rgba(12,11,9,.45);
+  max-width: 100%;
+  font-style: normal;
+}
+
+.cat-rule {
+  height: 2px;
+  width: 32px;
+}
+.cat-card--red   .cat-rule { background: var(--red); }
+.cat-card--sage  .cat-rule { background: var(--sage); }
+.cat-card--yellow .cat-rule { background: var(--yellow-dark); }
+
+.cat-desc {
+  color: rgba(12,11,9,.7);
+  font-size: .9rem;
+  max-width: 100%;
+}
+
+.cat-details {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: .6rem;
-  flex: 1;
+  gap: .55rem;
 }
 
-.category-details li {
+.cat-details li {
   display: flex;
   gap: .6rem;
-  font-size: .88rem;
-  color: var(--charcoal);
-  align-items: flex-start;
+  font-size: .83rem;
+  color: rgba(12,11,9,.65);
+  line-height: 1.4;
 }
 
-.category-details li svg {
+.detail-marker {
+  color: rgba(12,11,9,.3);
   flex-shrink: 0;
-  color: var(--green);
-  margin-top: 2px;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
-.category-card--gold .category-details li svg { color: var(--gold-dark); }
-.category-card--coral .category-details li svg { color: var(--coral); }
 
-.category-cta {
+.cat-footer {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
   margin-top: .5rem;
+}
+
+.cat-cta {
+  opacity: .5;
+  cursor: not-allowed;
   width: 100%;
   justify-content: center;
-  opacity: .55;
-  cursor: not-allowed;
 }
-.category-cta:hover { transform: none !important; }
+.cat-cta:hover { transform: none; }
 
-.category-cta-note {
+.cat-cta-note {
+  color: rgba(12,11,9,.35);
   text-align: center;
-  font-size: .8rem;
-  color: var(--gray-light);
-  margin-top: -.5rem;
+  opacity: 1;
 }
 
 /* FAQ */
-.faq-inner { max-width: 900px; }
-.faq-inner h2 { margin-bottom: 2rem; }
-.faq-grid {
+.faq-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 2fr;
+  gap: 5rem;
+  align-items: start;
 }
-.faq-item h4 {
-  font-size: 1rem;
-  margin-bottom: .5rem;
-  color: var(--charcoal);
+
+.faq-left h2 { line-height: .9; margin-top: .4rem; }
+
+.faq-right {
+  display: flex;
+  flex-direction: column;
 }
-.faq-item p { font-size: .9rem; color: var(--gray); max-width: 100%; }
+
+.faq-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(239,231,210,.1);
+}
+.faq-item:first-child { border-top: 1px solid rgba(239,231,210,.1); }
+
+.faq-q-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: .6rem;
+}
+.faq-num { color: rgba(239,231,210,.3); opacity: 1; }
+.faq-q {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-style: normal;
+  font-size: .95rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--paper);
+}
+.faq-a {
+  font-size: .88rem;
+  color: rgba(239,231,210,.6);
+  padding-left: calc(1.5rem + .7rem);
+  max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
 
 /* Closing CTA */
-.closing-cta { text-align: center; }
-.closing-cta p { margin-inline: auto; }
+.closing-cta {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.closing-cta h2 { color: var(--ink); flex-shrink: 0; }
+.closing-cta p {
+  color: rgba(12,11,9,.65);
+  flex: 1;
+  min-width: 200px;
+  max-width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
 
-/* Responsive */
 @media (max-width: 900px) {
-  .category-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-  .faq-grid { grid-template-columns: 1fr; }
+  .categories-grid { grid-template-columns: 1fr; border-bottom: none; }
+  .cat-card { border-right: none; border-bottom: 2px solid var(--ink); }
+  .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .faq-left { display: flex; align-items: baseline; gap: 1.5rem; }
 }
 </style>
