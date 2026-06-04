@@ -1,0 +1,78 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  align?: "left" | "center";
+}
+
+const { title, subtitle, align = "left" } = Astro.props;
+---
+
+<section class:list={["page-hero", `page-hero--${align}`]}>
+  <div class="container page-hero-inner">
+    <h1 class="page-hero-title">{title}</h1>
+    {subtitle && <p class="page-hero-subtitle">{subtitle}</p>}
+    <slot />
+  </div>
+  <div class="page-hero-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="var(--cream)">
+      <path d="M0,60 C360,0 1080,60 1440,20 L1440,60 Z"/>
+    </svg>
+  </div>
+</section>
+
+<style>
+.page-hero {
+  background: var(--green);
+  color: var(--cream);
+  padding: 8rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 10% 100%, rgba(200,146,42,.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 90% 0%, rgba(200,146,42,.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.page-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.page-hero--center .page-hero-inner { text-align: center; }
+.page-hero--center .page-hero-inner p { margin-inline: auto; }
+
+.page-hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: .75rem;
+  letter-spacing: -.02em;
+}
+
+.page-hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: rgba(250,246,238,.8);
+  max-width: 60ch;
+  line-height: 1.55;
+}
+
+/* Decorative wave at the bottom */
+.page-hero-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  line-height: 0;
+}
+.page-hero-wave svg { width: 100%; height: 100%; }
+</style>

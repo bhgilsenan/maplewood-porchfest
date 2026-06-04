@@ -1,0 +1,286 @@
+/* ============================================
+   MAPLEWOOD PORCHFEST — GLOBAL STYLES
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap');
+
+/* --- CUSTOM PROPERTIES --- */
+:root {
+  --gold:    #C8922A;
+  --gold-light: #E8B85A;
+  --gold-dark:  #9E7120;
+  --green:   #2C5F2E;
+  --green-light: #3D7A40;
+  --cream:   #FAF6EE;
+  --cream-dark: #F0E8D6;
+  --coral:   #C94A2E;
+  --coral-dark: #A33822;
+  --charcoal: #1C1A17;
+  --gray:    #5A5550;
+  --gray-light: #9E9890;
+  --white:   #FFFFFF;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  --max-width: 1200px;
+  --section-gap: 5rem;
+  --radius: 8px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 4px rgba(28,26,23,.08);
+  --shadow-md: 0 4px 16px rgba(28,26,23,.12);
+  --shadow-lg: 0 8px 32px rgba(28,26,23,.16);
+
+  --transition: 200ms ease;
+}
+
+/* --- RESET & BASE --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--charcoal);
+  background: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, video { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--charcoal);
+}
+
+h1 { font-size: clamp(2.4rem, 6vw, 4.5rem); }
+h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.3rem, 2.5vw, 1.9rem); }
+h4 { font-size: 1.2rem; }
+
+p { max-width: 68ch; }
+
+/* --- LAYOUT UTILITIES --- */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.section {
+  padding-block: var(--section-gap);
+}
+
+.section--dark {
+  background: var(--green);
+  color: var(--cream);
+}
+.section--dark h1,
+.section--dark h2,
+.section--dark h3,
+.section--dark h4 { color: var(--cream); }
+
+.section--gold {
+  background: var(--gold);
+  color: var(--charcoal);
+}
+
+.section--cream-dark {
+  background: var(--cream-dark);
+}
+
+.section--charcoal {
+  background: var(--charcoal);
+  color: var(--cream);
+}
+.section--charcoal h1,
+.section--charcoal h2,
+.section--charcoal h3,
+.section--charcoal h4 { color: var(--cream); }
+
+/* --- BUTTONS --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .75rem 1.75rem;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition), transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn--primary {
+  background: var(--coral);
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(201,74,46,.3);
+}
+.btn--primary:hover {
+  background: var(--coral-dark);
+  box-shadow: 0 4px 16px rgba(201,74,46,.4);
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,.7);
+}
+.btn--secondary:hover {
+  background: rgba(255,255,255,.15);
+  border-color: var(--white);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--coral);
+  border: 2px solid var(--coral);
+}
+.btn--outline:hover {
+  background: var(--coral);
+  color: var(--white);
+}
+
+.btn--gold {
+  background: var(--gold);
+  color: var(--charcoal);
+  font-weight: 700;
+}
+.btn--gold:hover {
+  background: var(--gold-dark);
+  transform: translateY(-1px);
+}
+
+.btn--green {
+  background: var(--green);
+  color: var(--white);
+}
+.btn--green:hover {
+  background: var(--green-light);
+  transform: translateY(-1px);
+}
+
+/* --- GENRE PILLS --- */
+.genre-pill {
+  display: inline-block;
+  padding: .2rem .75rem;
+  border-radius: 50px;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--cream-dark);
+  color: var(--charcoal);
+  border: 1px solid var(--cream-dark);
+}
+
+.genre-pill[data-genre="Indie Rock"]   { background: #EDE0FF; color: #4A1080; border-color: #CDB0F0; }
+.genre-pill[data-genre="Folk"]         { background: #FFF0D6; color: #7A4800; border-color: #F0CC80; }
+.genre-pill[data-genre="Jazz"]         { background: #D6F0FF; color: #00427A; border-color: #80CCEE; }
+.genre-pill[data-genre="Blues"]        { background: #D6E4FF; color: #002A7A; border-color: #80AAEE; }
+.genre-pill[data-genre="Classical"]    { background: #FFEEDE; color: #7A2800; border-color: #F0AA80; }
+.genre-pill[data-genre="Funk"]         { background: #FFEDD6; color: #7A3200; border-color: #F0A860; }
+.genre-pill[data-genre="Latin"]        { background: #FFDED6; color: #7A1800; border-color: #F09080; }
+.genre-pill[data-genre="Kids/Family"]  { background: #D6FFE4; color: #007A30; border-color: #80F0B0; }
+
+/* --- FORMS --- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: .9rem;
+  color: var(--charcoal);
+}
+
+.form-control {
+  padding: .7rem 1rem;
+  border: 2px solid var(--cream-dark);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--charcoal);
+  background: var(--white);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(200,146,42,.2);
+}
+
+textarea.form-control { resize: vertical; min-height: 130px; }
+
+/* --- CARDS --- */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* --- DIVIDERS --- */
+.divider {
+  width: 60px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-block: 1.25rem;
+}
+
+/* --- SKIP LINK --- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: .5rem 1rem;
+  background: var(--coral);
+  color: var(--white);
+  font-weight: 600;
+  border-radius: var(--radius);
+  z-index: 9999;
+  transition: top var(--transition);
+}
+.skip-link:focus { top: 1rem; }
+
+/* --- PRINT --- */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; color: black; font-size: 12pt; }
+  a { color: black; }
+}

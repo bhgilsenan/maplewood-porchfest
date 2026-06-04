@@ -1,0 +1,239 @@
+---
+const navLinks = [
+  { href: "/",          label: "Home" },
+  { href: "/participate", label: "Participate" },
+  { href: "/schedule",  label: "Schedule" },
+  { href: "/#about",    label: "About" },
+  { href: "/photos",    label: "Photos" },
+  { href: "/contact",   label: "Contact" },
+];
+
+const pathname = Astro.url.pathname;
+function isActive(href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
+---
+
+<header class="site-header" id="site-header">
+  <div class="header-inner container">
+    <a href="/" class="header-logo" aria-label="Maplewood Porchfest home">
+      <span class="logo-text">Maplewood<br/><em>Porchfest</em></span>
+    </a>
+
+    <nav class="header-nav" id="header-nav" aria-label="Main navigation">
+      <ul class="nav-list">
+        {navLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class:list={["nav-link", { "nav-link--active": isActive(link.href) }]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      class="hamburger"
+      id="hamburger"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+      aria-controls="header-nav"
+    >
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById("hamburger")!;
+  const nav = document.getElementById("header-nav")!;
+  const header = document.getElementById("site-header")!;
+
+  btn.addEventListener("click", () => {
+    const open = nav.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", String(open));
+    btn.classList.toggle("is-open", open);
+    document.body.classList.toggle("nav-open", open);
+  });
+
+  // close on outside click
+  document.addEventListener("click", (e) => {
+    if (!header.contains(e.target as Node) && nav.classList.contains("is-open")) {
+      nav.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
+      btn.classList.remove("is-open");
+      document.body.classList.remove("nav-open");
+    }
+  });
+
+  // close on nav link click (mobile)
+  nav.querySelectorAll(".nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
+      btn.classList.remove("is-open");
+      document.body.classList.remove("nav-open");
+    });
+  });
+
+  // add scrolled class
+  window.addEventListener("scroll", () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 20);
+  }, { passive: true });
+</script>
+
+<style>
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--green);
+  transition: box-shadow 200ms ease, background 200ms ease;
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 2px 16px rgba(0,0,0,.25);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 1.5rem;
+}
+
+/* Logo */
+.header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  color: var(--cream);
+  letter-spacing: -.01em;
+}
+
+.logo-text em {
+  font-style: italic;
+  color: var(--gold-light);
+  font-size: 1.3rem;
+}
+
+/* Nav */
+.header-nav { display: flex; }
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+.nav-link {
+  display: block;
+  padding: .4rem .75rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: .92rem;
+  color: rgba(250,246,238,.85);
+  border-radius: 6px;
+  transition: color 150ms, background 150ms;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link--active {
+  color: var(--cream);
+  background: rgba(255,255,255,.12);
+}
+
+.nav-link--active {
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 150ms;
+}
+.hamburger:hover { background: rgba(255,255,255,.1); }
+
+.hamburger-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--cream);
+  border-radius: 2px;
+  transition: transform 200ms, opacity 200ms;
+  transform-origin: center;
+}
+
+.hamburger.is-open .hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.is-open .hamburger-bar:nth-child(2) { opacity: 0; }
+.hamburger.is-open .hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+
+  .header-nav {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: var(--green);
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding: 1rem 1.5rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  }
+
+  .header-nav.is-open { display: flex; }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .25rem;
+    width: 100%;
+  }
+
+  .nav-link {
+    font-size: 1.05rem;
+    padding: .65rem 1rem;
+  }
+}
+</style>

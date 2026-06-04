@@ -1,0 +1,201 @@
+{
+  "event": {
+    "date": "Sunday, September 6, 2026",
+    "rain_date": "Monday, September 7, 2026",
+    "hours": "1:00 PM – 5:00 PM",
+    "honk_parade": "Noon at DeHart Community Center"
+  },
+  "porches": [
+    {
+      "id": 1,
+      "address": "121 Lexington Ave",
+      "neighborhood_note": "Corner of Lexington & Baker St",
+      "lat": 40.7282,
+      "lng": -74.2751,
+      "performers": [
+        {
+          "name": "The River Road Ramblers",
+          "genre": "Folk",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Acoustic folk duo blending Appalachian roots with contemporary storytelling. Bring a blanket and settle in."
+        },
+        {
+          "name": "Sonia Reyes Quartet",
+          "genre": "Latin",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Sonia's quartet brings the energy of salsa and bossa nova to the porch. Guaranteed to get you on your feet."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "address": "47 Midland Ave",
+      "neighborhood_note": "Large yard, plenty of lawn space",
+      "lat": 40.7295,
+      "lng": -74.2738,
+      "performers": [
+        {
+          "name": "Maplewood Blues Project",
+          "genre": "Blues",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Local blues veterans with a repertoire stretching from Delta classics to Chicago electric. Don't miss their slide guitar."
+        },
+        {
+          "name": "The Funky Hilton Horns",
+          "genre": "Funk",
+          "time_start": "3:30 PM",
+          "time_end": "5:00 PM",
+          "description": "An eight-piece funk ensemble born in the Hilton neighborhood. Soul, groove, and brass — all afternoon."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "address": "203 Parker Ave",
+      "neighborhood_note": "Wrap-around porch, shaded",
+      "lat": 40.7271,
+      "lng": -74.2760,
+      "performers": [
+        {
+          "name": "Clara Westfield",
+          "genre": "Classical",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Pianist Clara Westfield performs solo repertoire from Chopin and Debussy. A quiet, beautiful corner of Porchfest."
+        },
+        {
+          "name": "Hearthstone String Quartet",
+          "genre": "Classical",
+          "time_start": "2:30 PM",
+          "time_end": "4:30 PM",
+          "description": "Four friends, four strings, and a shaded porch. Expect Beethoven, Shostakovich, and a few surprises."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "address": "88 Burnett Ave",
+      "neighborhood_note": "Open driveway, great sightlines",
+      "lat": 40.7310,
+      "lng": -74.2745,
+      "performers": [
+        {
+          "name": "Neon Gravity",
+          "genre": "Indie Rock",
+          "time_start": "1:30 PM",
+          "time_end": "3:30 PM",
+          "description": "Guitar-driven indie rock with pop hooks and big energy. These kids grew up on Wilco and Vampire Weekend."
+        },
+        {
+          "name": "The Hollow Pines",
+          "genre": "Indie Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Dreamy shoegaze-inflected indie rock. Closer vibes. Perfect for the golden hour."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "address": "15 Durand Rd",
+      "neighborhood_note": "Front steps and yard",
+      "lat": 40.7265,
+      "lng": -74.2772,
+      "performers": [
+        {
+          "name": "Tiny Tunes & Tales",
+          "genre": "Kids/Family",
+          "time_start": "1:00 PM",
+          "time_end": "2:30 PM",
+          "description": "Interactive songs, stories, and silliness for the littlest Porchfest fans. All ages welcome, but bring the kids!"
+        },
+        {
+          "name": "Marcus & The Afternoon",
+          "genre": "Folk",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Marcus Chen's fingerpicking and warm baritone feel like a long summer afternoon. Originals and covers from his forthcoming album."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "address": "162 Lenox Ave",
+      "neighborhood_note": "Corner lot, good visibility",
+      "lat": 40.7300,
+      "lng": -74.2762,
+      "performers": [
+        {
+          "name": "The Idle Hours Jazz Band",
+          "genre": "Jazz",
+          "time_start": "1:00 PM",
+          "time_end": "2:30 PM",
+          "description": "Traditional jazz standards and a few bebop charts from this beloved local ensemble. They've played every Porchfest."
+        },
+        {
+          "name": "Vera Okafor Trio",
+          "genre": "Jazz",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Contemporary jazz with West African harmonic influences. Vera's saxophone work is not to be missed."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "address": "34 Highland Place",
+      "neighborhood_note": "Top of the hill, great view",
+      "lat": 40.7318,
+      "lng": -74.2730,
+      "performers": [
+        {
+          "name": "Smoke & Ember",
+          "genre": "Blues",
+          "time_start": "1:00 PM",
+          "time_end": "2:30 PM",
+          "description": "Husband-and-wife blues duo. Slide guitar, harmonica, and soul-deep vocals. Raw and beautiful."
+        },
+        {
+          "name": "DJ Mambo Groove",
+          "genre": "Funk",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "A DJ set that mixes funk, soul, Afrobeat, and disco. The highest-energy porch on the block."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "address": "77 Courtenay Ave",
+      "neighborhood_note": "Spacious front yard",
+      "lat": 40.7288,
+      "lng": -74.2718,
+      "performers": [
+        {
+          "name": "The Porch Pickers",
+          "genre": "Folk",
+          "time_start": "1:00 PM",
+          "time_end": "2:30 PM",
+          "description": "Old-time string band featuring banjo, fiddle, upright bass, and mandolin. Expect dancing."
+        },
+        {
+          "name": "Kids in Concert: Little Hilton Choir",
+          "genre": "Kids/Family",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Local children's choir performing songs from their spring concert. Proud parents (and neighbors) encouraged to attend."
+        },
+        {
+          "name": "Rosa & The Bloom",
+          "genre": "Indie Rock",
+          "time_start": "4:15 PM",
+          "time_end": "5:00 PM",
+          "description": "Power trio closing out the afternoon with anthemic indie rock. A perfect send-off to a great Porchfest."
+        }
+      ]
+    }
+  ]
+}

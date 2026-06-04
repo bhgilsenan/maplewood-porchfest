@@ -1,17 +1,534 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Home">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <p class="hero-eyebrow">9th Annual</p>
+      <h1 class="hero-title">Maplewood<br/><em>Porchfest</em><br/>2026</h1>
+      <p class="hero-sub">
+        Sunday, September 6th &middot; 1–5 PM<br/>
+        Rain date: September 7th &middot; Hilton Neighborhood, Maplewood NJ
+      </p>
+      <div class="hero-ctas">
+        <a href="/schedule" class="btn btn--primary">See the Schedule</a>
+        <a href="/participate" class="btn btn--secondary">How to Participate</a>
+      </div>
+    </div>
+    <div class="hero-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" fill="var(--cream)">
+        <path d="M0,40 C400,80 1040,0 1440,50 L1440,80 L0,80 Z"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===================== EVENT DESCRIPTION ===================== -->
+  <section class="section">
+    <div class="container description-grid">
+      <div class="description-text">
+        <div class="divider"></div>
+        <h2>A neighborhood turns into a stage</h2>
+        <p>
+          Maplewood Porchfest is a free, all-volunteer, commercial-free afternoon of live music
+          on the porches, front steps, stoops, yards, and driveways of Maplewood's Hilton neighborhood.
+          Every Labor Day Sunday, dozens of performers — musicians, DJs, dancers, poets — bring the
+          community together in the most joyful way possible: live music spilling into the street.
+        </p>
+        <p style="margin-top: 1rem;">
+          Wander the neighborhood at your own pace. Follow the sound. Tip the performers.
+          Say hi to your neighbors.
+        </p>
+        <a href="/schedule" class="btn btn--outline" style="margin-top: 1.5rem;">Browse the Schedule</a>
+      </div>
+      <div class="description-image">
+        <img
+          src="https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1S7A8628-FINAL-3200PX.jpg?format=1000w"
+          alt="Live music performance at a Hilton neighborhood porch during Maplewood Porchfest"
+          class="section-photo"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HONK PARADE ===================== -->
+  <section class="section section--cream-dark honk-section">
+    <div class="container honk-inner">
+      <div class="honk-image">
+        <img
+          src="https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/7583f04f-c0fb-4a40-8321-ae78b484eabb/Honk-A-Photo-Tom_Melee.jpg?format=800w"
+          alt="Honk Parade brass bands marching through the Hilton neighborhood at Porchfest"
+          class="section-photo section-photo--square"
+          loading="lazy"
+        />
+      </div>
+      <div class="honk-text">
+        <span class="section-badge">Before the Music</span>
+        <div class="divider"></div>
+        <h2>Kick Off with the Honk Parade!</h2>
+        <p>
+          Before the porches come alive, join us for the Honk Parade — a raucous, brass-heavy
+          procession through the neighborhood. Gather at <strong>DeHart Community Center at 12 noon</strong>.
+          All are welcome. Bring an instrument, bring a cowbell, bring yourself.
+        </p>
+        <p style="margin-top:.75rem; color: var(--gray);">
+          The parade winds through Hilton and arrives just in time for the 1 PM porch start.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SUPPORT ===================== -->
+  <section class="section section--dark support-section">
+    <div class="container support-inner">
+      <div class="support-text">
+        <div class="divider" style="background: var(--gold-light);"></div>
+        <h2 style="color: var(--cream);">100% Volunteer. 100% Free.<br/>100% Worth Supporting.</h2>
+        <p style="color: rgba(250,246,238,.8); max-width: 52ch; margin-top: 1rem;">
+          Porchfest is entirely non-profit and commercial-free. No tickets. No sponsors.
+          Just neighbors making music for neighbors. If you love what we do, please
+          consider a donation to help us keep it that way.
+        </p>
+        <a
+          href="https://givebutter.com/maplewoodporchfest"
+          class="btn btn--gold"
+          style="margin-top: 1.75rem;"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Donate to Porchfest
+        </a>
+      </div>
+      <div class="support-stats" aria-hidden="true">
+        <div class="stat-card">
+          <span class="stat-number">9th</span>
+          <span class="stat-label">Year</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">Free</span>
+          <span class="stat-label">Always free</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">30+</span>
+          <span class="stat-label">Performers</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section class="section" id="about">
+    <div class="container about-inner">
+      <div class="divider"></div>
+      <h2>About Porchfest</h2>
+      <div class="about-grid">
+        <div class="about-col">
+          <p>
+            Maplewood Porchfest was founded by pianist <strong>Bill Tally</strong>,
+            inspired by the original Jamaica Plain Porchfest in Boston. What started as a
+            small gathering of neighbors sharing music from their front stoops has grown into
+            one of the Maplewood–South Orange area's most beloved annual traditions.
+          </p>
+          <p style="margin-top: 1rem;">
+            Now in its <strong>9th year</strong>, Porchfest draws hundreds of attendees and
+            dozens of performers across the Hilton neighborhood every Labor Day Sunday.
+          </p>
+        </div>
+        <div class="about-col">
+          <p>
+            Porchfest is presented by
+            <a href="http://www.maplewoodcommunitymusic.org/" target="_blank" rel="noopener noreferrer" class="text-link">
+              Maplewood Community Music
+            </a>
+            and supported by the
+            <a href="https://hnamaplewood.com/" target="_blank" rel="noopener noreferrer" class="text-link">
+              Hilton Neighborhood Association
+            </a>.
+            Every performer, organizer, and volunteer gives their time freely. Commercial-free,
+            volunteer-run, and rooted in community.
+          </p>
+          <p style="margin-top: 1rem;">
+            Performers pass the hat — cash tips go directly to the artists.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSTAGRAM ===================== -->
+  <section class="section section--cream-dark instagram-section">
+    <div class="container">
+      <div class="instagram-header">
+        <h2>Follow Along</h2>
+        <a
+          href="https://www.instagram.com/maplewood_porchfest/"
+          class="btn btn--outline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >@maplewood_porchfest</a>
+      </div>
+      <div class="instagram-grid" aria-label="Recent photos from @maplewood_porchfest on Instagram">
+        {[
+          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1780188224915-IG9HY1T57DF7P4ECO49Q/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-H9SV0UTUFL80DKCWCQNQ/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775878816891-65G1F3FKWVFTCM0YYH3T/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-GS353DM8SOA10KA7UFRD/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-FF3UPU65CVAEYLQPE6NE/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-XARZMHLCZWXAB20YLFBM/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+        ].map((img, i) => (
+          <a
+            href="https://www.instagram.com/maplewood_porchfest/"
+            class="instagram-tile"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`View @maplewood_porchfest on Instagram`}
+          >
+            <img src={img.url} alt={img.alt} class="instagram-img" loading="lazy" />
+            <div class="instagram-tile-overlay" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NAV CARDS ===================== -->
+  <section class="section">
+    <div class="container">
+      <h2 class="nav-cards-heading">Get Involved</h2>
+      <div class="nav-cards">
+        <a href="/participate" class="nav-card">
+          <div class="nav-card-icon">🏡</div>
+          <h3>Participate</h3>
+          <p>Lend your porch, perform, volunteer, or run a lemonade stand.</p>
+          <span class="nav-card-cta">Learn more &rarr;</span>
+        </a>
+        <a href="/schedule" class="nav-card nav-card--gold">
+          <div class="nav-card-icon">🎵</div>
+          <h3>Schedule</h3>
+          <p>Browse performers by porch, genre, and time. Plan your afternoon.</p>
+          <span class="nav-card-cta">View schedule &rarr;</span>
+        </a>
+        <a href="/photos" class="nav-card">
+          <div class="nav-card-icon">📸</div>
+          <h3>Photos</h3>
+          <p>Browse images from past Porchfests captured by community photographers.</p>
+          <span class="nav-card-cta">See photos &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* ---- HERO ---- */
+.hero {
+  position: relative;
+  min-height: calc(100svh - 72px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--charcoal);
+  margin-top: -72px;
+  padding-top: 72px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/71b5c943-d5cc-4785-b1f5-2d41ef6e4ac4/IMG_6544-C.jpg?format=2500w');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 70% at 20% 110%, rgba(200,146,42,.25) 0%, transparent 60%),
+    linear-gradient(to right, rgba(28,26,23,.85) 0%, rgba(28,26,23,.3) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding-block: 6rem 5rem;
+  max-width: 800px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--gold-light);
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 1.0;
+  color: var(--cream);
+  letter-spacing: -.03em;
+  margin-bottom: 1.25rem;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: rgba(250,246,238,.85);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  max-width: 50ch;
+}
+
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hero-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  line-height: 0;
+  z-index: 1;
+}
+.hero-wave svg { width: 100%; height: 100%; }
+
+/* ---- SECTION PHOTOS ---- */
+.section-photo {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: block;
+}
+.section-photo--square {
+  aspect-ratio: 1/1;
+}
+.img-placeholder--square    { aspect-ratio: 1/1; }
+
+/* ---- DESCRIPTION ---- */
+.description-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.description-text p { color: var(--gray); }
+.description-text h2 { color: var(--charcoal); margin-bottom: 1.25rem; }
+
+/* ---- HONK ---- */
+.honk-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.honk-text h2 { margin-bottom: 1rem; }
+.honk-text p { color: var(--gray); }
+
+.section-badge {
+  display: inline-block;
+  padding: .3rem .9rem;
+  background: var(--gold);
+  color: var(--charcoal);
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  border-radius: 50px;
+  margin-bottom: .75rem;
+}
+
+/* ---- SUPPORT ---- */
+.support-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.support-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: .4rem;
+}
+
+.stat-label {
+  font-size: .8rem;
+  color: rgba(250,246,238,.6);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 600;
+}
+
+/* ---- ABOUT ---- */
+.about-inner h2 { margin-bottom: 1.5rem; }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+.about-col p { color: var(--gray); }
+.text-link {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 150ms;
+}
+.text-link:hover { color: var(--green-light); }
+
+/* ---- INSTAGRAM ---- */
+.instagram-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .75rem;
+}
+
+.instagram-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius);
+  aspect-ratio: 1/1;
+}
+
+.instagram-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius);
+}
+
+.instagram-tile-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(44,95,46,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 200ms;
+  border-radius: var(--radius);
+}
+.instagram-tile:hover .instagram-tile-overlay { opacity: 1; }
+
+/* ---- NAV CARDS ---- */
+.nav-cards-heading {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.nav-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.nav-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 2rem;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: var(--charcoal);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  transition: box-shadow var(--transition), transform var(--transition);
+  border: 2px solid transparent;
+}
+.nav-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  border-color: var(--gold);
+}
+.nav-card--gold {
+  background: var(--gold);
+  color: var(--charcoal);
+}
+.nav-card--gold:hover { border-color: var(--gold-dark); }
+
+.nav-card-icon { font-size: 2rem; }
+.nav-card h3 { font-size: 1.3rem; }
+.nav-card p { font-size: .9rem; color: var(--gray); flex: 1; max-width: 100%; }
+.nav-card--gold p { color: rgba(28,26,23,.7); }
+.nav-card-cta {
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--coral);
+  margin-top: .5rem;
+}
+.nav-card--gold .nav-card-cta { color: var(--charcoal); }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .description-grid,
+  .honk-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .honk-image { order: -1; }
+  .support-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .support-stats { grid-template-columns: repeat(3, 1fr); }
+  .about-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .instagram-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .nav-cards { grid-template-columns: 1fr; }
+  .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+  .support-stats { grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+  .stat-card { padding: 1rem .75rem; }
+  .stat-number { font-size: 1.6rem; }
+}
+</style>

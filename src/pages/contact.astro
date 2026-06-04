@@ -1,0 +1,275 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with the Maplewood Porchfest team."
+>
+
+  <PageHero
+    title="Contact"
+    subtitle="For porch, performer, or volunteer inquiries, please visit the Participate page. For everything else, reach out below."
+  />
+
+  <section class="section">
+    <div class="container contact-layout">
+
+      <div class="contact-form-col">
+        <h2>Send us a message</h2>
+        <p class="contact-intro">
+          We appreciate your message and kindly request 48 hours to respond.
+          Please note that registration inquiries are handled through the
+          <a href="/participate" class="text-link">Participate page</a>
+          once forms open in mid-June.
+        </p>
+
+        <form class="contact-form" action="#" method="post" novalidate>
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="Jane Smith"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              placeholder="jane@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" class="form-control">
+              <option value="">Select a topic…</option>
+              <option value="general">General question</option>
+              <option value="media">Media inquiry</option>
+              <option value="sponsor">Donation / fundraising</option>
+              <option value="tech">Website feedback</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              class="form-control"
+              placeholder="Tell us what's on your mind…"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary submit-btn">
+            Send Message
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+
+          <p class="response-note">
+            We appreciate your message and kindly request 48 hours to respond.
+          </p>
+        </form>
+      </div>
+
+      <aside class="contact-sidebar">
+        <div class="sidebar-card">
+          <h3>Quick links</h3>
+          <ul class="quick-links">
+            <li>
+              <a href="/participate" class="quick-link">
+                <span class="quick-link-icon">🏡</span>
+                <div>
+                  <strong>Porch, performer &amp; volunteer signup</strong>
+                  <span>Opens mid-June</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="/schedule" class="quick-link">
+                <span class="quick-link-icon">🎵</span>
+                <div>
+                  <strong>View the schedule</strong>
+                  <span>Browse performers &amp; porches</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://givebutter.com/maplewoodporchfest"
+                class="quick-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="quick-link-icon">💛</span>
+                <div>
+                  <strong>Donate to Porchfest</strong>
+                  <span>via Givebutter</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card sidebar-card--social">
+          <h3>Follow us</h3>
+          <div class="sidebar-social">
+            <a href="https://www.instagram.com/maplewood_porchfest/" target="_blank" rel="noopener noreferrer" class="sidebar-social-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+            <a href="https://www.facebook.com/maplewoodporchfest" target="_blank" rel="noopener noreferrer" class="sidebar-social-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              Facebook
+            </a>
+            <a href="https://www.youtube.com/@maplewoodporchfest5068/videos" target="_blank" rel="noopener noreferrer" class="sidebar-social-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.94C18.88 4 12 4 12 4s-6.88 0-8.6.48A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 1.94C5.12 20 12 20 12 20s6.88 0 8.6-.48a2.78 2.78 0 0 0 1.94-1.94A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+              YouTube
+            </a>
+          </div>
+        </div>
+
+        <div class="sidebar-card sidebar-card--org">
+          <h3>Presented by</h3>
+          <a href="http://www.maplewoodcommunitymusic.org/" target="_blank" rel="noopener noreferrer" class="org-link">
+            Maplewood Community Music
+          </a>
+          <h3 style="margin-top: 1.25rem;">Supported by</h3>
+          <a href="https://hnamaplewood.com/" target="_blank" rel="noopener noreferrer" class="org-link">
+            Hilton Neighborhood Association
+          </a>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.contact-form-col h2 { margin-bottom: .75rem; }
+
+.contact-intro {
+  color: var(--gray);
+  margin-bottom: 2rem;
+  max-width: 55ch;
+}
+
+.text-link {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.submit-btn {
+  align-self: flex-start;
+  margin-top: .5rem;
+}
+
+.response-note {
+  font-size: .85rem;
+  color: var(--gray-light);
+  max-width: 100%;
+}
+
+/* Sidebar */
+.sidebar-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.25rem;
+}
+.sidebar-card h3 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: var(--charcoal);
+}
+
+.quick-links { display: flex; flex-direction: column; gap: .75rem; }
+.quick-link {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  text-decoration: none;
+  color: var(--charcoal);
+  padding: .75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--cream-dark);
+  transition: background 150ms, border-color 150ms;
+}
+.quick-link:hover {
+  background: var(--cream-dark);
+  border-color: var(--gold);
+}
+.quick-link-icon { font-size: 1.25rem; flex-shrink: 0; }
+.quick-link strong { display: block; font-size: .9rem; }
+.quick-link span { font-size: .8rem; color: var(--gray); }
+
+.sidebar-social {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+.sidebar-social-link {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  color: var(--charcoal);
+  font-size: .9rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: .5rem;
+  border-radius: var(--radius);
+  transition: background 150ms, color 150ms;
+}
+.sidebar-social-link:hover { background: var(--cream-dark); color: var(--green); }
+
+.org-link {
+  display: block;
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: .95rem;
+  transition: color 150ms;
+}
+.org-link:hover { color: var(--green-light); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .submit-btn { width: 100%; justify-content: center; }
+}
+</style>

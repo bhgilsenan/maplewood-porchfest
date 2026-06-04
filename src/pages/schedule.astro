@@ -1,0 +1,763 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import scheduleData from "../data/schedule.json";
+
+const { event, porches } = scheduleData;
+
+// Collect all unique genres
+const allGenres = [...new Set(
+  porches.flatMap(p => p.performers.map(perf => perf.genre))
+)].sort();
+---
+
+<BaseLayout
+  title="Schedule"
+  description={`Maplewood Porchfest 2026 schedule — ${event.date}. Browse performers by porch, genre, and time.`}
+>
+
+  <PageHero
+    title="Schedule"
+    subtitle={`${event.date} · ${event.hours}`}
+  />
+
+  <!-- EVENT INFO BAR -->
+  <div class="event-bar no-print">
+    <div class="container event-bar-inner">
+      <div class="event-info-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span><strong>{event.date}</strong></span>
+      </div>
+      <div class="event-info-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>{event.hours}</span>
+      </div>
+      <div class="event-info-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/></svg>
+        <span>Rain date: <strong>{event.rain_date}</strong></span>
+      </div>
+      <div class="event-info-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Honk Parade: <strong>{event.honk_parade}</strong></span>
+      </div>
+      <a href="/schedule" onclick="window.print(); return false;" class="btn btn--outline print-btn no-print" aria-label="Print schedule">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print
+      </a>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar no-print" id="filter-bar">
+    <div class="container filter-bar-inner">
+      <!-- Genre pills -->
+      <div class="filter-group" role="group" aria-label="Filter by genre">
+        <span class="filter-label">Genre:</span>
+        <div class="filter-pills" id="genre-filters">
+          <button class="filter-pill filter-pill--active" data-genre="all" type="button">All</button>
+          {allGenres.map(genre => (
+            <button class="filter-pill" data-genre={genre} type="button">{genre}</button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Time filter -->
+      <div class="filter-group" role="group" aria-label="Filter by time">
+        <span class="filter-label">Time:</span>
+        <select class="filter-select" id="time-filter" aria-label="Filter by time slot">
+          <option value="all">All times</option>
+          <option value="1">1–2 PM</option>
+          <option value="2">2–3 PM</option>
+          <option value="3">3–4 PM</option>
+          <option value="4">4–5 PM</option>
+        </select>
+      </div>
+
+      <!-- Search -->
+      <div class="filter-group filter-group--search">
+        <label for="performer-search" class="filter-label">Search:</label>
+        <div class="search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            type="search"
+            id="performer-search"
+            class="filter-input"
+            placeholder="Performer name…"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <button class="btn btn--outline filter-clear" id="clear-filters" type="button">Clear filters</button>
+    </div>
+  </div>
+
+  <!-- MOBILE MAP TOGGLE -->
+  <div class="map-toggle-bar no-print" id="map-toggle-bar">
+    <div class="container">
+      <button class="btn btn--green map-toggle-btn" id="map-toggle" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        Show Map
+      </button>
+    </div>
+  </div>
+
+  <!-- SCHEDULE LAYOUT -->
+  <section class="schedule-section">
+    <div class="container schedule-layout">
+
+      <!-- MAP -->
+      <div class="map-col no-print" id="map-col">
+        <div class="map-sticky">
+          <div id="porchfest-map" aria-label="Porch locations map" role="application"></div>
+          <p class="map-note">Click a marker to highlight that porch</p>
+        </div>
+      </div>
+
+      <!-- PORCH CARDS -->
+      <div class="porch-list-col" id="porch-list">
+
+        {porches.map((porch) => (
+          <div
+            class="porch-card"
+            id={`porch-${porch.id}`}
+            data-porch-id={porch.id}
+            data-genres={porch.performers.map(p => p.genre).join(",")}
+            data-performers={porch.performers.map(p => p.name.toLowerCase()).join(",")}
+            data-times={porch.performers.map(p => {
+              const h = parseInt(p.time_start.split(":")[0]);
+              const pm = p.time_start.includes("PM") && h !== 12;
+              return pm ? h : h;
+            }).join(",")}
+          >
+            <div class="porch-card-header">
+              <div class="porch-number" aria-label={`Porch ${porch.id}`}>{porch.id}</div>
+              <div class="porch-address-block">
+                <h3 class="porch-address">{porch.address}</h3>
+                {porch.neighborhood_note && (
+                  <p class="porch-note">{porch.neighborhood_note}</p>
+                )}
+              </div>
+            </div>
+
+            <div class="performer-list">
+              {porch.performers.map((performer) => (
+                <div
+                  class="performer-row"
+                  data-genre={performer.genre}
+                  data-name={performer.name.toLowerCase()}
+                  data-time-start={performer.time_start}
+                  data-time-end={performer.time_end}
+                >
+                  <div class="performer-time">
+                    <span class="time-start">{performer.time_start}</span>
+                    <span class="time-sep">–</span>
+                    <span class="time-end">{performer.time_end}</span>
+                  </div>
+                  <div class="performer-info">
+                    <div class="performer-name-row">
+                      <strong class="performer-name">{performer.name}</strong>
+                      <span class="genre-pill" data-genre={performer.genre}>{performer.genre}</span>
+                    </div>
+                    <p class="performer-desc">{performer.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <!-- NO RESULTS -->
+        <div class="no-results" id="no-results" hidden aria-live="polite">
+          <div class="no-results-inner">
+            <span class="no-results-icon" aria-hidden="true">🎵</span>
+            <h3>No performers found</h3>
+            <p>Try clearing the filters to see the full schedule.</p>
+            <button class="btn btn--outline" id="no-results-clear" type="button">Clear all filters</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINT-ONLY SCHEDULE -->
+  <section class="print-only-schedule print-only">
+    <h2>Maplewood Porchfest 2026 — Full Schedule</h2>
+    <p>{event.date} &middot; {event.hours} &middot; Rain date: {event.rain_date}</p>
+    <p>Honk Parade: {event.honk_parade}</p>
+    {porches.map(porch => (
+      <div class="print-porch">
+        <h3>Porch #{porch.id} — {porch.address}</h3>
+        {porch.neighborhood_note && <p>{porch.neighborhood_note}</p>}
+        {porch.performers.map(p => (
+          <p><strong>{p.name}</strong> ({p.genre}) — {p.time_start}–{p.time_end}</p>
+        ))}
+      </div>
+    ))}
+  </section>
+
+</BaseLayout>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<script>
+// ===================== LEAFLET MAP =====================
+(async function initMap() {
+  // @ts-ignore
+  const L = await import("https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js");
+
+  const porches = JSON.parse(document.getElementById("porchfest-map")!.dataset.porches || "[]");
+
+  const map = L.map("porchfest-map", {
+    center: [40.7291, -74.2745],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true,
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19,
+  }).addTo(map);
+
+  const markers: Record<number, any> = {};
+
+  porches.forEach((porch: any) => {
+    const icon = L.divIcon({
+      html: `<div class="map-marker">${porch.id}</div>`,
+      className: "",
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+    });
+
+    const marker = L.marker([porch.lat, porch.lng], { icon })
+      .addTo(map)
+      .bindPopup(`
+        <strong>#${porch.id} — ${porch.address}</strong><br/>
+        ${porch.performers.map((p: any) => `${p.name} (${p.genre})`).join("<br/>")}
+      `);
+
+    marker.on("click", () => {
+      const card = document.getElementById(`porch-${porch.id}`);
+      if (card && !card.hidden) {
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+        card.classList.add("porch-card--highlighted");
+        setTimeout(() => card.classList.remove("porch-card--highlighted"), 2000);
+      }
+    });
+
+    markers[porch.id] = marker;
+  });
+
+  // expose for filter sync
+  (window as any).__mapMarkers = markers;
+  (window as any).__leafletMap = map;
+})();
+</script>
+
+<script define:vars={{ porchesSrc: scheduleData.porches }}>
+// ===================== FILTERS =====================
+const porchesData = porchesSrc;
+document.getElementById("porchfest-map").dataset.porches = JSON.stringify(porchesData);
+
+let activeGenres = new Set(["all"]);
+let activeTime = "all";
+let searchQuery = "";
+
+function getPerformerHour(timeStr) {
+  const match = timeStr.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+  if (!match) return 0;
+  let h = parseInt(match[1]);
+  const ampm = match[3].toUpperCase();
+  if (ampm === "PM" && h !== 12) h += 12;
+  if (ampm === "AM" && h === 12) h = 0;
+  return h;
+}
+
+function timeInSlot(slot, timeStart, timeEnd) {
+  if (slot === "all") return true;
+  const slotStart = 12 + parseInt(slot);
+  const slotEnd = slotStart + 1;
+  const pStart = getPerformerHour(timeStart);
+  const pEnd = getPerformerHour(timeEnd);
+  return pStart < slotEnd && pEnd > slotStart;
+}
+
+function applyFilters() {
+  const cards = document.querySelectorAll(".porch-card");
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const rows = card.querySelectorAll(".performer-row");
+    let cardVisible = false;
+
+    rows.forEach(row => {
+      const genre = row.dataset.genre;
+      const name = (row.dataset.name || "").toLowerCase();
+      const timeStart = row.dataset.timeStart;
+      const timeEnd = row.dataset.timeEnd;
+
+      const genreMatch = activeGenres.has("all") || activeGenres.has(genre);
+      const timeMatch = timeInSlot(activeTime, timeStart, timeEnd);
+      const searchMatch = !searchQuery || name.includes(searchQuery.toLowerCase());
+
+      const visible = genreMatch && timeMatch && searchMatch;
+      row.style.display = visible ? "" : "none";
+      if (visible) cardVisible = true;
+    });
+
+    card.style.display = cardVisible ? "" : "none";
+    if (cardVisible) visibleCount++;
+  });
+
+  document.getElementById("no-results").hidden = visibleCount > 0;
+
+  // sync map markers
+  const markers = window.__mapMarkers;
+  if (markers) {
+    cards.forEach(card => {
+      const id = parseInt(card.dataset.porchId);
+      const marker = markers[id];
+      if (!marker) return;
+      const visible = card.style.display !== "none";
+      const el = marker.getElement();
+      if (el) el.style.opacity = visible ? "1" : "0.3";
+    });
+  }
+}
+
+// Genre pills
+document.getElementById("genre-filters").addEventListener("click", e => {
+  const btn = e.target.closest(".filter-pill");
+  if (!btn) return;
+  const genre = btn.dataset.genre;
+
+  if (genre === "all") {
+    activeGenres = new Set(["all"]);
+  } else {
+    activeGenres.delete("all");
+    if (activeGenres.has(genre)) {
+      activeGenres.delete(genre);
+      if (activeGenres.size === 0) activeGenres.add("all");
+    } else {
+      activeGenres.add(genre);
+    }
+  }
+
+  document.querySelectorAll(".filter-pill").forEach(p => {
+    const g = p.dataset.genre;
+    const active = activeGenres.has("all") ? g === "all" : activeGenres.has(g);
+    p.classList.toggle("filter-pill--active", active);
+  });
+
+  applyFilters();
+});
+
+// Time filter
+document.getElementById("time-filter").addEventListener("change", e => {
+  activeTime = e.target.value;
+  applyFilters();
+});
+
+// Search
+document.getElementById("performer-search").addEventListener("input", e => {
+  searchQuery = e.target.value.trim();
+  applyFilters();
+});
+
+// Clear
+function clearFilters() {
+  activeGenres = new Set(["all"]);
+  activeTime = "all";
+  searchQuery = "";
+  document.querySelectorAll(".filter-pill").forEach(p => {
+    p.classList.toggle("filter-pill--active", p.dataset.genre === "all");
+  });
+  document.getElementById("time-filter").value = "all";
+  document.getElementById("performer-search").value = "";
+  applyFilters();
+}
+
+document.getElementById("clear-filters").addEventListener("click", clearFilters);
+document.getElementById("no-results-clear")?.addEventListener("click", clearFilters);
+
+// Sticky filter bar
+const filterBar = document.getElementById("filter-bar");
+const heroBottom = document.querySelector(".page-hero");
+if (heroBottom && filterBar) {
+  const obs = new IntersectionObserver(entries => {
+    filterBar.classList.toggle("filter-bar--sticky", !entries[0].isIntersecting);
+  }, { threshold: 0 });
+  obs.observe(heroBottom);
+}
+
+// Mobile map toggle
+const mapToggleBtn = document.getElementById("map-toggle");
+const mapCol = document.getElementById("map-col");
+const mapToggleBar = document.getElementById("map-toggle-bar");
+
+mapToggleBtn?.addEventListener("click", () => {
+  const open = mapCol.classList.toggle("map-col--open");
+  mapToggleBtn.textContent = open ? "Hide Map" : "Show Map";
+  mapToggleBtn.prepend((() => {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", "18"); s.setAttribute("height", "18");
+    s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("fill", "none");
+    s.setAttribute("stroke", "currentColor"); s.setAttribute("stroke-width", "2");
+    s.setAttribute("stroke-linecap", "round"); s.setAttribute("stroke-linejoin", "round");
+    s.setAttribute("aria-hidden", "true");
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    p.setAttribute("points", "1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6");
+    const l1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l1.setAttribute("x1","8"); l1.setAttribute("y1","2"); l1.setAttribute("x2","8"); l1.setAttribute("y2","18");
+    const l2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l2.setAttribute("x1","16"); l2.setAttribute("y1","6"); l2.setAttribute("x2","16"); l2.setAttribute("y2","22");
+    s.appendChild(p); s.appendChild(l1); s.appendChild(l2);
+    return s;
+  })());
+  // Invalidate map size after transition
+  setTimeout(() => { window.__leafletMap?.invalidateSize(); }, 350);
+});
+</script>
+
+<style>
+/* ---- EVENT BAR ---- */
+.event-bar {
+  background: var(--green);
+  color: var(--cream);
+  padding: .75rem 0;
+  border-bottom: 3px solid var(--gold);
+}
+.event-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+}
+.event-info-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .9rem;
+  color: rgba(250,246,238,.9);
+}
+.event-info-item svg { opacity: .7; flex-shrink: 0; }
+.print-btn { margin-left: auto; padding: .4rem 1rem; font-size: .85rem; border-color: rgba(255,255,255,.4); color: var(--cream); }
+.print-btn:hover { background: rgba(255,255,255,.15); }
+
+/* ---- FILTER BAR ---- */
+.filter-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--cream-dark);
+  padding: .75rem 0;
+  top: 72px;
+  z-index: 90;
+  transition: box-shadow 200ms;
+}
+.filter-bar--sticky {
+  position: sticky;
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+}
+.filter-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.5rem;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-weight: 700;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--gray);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.filter-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+.filter-pill {
+  padding: .3rem .85rem;
+  border-radius: 50px;
+  border: 1.5px solid var(--cream-dark);
+  background: var(--white);
+  color: var(--charcoal);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms, color 150ms;
+  white-space: nowrap;
+}
+.filter-pill:hover { border-color: var(--gold); background: var(--cream); }
+.filter-pill--active { background: var(--green); color: var(--white); border-color: var(--green); }
+
+.filter-select {
+  padding: .35rem .75rem;
+  border: 1.5px solid var(--cream-dark);
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: .85rem;
+  color: var(--charcoal);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color 150ms;
+}
+.filter-select:focus { outline: none; border-color: var(--gold); }
+
+.filter-group--search { flex: 1; min-width: 180px; }
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.search-icon {
+  position: absolute;
+  left: .75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-light);
+  pointer-events: none;
+}
+.filter-input {
+  width: 100%;
+  padding: .38rem .75rem .38rem 2.2rem;
+  border: 1.5px solid var(--cream-dark);
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: .88rem;
+  color: var(--charcoal);
+  background: var(--white);
+  transition: border-color 150ms;
+}
+.filter-input:focus { outline: none; border-color: var(--gold); }
+
+.filter-clear { padding: .35rem 1rem; font-size: .85rem; flex-shrink: 0; }
+
+/* ---- MAP TOGGLE (mobile only) ---- */
+.map-toggle-bar {
+  display: none;
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--cream-dark);
+  background: var(--cream);
+}
+.map-toggle-btn { display: flex; align-items: center; gap: .5rem; font-size: .9rem; }
+
+/* ---- SCHEDULE LAYOUT ---- */
+.schedule-section { padding-block: 2.5rem 4rem; }
+.schedule-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ---- MAP ---- */
+.map-col { }
+.map-sticky {
+  position: sticky;
+  top: calc(72px + 54px + 58px); /* header + event bar + filter bar */
+}
+#porchfest-map {
+  height: 520px;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--cream-dark);
+  z-index: 1;
+}
+.map-note {
+  font-size: .78rem;
+  color: var(--gray-light);
+  text-align: center;
+  margin-top: .5rem;
+  font-style: italic;
+}
+
+/* Leaflet marker styling */
+:global(.map-marker) {
+  width: 36px;
+  height: 36px;
+  background: var(--green);
+  color: var(--cream);
+  border-radius: 50%;
+  border: 3px solid var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  cursor: pointer;
+  transition: background 150ms, transform 150ms;
+}
+:global(.map-marker:hover) {
+  background: var(--gold);
+  color: var(--charcoal);
+  transform: scale(1.1);
+}
+
+/* ---- PORCH CARDS ---- */
+.porch-list-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.porch-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition), outline 150ms;
+  scroll-margin-top: calc(72px + 60px + 60px + 16px);
+}
+
+.porch-card--highlighted {
+  outline: 3px solid var(--gold);
+  box-shadow: var(--shadow-md);
+}
+
+.porch-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--cream-dark);
+  background: linear-gradient(to right, var(--cream) 0%, var(--white) 100%);
+}
+
+.porch-number {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.porch-address {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.porch-note {
+  font-size: .82rem;
+  color: var(--gray-light);
+  margin-top: .2rem;
+}
+
+.performer-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.performer-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--cream-dark);
+  align-items: start;
+  transition: background 150ms;
+}
+.performer-row:last-child { border-bottom: none; }
+.performer-row:hover { background: var(--cream); }
+
+.performer-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.time-start { font-weight: 700; font-size: .88rem; color: var(--charcoal); }
+.time-sep   { font-size: .7rem; color: var(--gray-light); }
+.time-end   { font-size: .82rem; color: var(--gray); }
+
+.performer-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: .35rem;
+}
+.performer-name { font-size: .98rem; }
+.performer-desc { font-size: .84rem; color: var(--gray); line-height: 1.5; max-width: 100%; }
+
+/* ---- NO RESULTS ---- */
+.no-results {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.no-results-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.no-results-icon { font-size: 3rem; }
+.no-results h3 { font-size: 1.4rem; }
+.no-results p  { color: var(--gray); max-width: 36ch; margin-inline: auto; }
+
+/* ---- PRINT ---- */
+.print-only { display: none; }
+
+.print-porch {
+  margin-top: 1.5em;
+  border-top: 1px solid #ccc;
+  padding-top: 1em;
+}
+.print-porch h3 { font-size: 1.1em; margin-bottom: .3em; }
+
+@media print {
+  .print-only { display: block; padding: 1cm; }
+  .schedule-section { display: none; }
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1040px) {
+  .schedule-layout { grid-template-columns: 300px 1fr; }
+  #porchfest-map { height: 420px; }
+}
+
+@media (max-width: 768px) {
+  .map-toggle-bar { display: block; }
+  .schedule-layout { grid-template-columns: 1fr; }
+  .map-col {
+    display: none;
+    position: static;
+  }
+  .map-col--open { display: block; }
+  .map-sticky { position: static; }
+  #porchfest-map { height: 300px; }
+  .filter-bar-inner { gap: .6rem 1rem; }
+  .filter-pills { gap: .3rem; }
+  .event-bar-inner { gap: .6rem 1.5rem; }
+  .performer-row { grid-template-columns: 90px 1fr; gap: .75rem; }
+}
+
+@media (max-width: 480px) {
+  .porch-card-header { gap: .75rem; padding: 1rem; }
+  .performer-row { grid-template-columns: 1fr; gap: .4rem; padding: .85rem 1rem; }
+  .performer-time { flex-direction: row; align-items: center; gap: .25rem; }
+  .time-sep { display: inline; }
+  .filter-bar-inner { flex-direction: column; align-items: stretch; }
+  .filter-group { flex-wrap: wrap; }
+  .filter-group--search { min-width: unset; }
+  .filter-clear { align-self: flex-start; }
+}
+</style>

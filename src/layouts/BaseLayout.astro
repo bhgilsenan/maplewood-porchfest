@@ -1,0 +1,53 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "Maplewood Porchfest — A free, all-volunteer, commercial-free afternoon of live music on the porches of Maplewood's Hilton neighborhood. Every Labor Day Sunday.",
+  ogImage = "/og-default.jpg",
+} = Astro.props;
+
+const siteTitle = title === "Home"
+  ? "Maplewood Porchfest 2026"
+  : `${title} | Maplewood Porchfest 2026`;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{siteTitle}</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={siteTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <Header />
+  <main id="main" style="padding-top: 72px;">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>
