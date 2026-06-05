@@ -85,22 +85,6 @@ const timeSlots = TIME_SLOTS.map(slot => ({
         </div>
       </div>
 
-      <!-- Search -->
-      <div class="filter-group filter-group--search">
-        <label for="performer-search" class="filter-label">Search:</label>
-        <div class="search-wrap">
-          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input
-            type="search"
-            id="performer-search"
-            class="filter-input"
-            placeholder="Performer name…"
-            autocomplete="off"
-          />
-        </div>
-      </div>
-
-      <button class="btn btn--outline filter-clear" id="clear-filters" type="button">Clear</button>
     </div>
   </div>
 
@@ -129,10 +113,19 @@ const timeSlots = TIME_SLOTS.map(slot => ({
       <!-- RIGHT PANEL: TIME VIEW (default) -->
       <div class="content-col" id="content-col">
 
-        <!-- VIEW TOGGLE -->
-        <div class="view-toggle no-print" role="group" aria-label="View mode">
-          <button class="view-btn view-btn--active" data-view="time" id="btn-by-time" type="button">By Time</button>
-          <button class="view-btn" data-view="porch" id="btn-by-porch" type="button">By Porch</button>
+        <!-- VIEW TOGGLE + TIME FILTER -->
+        <div class="view-toggle-row no-print">
+          <div class="view-toggle" role="group" aria-label="View mode">
+            <button class="view-btn view-btn--active" data-view="time" id="btn-by-time" type="button">By Time</button>
+            <button class="view-btn" data-view="porch" id="btn-by-porch" type="button">By Porch</button>
+          </div>
+          <select class="filter-select" id="time-filter" aria-label="Filter by time slot">
+            <option value="all">All times</option>
+            <option value="1">1–2 PM</option>
+            <option value="2">2–3 PM</option>
+            <option value="3">3–4 PM</option>
+            <option value="4">4–5 PM</option>
+          </select>
         </div>
 
         <!-- TIME VIEW -->
@@ -327,7 +320,7 @@ const porchesData = porchesSrc;
 document.getElementById("porchfest-map").dataset.porches = JSON.stringify(porchesData);
 
 let activeGenres = new Set(["all"]);
-let searchQuery = "";
+let activeTime = "all";
 let activeView = "time"; // "time" | "porch"
 
 // ===================== VIEW TOGGLE =====================
@@ -352,11 +345,38 @@ function applyFilters() {
   syncMapMarkers();
 }
 
+function slotMatchesTime(slotLabel) {
+  if (activeTime === "all") return true;
+  const slotStart = 12 + parseInt(activeTime);
+  // slotLabel e.g. "1:00 – 2:00 PM" — extract leading hour
+  const hour = parseInt(slotLabel);
+  return hour === slotStart - 12; // "1:00..." → 1 === 13-12
+}
+
+function getPerformerHour(timeStr) {
+  const match = timeStr.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+  if (!match) return 0;
+  let h = parseInt(match[1]);
+  if (match[3].toUpperCase() === "PM" && h !== 12) h += 12;
+  return h;
+}
+
+function timeInSlot(timeStart, timeEnd) {
+  if (activeTime === "all") return true;
+  const slotStart = 12 + parseInt(activeTime);
+  const slotEnd = slotStart + 1;
+  return getPerformerHour(timeStart) < slotEnd && getPerformerHour(timeEnd) > slotStart;
+}
+
 function applyTimeViewFilters() {
   const slots = document.querySelectorAll(".time-slot-section");
   let anyVisible = false;
 
   slots.forEach(slot => {
+    const slotLabel = slot.dataset.slot || "";
+    const slotHidden = !slotMatchesTime(slotLabel);
+    if (slotHidden) { slot.style.display = "none"; return; }
+
     const cards = slot.querySelectorAll(".time-act-card");
     let slotVisible = false;
 
@@ -364,8 +384,7 @@ function applyTimeViewFilters() {
       const genre = card.dataset.genre;
       const name = (card.dataset.name || "").toLowerCase();
       const genreMatch = activeGenres.has("all") || activeGenres.has(genre);
-      const searchMatch = !searchQuery || name.includes(searchQuery.toLowerCase());
-      const visible = genreMatch && searchMatch;
+      const visible = genreMatch;
       card.style.display = visible ? "" : "none";
       if (visible) { slotVisible = true; anyVisible = true; }
     });
@@ -388,8 +407,8 @@ function applyPorchViewFilters() {
       const genre = row.dataset.genre;
       const name = (row.dataset.name || "").toLowerCase();
       const genreMatch = activeGenres.has("all") || activeGenres.has(genre);
-      const searchMatch = !searchQuery || name.includes(searchQuery.toLowerCase());
-      const visible = genreMatch && searchMatch;
+      const timeMatch = timeInSlot(row.dataset.timeStart, row.dataset.timeEnd);
+      const visible = genreMatch && timeMatch;
       row.style.display = visible ? "" : "none";
       if (visible) cardVisible = true;
     });
@@ -450,26 +469,12 @@ document.getElementById("genre-filters").addEventListener("click", e => {
   applyFilters();
 });
 
-// Search
-document.getElementById("performer-search").addEventListener("input", e => {
-  searchQuery = e.target.value.trim();
+// Time filter
+document.getElementById("time-filter").addEventListener("change", e => {
+  activeTime = e.target.value;
   applyFilters();
 });
 
-// Clear
-function clearFilters() {
-  activeGenres = new Set(["all"]);
-  searchQuery = "";
-  document.querySelectorAll(".filter-pill").forEach(p => {
-    p.classList.toggle("filter-pill--active", p.dataset.genre === "all");
-  });
-  document.getElementById("performer-search").value = "";
-  applyFilters();
-}
-
-document.getElementById("clear-filters").addEventListener("click", clearFilters);
-document.getElementById("no-results-clear-time")?.addEventListener("click", clearFilters);
-document.getElementById("no-results-clear-porch")?.addEventListener("click", clearFilters);
 
 // Sticky filter bar
 const filterBar = document.getElementById("filter-bar");
@@ -583,29 +588,33 @@ mapToggleBtn?.addEventListener("click", () => {
 .filter-pill:hover { border-color: var(--gold); background: var(--cream); }
 .filter-pill--active { background: var(--green); color: var(--white); border-color: var(--green); }
 
-.filter-group--search { flex: 1; min-width: 160px; }
-.search-wrap { position: relative; flex: 1; min-width: 0; }
-.search-icon {
-  position: absolute;
-  left: .75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--gray-light);
-  pointer-events: none;
-}
-.filter-input {
-  width: 100%;
-  padding: .38rem .75rem .38rem 2.2rem;
+.filter-select {
+  padding: .35rem .75rem;
   border: 1.5px solid var(--cream-dark);
   border-radius: 50px;
   font-family: var(--font-body);
-  font-size: .88rem;
+  font-size: .85rem;
   color: var(--charcoal);
   background: var(--white);
+  cursor: pointer;
   transition: border-color 150ms;
 }
-.filter-input:focus { outline: none; border-color: var(--gold); }
-.filter-clear { padding: .35rem 1rem; font-size: .85rem; flex-shrink: 0; }
+.filter-select:focus { outline: none; border-color: var(--gold); }
+
+
+/* ---- VIEW TOGGLE ROW ---- */
+.view-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  z-index: 10;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--cream-dark);
+  margin-bottom: 1rem;
+}
 
 /* ---- VIEW TOGGLE ---- */
 .view-toggle {
@@ -643,24 +652,39 @@ mapToggleBtn?.addEventListener("click", () => {
 .map-toggle-btn { display: flex; align-items: center; gap: .5rem; font-size: .9rem; }
 
 /* ---- SCHEDULE LAYOUT ---- */
-.schedule-section { padding-block: 2.5rem 4rem; }
+:root { --sched-offset: 130px; } /* nav 72px + filter bar ~58px */
+
+.schedule-section {
+  padding-block: 0;
+  overflow: hidden;
+}
 .schedule-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
+  gap: 0;
+  align-items: stretch;
+  height: calc(100vh - var(--sched-offset));
+  overflow: hidden;
 }
 
 /* ---- MAP ---- */
+.map-col {
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--cream-dark);
+}
 .map-sticky {
-  position: sticky;
-  top: calc(72px + 54px + 58px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 }
 #porchfest-map {
-  height: 560px;
+  flex: 1;
   border-radius: var(--radius-lg);
   border: 2px solid var(--cream-dark);
   z-index: 1;
+  min-height: 0;
 }
 .map-note {
   font-size: .78rem;
@@ -668,6 +692,7 @@ mapToggleBtn?.addEventListener("click", () => {
   text-align: center;
   margin-top: .5rem;
   font-style: italic;
+  flex-shrink: 0;
 }
 
 :global(.map-marker) {
@@ -763,12 +788,16 @@ mapToggleBtn?.addEventListener("click", () => {
   margin: 0;
 }
 
-/* ---- PORCH CARDS ---- */
+/* ---- CONTENT COLUMN ---- */
 .content-col {
+  height: 100%;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  padding: 0 1.25rem 1.25rem;
 }
+
+/* ---- PORCH CARDS ---- */
 
 #porch-view:not([hidden]) {
   display: flex;
@@ -908,8 +937,6 @@ mapToggleBtn?.addEventListener("click", () => {
   .time-sep { display: inline; }
   .filter-bar-inner { flex-direction: column; align-items: stretch; }
   .filter-group { flex-wrap: wrap; }
-  .filter-group--search { min-width: unset; }
-  .filter-clear { align-self: flex-start; }
   .view-toggle { align-self: flex-start; }
 }
 </style>
