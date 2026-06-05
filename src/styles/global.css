@@ -254,15 +254,6 @@ textarea.form-control { resize: vertical; min-height: 130px; }
   transform: translateY(-2px);
 }
 
-/* --- DIVIDERS --- */
-.divider {
-  width: 60px;
-  height: 4px;
-  background: var(--gold);
-  border-radius: 2px;
-  margin-block: 1.25rem;
-}
-
 /* --- SKIP LINK --- */
 .skip-link {
   position: absolute;
