@@ -3,197 +3,695 @@
     "date": "Sunday, September 6, 2026",
     "rain_date": "Monday, September 7, 2026",
     "hours": "1:00 PM – 5:00 PM",
-    "honk_parade": "Noon at DeHart Community Center"
+    "honk_parade": "12:30 PM from DeHart Community Center, 120 Burnett Ave"
   },
   "porches": [
     {
       "id": 1,
-      "address": "121 Lexington Ave",
-      "neighborhood_note": "Corner of Lexington & Baker St",
-      "lat": 40.7282,
-      "lng": -74.2751,
+      "address": "2 Henry Pl",
+      "neighborhood_note": null,
+      "lat": 40.7204,
+      "lng": -74.2545,
       "performers": [
         {
-          "name": "The River Road Ramblers",
-          "genre": "Folk",
+          "name": "Open Roads Band",
+          "genre": "Rock",
           "time_start": "1:00 PM",
-          "time_end": "2:00 PM",
-          "description": "Acoustic folk duo blending Appalachian roots with contemporary storytelling. Bring a blanket and settle in."
-        },
-        {
-          "name": "Sonia Reyes Quartet",
-          "genre": "Latin",
-          "time_start": "3:00 PM",
-          "time_end": "5:00 PM",
-          "description": "Sonia's quartet brings the energy of salsa and bossa nova to the porch. Guaranteed to get you on your feet."
+          "time_end": "3:00 PM",
+          "description": "Mix of styles from rock, country, blues, and more."
         }
       ]
     },
     {
       "id": 2,
-      "address": "47 Midland Ave",
-      "neighborhood_note": "Large yard, plenty of lawn space",
-      "lat": 40.7295,
-      "lng": -74.2738,
+      "address": "174 Jacoby St",
+      "neighborhood_note": null,
+      "lat": 40.7180,
+      "lng": -74.2559,
       "performers": [
         {
-          "name": "Maplewood Blues Project",
-          "genre": "Blues",
-          "time_start": "1:00 PM",
-          "time_end": "3:00 PM",
-          "description": "Local blues veterans with a repertoire stretching from Delta classics to Chicago electric. Don't miss their slide guitar."
-        },
-        {
-          "name": "The Funky Hilton Horns",
-          "genre": "Funk",
-          "time_start": "3:30 PM",
-          "time_end": "5:00 PM",
-          "description": "An eight-piece funk ensemble born in the Hilton neighborhood. Soul, groove, and brass — all afternoon."
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "address": "203 Parker Ave",
-      "neighborhood_note": "Wrap-around porch, shaded",
-      "lat": 40.7271,
-      "lng": -74.2760,
-      "performers": [
-        {
-          "name": "Clara Westfield",
-          "genre": "Classical",
+          "name": "Amusia",
+          "genre": "Pop",
           "time_start": "1:00 PM",
           "time_end": "2:00 PM",
-          "description": "Pianist Clara Westfield performs solo repertoire from Chopin and Debussy. A quiet, beautiful corner of Porchfest."
+          "description": "Good time dance music."
         },
         {
-          "name": "Hearthstone String Quartet",
-          "genre": "Classical",
-          "time_start": "2:30 PM",
-          "time_end": "4:30 PM",
-          "description": "Four friends, four strings, and a shaded porch. Expect Beethoven, Shostakovich, and a few surprises."
+          "name": "David Oliver Till",
+          "genre": "Folk",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Singer/songwriter playing acoustic folk."
         }
       ]
     },
     {
       "id": 4,
-      "address": "88 Burnett Ave",
-      "neighborhood_note": "Open driveway, great sightlines",
-      "lat": 40.7310,
-      "lng": -74.2745,
+      "address": "59 Schaefer Rd",
+      "neighborhood_note": null,
+      "lat": 40.7153,
+      "lng": -74.2580,
       "performers": [
         {
-          "name": "Neon Gravity",
-          "genre": "Indie Rock",
-          "time_start": "1:30 PM",
-          "time_end": "3:30 PM",
-          "description": "Guitar-driven indie rock with pop hooks and big energy. These kids grew up on Wilco and Vampire Weekend."
+          "name": "Choy",
+          "genre": "World",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Trinidad-influenced soulful sounds."
         },
         {
-          "name": "The Hollow Pines",
-          "genre": "Indie Rock",
-          "time_start": "4:00 PM",
-          "time_end": "5:00 PM",
-          "description": "Dreamy shoegaze-inflected indie rock. Closer vibes. Perfect for the golden hour."
+          "name": "Uncalled For",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Cover band playing rock, metal, and more."
         }
       ]
     },
     {
       "id": 5,
-      "address": "15 Durand Rd",
-      "neighborhood_note": "Front steps and yard",
-      "lat": 40.7265,
-      "lng": -74.2772,
+      "address": "26 Porter Rd",
+      "neighborhood_note": null,
+      "lat": 40.7149,
+      "lng": -74.2594,
       "performers": [
         {
-          "name": "Tiny Tunes & Tales",
-          "genre": "Kids/Family",
-          "time_start": "1:00 PM",
-          "time_end": "2:30 PM",
-          "description": "Interactive songs, stories, and silliness for the littlest Porchfest fans. All ages welcome, but bring the kids!"
-        },
-        {
-          "name": "Marcus & The Afternoon",
-          "genre": "Folk",
+          "name": "The Johnny Woods Band",
+          "genre": "Country",
           "time_start": "3:00 PM",
-          "time_end": "5:00 PM",
-          "description": "Marcus Chen's fingerpicking and warm baritone feel like a long summer afternoon. Originals and covers from his forthcoming album."
+          "time_end": "4:00 PM",
+          "description": "Country Americana."
         }
       ]
     },
     {
       "id": 6,
-      "address": "162 Lenox Ave",
-      "neighborhood_note": "Corner lot, good visibility",
-      "lat": 40.7300,
-      "lng": -74.2762,
+      "address": "11 Field Rd",
+      "neighborhood_note": null,
+      "lat": 40.7155,
+      "lng": -74.2614,
       "performers": [
         {
-          "name": "The Idle Hours Jazz Band",
-          "genre": "Jazz",
-          "time_start": "1:00 PM",
-          "time_end": "2:30 PM",
-          "description": "Traditional jazz standards and a few bebop charts from this beloved local ensemble. They've played every Porchfest."
+          "name": "Three Blind Mice",
+          "genre": "Blues",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Rock and Blues."
         },
         {
-          "name": "Vera Okafor Trio",
-          "genre": "Jazz",
-          "time_start": "3:00 PM",
+          "name": "Broken Rulz",
+          "genre": "Blues",
+          "time_start": "4:00 PM",
           "time_end": "5:00 PM",
-          "description": "Contemporary jazz with West African harmonic influences. Vera's saxophone work is not to be missed."
+          "description": "Rock and Blues."
         }
       ]
     },
     {
       "id": 7,
-      "address": "34 Highland Place",
-      "neighborhood_note": "Top of the hill, great view",
-      "lat": 40.7318,
-      "lng": -74.2730,
+      "address": "67 Hughes St",
+      "neighborhood_note": null,
+      "lat": 40.7183,
+      "lng": -74.2572,
       "performers": [
         {
-          "name": "Smoke & Ember",
-          "genre": "Blues",
-          "time_start": "1:00 PM",
-          "time_end": "2:30 PM",
-          "description": "Husband-and-wife blues duo. Slide guitar, harmonica, and soul-deep vocals. Raw and beautiful."
-        },
-        {
-          "name": "DJ Mambo Groove",
-          "genre": "Funk",
+          "name": "Eli Bolin & Allison Posner",
+          "genre": "Folk",
           "time_start": "3:00 PM",
-          "time_end": "5:00 PM",
-          "description": "A DJ set that mixes funk, soul, Afrobeat, and disco. The highest-energy porch on the block."
+          "time_end": "4:00 PM",
+          "description": "Acoustic duo with tight vocal harmonies."
         }
       ]
     },
     {
       "id": 8,
-      "address": "77 Courtenay Ave",
-      "neighborhood_note": "Spacious front yard",
-      "lat": 40.7288,
-      "lng": -74.2718,
+      "address": "64 Hughes St",
+      "neighborhood_note": null,
+      "lat": 40.7182,
+      "lng": -74.2569,
       "performers": [
         {
-          "name": "The Porch Pickers",
+          "name": "U.L.T.R.A.S.",
+          "genre": "Jazz",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Jazz Fusion."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "address": "33 Hughes St",
+      "neighborhood_note": null,
+      "lat": 40.7188,
+      "lng": -74.2565,
+      "performers": [
+        {
+          "name": "Fishmarket Stew",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Playing the music of Phish."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "address": "17 Vermont St",
+      "neighborhood_note": "On Hilton",
+      "lat": 40.7213,
+      "lng": -74.2596,
+      "performers": [
+        {
+          "name": "The Refugee Dogs",
           "genre": "Folk",
           "time_start": "1:00 PM",
-          "time_end": "2:30 PM",
-          "description": "Old-time string band featuring banjo, fiddle, upright bass, and mandolin. Expect dancing."
+          "time_end": "2:00 PM",
+          "description": "Music ranging from insightful to vaguely off color."
         },
         {
-          "name": "Kids in Concert: Little Hilton Choir",
+          "name": "The Dot Tones",
+          "genre": "Punk",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Eclectic mix of punk, post-punk, and surf rock music."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "address": "11 Vermont St",
+      "neighborhood_note": null,
+      "lat": 40.7216,
+      "lng": -74.2597,
+      "performers": [
+        {
+          "name": "Adventures in Ozz",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Ozzy Osbourne cover band."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "address": "16 Franklin Ave",
+      "neighborhood_note": null,
+      "lat": 40.7207,
+      "lng": -74.2602,
+      "performers": [
+        {
+          "name": "Mad Slap Tones",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Vintage rock & roll & rockabilly."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "address": "34 Tucsan St",
+      "neighborhood_note": null,
+      "lat": 40.7210,
+      "lng": -74.2614,
+      "performers": [
+        {
+          "name": "Adjustable Thrills",
+          "genre": "Punk",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Mix of punk, post-punk, and surf rock music."
+        },
+        {
+          "name": "Chaance Barnes",
+          "genre": "R&B",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "R&B and jazz singer."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "address": "56 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.7211,
+      "lng": -74.2623,
+      "performers": [
+        {
+          "name": "Useful Engines",
+          "genre": "Funk",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Funk infused rock."
+        },
+        {
+          "name": "Foul Play",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Rock band covering 70s through 2000s."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "address": "58 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.7211,
+      "lng": -74.2624,
+      "performers": [
+        {
+          "name": "Big Romance",
+          "genre": "Pop",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Classic favorites and originals with sweet harmonies."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "address": "78 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.7210,
+      "lng": -74.2632,
+      "performers": [
+        {
+          "name": "Constant Gardeners",
+          "genre": "Folk",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Indie and folk duo."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "address": "16 Princeton St",
+      "neighborhood_note": "On Hilton",
+      "lat": 40.7203,
+      "lng": -74.2679,
+      "performers": [
+        {
+          "name": "The Foggy Family",
+          "genre": "Bluegrass",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Bluegrass, folk, country, and comedy."
+        },
+        {
+          "name": "The Coverup",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Rock from the 60s through the 90s."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "address": "194 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.7202,
+      "lng": -74.2689,
+      "performers": [
+        {
+          "name": "Ghost Notes",
+          "genre": "Kids/Family",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Kid's band with a variety of great rock grooves."
+        },
+        {
+          "name": "Starlight Barfight",
+          "genre": "Pop",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "All-women pop cover band."
+        },
+        {
+          "name": "Mousetrap",
           "genre": "Kids/Family",
           "time_start": "3:00 PM",
           "time_end": "4:00 PM",
-          "description": "Local children's choir performing songs from their spring concert. Proud parents (and neighbors) encouraged to attend."
+          "description": "Kid's band playing pop, punk, and hardcore."
         },
         {
-          "name": "Rosa & The Bloom",
-          "genre": "Indie Rock",
-          "time_start": "4:15 PM",
+          "name": "Harrison Clock Band",
+          "genre": "Electronic",
+          "time_start": "4:00 PM",
           "time_end": "5:00 PM",
-          "description": "Power trio closing out the afternoon with anthemic indie rock. A perfect send-off to a great Porchfest."
+          "description": "Atmospheric electric poetry."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "address": "180 Indiana St",
+      "neighborhood_note": "On Hilton",
+      "lat": 40.7195,
+      "lng": -74.2721,
+      "performers": [
+        {
+          "name": "DC & The Desperados",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Original rock & roll."
+        },
+        {
+          "name": "Over My Dad Body",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Sad Dad songs in a Nirvana vibe."
+        },
+        {
+          "name": "Ravens",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Doomgaze psychedelic rock."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "address": "197 Indiana St",
+      "neighborhood_note": null,
+      "lat": 40.7188,
+      "lng": -74.2721,
+      "performers": [
+        {
+          "name": "Spay",
+          "genre": "Punk",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Energetic covers of riot grrl and punk-adjacent music."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "address": "208 Franklin Ave",
+      "neighborhood_note": null,
+      "lat": 40.7195,
+      "lng": -74.2689,
+      "performers": [
+        {
+          "name": "The Maybes",
+          "genre": "Folk",
+          "time_start": "2:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Pop, folk, and rock mixture."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "address": "31 Princeton St",
+      "neighborhood_note": null,
+      "lat": 40.7196,
+      "lng": -74.2679,
+      "performers": [
+        {
+          "name": "Tuffy",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Lyric-driven indie pop."
+        },
+        {
+          "name": "Thrill Ride",
+          "genre": "Punk",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Post punk trio."
+        },
+        {
+          "name": "Paul Crane",
+          "genre": "Americana",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Americana infused power pop."
+        },
+        {
+          "name": "Anderson Council",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Psychopowerpop."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "address": "115 Franklin Ave",
+      "neighborhood_note": null,
+      "lat": 40.7199,
+      "lng": -74.2649,
+      "performers": [
+        {
+          "name": "Double A",
+          "genre": "Kids/Family",
+          "time_start": "2:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Kid band rocking out."
+        },
+        {
+          "name": "Mandarin Hand",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Instrumental prog metal."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "address": "45 Wellesley St",
+      "neighborhood_note": "On Lexington",
+      "lat": 40.7196,
+      "lng": -74.2635,
+      "performers": [
+        {
+          "name": "Big Train",
+          "genre": "R&B",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "R&B and soul classics."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "address": "117 Lexington Ave",
+      "neighborhood_note": "Two stages at Concord & Lexington",
+      "lat": 40.7189,
+      "lng": -74.2668,
+      "performers": [
+        {
+          "name": "South Mountain Squirrel Hunters",
+          "genre": "Bluegrass",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Fiddle and Bluegrass music on Concord."
+        },
+        {
+          "name": "Jackson Square",
+          "genre": "Jazz",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Classic New Orleans Jazz on Concord."
+        },
+        {
+          "name": "Hallie K.",
+          "genre": "Folk",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "90s-inspired singer/songwriter on Lexington."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "address": "155 Lexington Ave",
+      "neighborhood_note": null,
+      "lat": 40.7186,
+      "lng": -74.2687,
+      "performers": [
+        {
+          "name": "Django Untrained",
+          "genre": "Jazz",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Acoustic guitar jazz inspired by Django Reinhardt."
+        },
+        {
+          "name": "The Third Project",
+          "genre": "Folk",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Family-friendly jams on guitar and ukulele."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "address": "154 Lexington Ave",
+      "neighborhood_note": null,
+      "lat": 40.7188,
+      "lng": -74.2687,
+      "performers": [
+        {
+          "name": "sasso",
+          "genre": "Indie",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "SOMA teens rocking on 60s through alt/indie covers."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "address": "778 Prospect St",
+      "neighborhood_note": null,
+      "lat": 40.7189,
+      "lng": -74.2697,
+      "performers": [
+        {
+          "name": "Jay Daniels",
+          "genre": "Jazz",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Pianist/vocalist plays jazz-infused pop."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "address": "779 Prospect St",
+      "neighborhood_note": null,
+      "lat": 40.7189,
+      "lng": -74.2700,
+      "performers": [
+        {
+          "name": "Lady Lychee",
+          "genre": "Jazz",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Jazz vocals combined with pop and punk."
+        },
+        {
+          "name": "ZooS",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Power rock trio."
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "address": "185 Lexington Ave",
+      "neighborhood_note": null,
+      "lat": 40.7184,
+      "lng": -74.2700,
+      "performers": [
+        {
+          "name": "Mia Soleil Sanchez",
+          "genre": "Pop",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "13-year-old singer & musician."
+        },
+        {
+          "name": "Brennan Green",
+          "genre": "Electronic",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "House and disco DJ."
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "address": "804 Prospect St",
+      "neighborhood_note": null,
+      "lat": 40.7178,
+      "lng": -74.2695,
+      "performers": [
+        {
+          "name": "Aaron Dream",
+          "genre": "Indie",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Radiohead, Prince, and Kendrick Lamar influenced music."
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "address": "16 Revere Ave",
+      "neighborhood_note": null,
+      "lat": 40.7182,
+      "lng": -74.2683,
+      "performers": [
+        {
+          "name": "LAREDO & Friends",
+          "genre": "Americana",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Rock with an Americana twist."
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "address": "34 Revere Ave",
+      "neighborhood_note": null,
+      "lat": 40.7180,
+      "lng": -74.2690,
+      "performers": [
+        {
+          "name": "Future Hero",
+          "genre": "Folk",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Folk/pop originals."
+        },
+        {
+          "name": "Sarah Hodd & The Drive",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Covers and originals with a throwback vibe."
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "address": "71 Concord Ave",
+      "neighborhood_note": null,
+      "lat": 40.7176,
+      "lng": -74.2683,
+      "performers": [
+        {
+          "name": "Mt. Feral",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Indie rock-adjacent originals and covers."
+        },
+        {
+          "name": "Sammy Melman/Sammy Trombone",
+          "genre": "Jazz",
+          "time_start": "2:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Trombone and a loop pedal creating beautiful melodies."
         }
       ]
     }
