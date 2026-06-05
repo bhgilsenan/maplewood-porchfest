@@ -42,7 +42,9 @@ const timeSlots = TIME_SLOTS.map(slot => ({
   <PageHero
     title="Schedule"
     subtitle={`${event.date} · ${event.hours}`}
-  />
+  >
+    <p class="page-hero-rain-date">Rain date: {event.rain_date}</p>
+  </PageHero>
 
   <!-- EVENT INFO BAR -->
   <div class="event-bar no-print">
@@ -130,6 +132,25 @@ const timeSlots = TIME_SLOTS.map(slot => ({
 
         <!-- TIME VIEW -->
         <div id="time-view">
+
+          <!-- HONK PARADE -->
+          <div class="time-slot-section">
+            <h2 class="time-slot-heading">12:30 PM – 1:00 PM</h2>
+            <div class="time-acts-grid">
+              <div class="time-act-card time-act-card--parade">
+                <div class="time-act-top">
+                  <strong class="time-act-name">Honk Parade</strong>
+                  <span class="genre-pill genre-pill--parade">Parade</span>
+                </div>
+                <p class="time-act-where">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  DeHart Community Center, 120 Burnett Ave
+                </p>
+                <p class="time-act-time">Kicks off Porchfest. A brass-and-noise street parade — all are welcome to march or watch.</p>
+              </div>
+            </div>
+          </div>
+
           {timeSlots.map(slot => (
             <div class="time-slot-section" data-slot={slot.label}>
               <h2 class="time-slot-heading">{slot.label}</h2>
@@ -609,7 +630,7 @@ mapToggleBtn?.addEventListener("click", () => {
   justify-content: space-between;
   position: sticky;
   top: 0;
-  background: var(--white);
+  background: var(--cream);
   z-index: 10;
   padding-block: 1rem;
   border-bottom: 1px solid var(--cream-dark);
@@ -733,14 +754,18 @@ mapToggleBtn?.addEventListener("click", () => {
   text-transform: uppercase;
   letter-spacing: .08em;
   color: var(--green);
-  padding-bottom: .6rem;
+  padding: .5rem 0 .6rem;
   border-bottom: 2px solid var(--gold);
   margin-bottom: 1rem;
+  position: sticky;
+  top: 4rem;
+  background: var(--cream);
+  z-index: 9;
 }
 
 .time-acts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: 1fr;
   gap: .75rem;
 }
 
@@ -751,6 +776,27 @@ mapToggleBtn?.addEventListener("click", () => {
   padding: .9rem 1rem;
   transition: border-color 150ms, box-shadow 150ms;
   cursor: default;
+}
+.time-act-card--parade {
+  background: var(--white);
+  border-color: var(--gold);
+  border-left: 4px solid var(--gold);
+  cursor: default;
+}
+.time-act-card--parade:hover {
+  border-color: var(--gold);
+  border-left-color: var(--gold);
+  box-shadow: var(--shadow-sm);
+}
+.genre-pill--parade {
+  background: var(--gold);
+  color: var(--charcoal);
+  border-color: var(--gold);
+}
+.time-act-time {
+  font-size: .85rem;
+  color: var(--gray);
+  margin-top: .35rem;
 }
 .time-act-card:hover {
   border-color: var(--gold);
@@ -911,7 +957,7 @@ mapToggleBtn?.addEventListener("click", () => {
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 1100px) {
-  .time-acts-grid { grid-template-columns: 1fr; }
+
 }
 
 @media (max-width: 768px) {
