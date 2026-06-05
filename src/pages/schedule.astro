@@ -46,32 +46,6 @@ const timeSlots = TIME_SLOTS.map(slot => ({
     <p class="page-hero-rain-date">Rain date: {event.rain_date}</p>
   </PageHero>
 
-  <!-- EVENT INFO BAR -->
-  <div class="event-bar no-print">
-    <div class="container event-bar-inner">
-      <div class="event-info-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span><strong>{event.date}</strong></span>
-      </div>
-      <div class="event-info-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>{event.hours}</span>
-      </div>
-      <div class="event-info-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/></svg>
-        <span>Rain date: <strong>{event.rain_date}</strong></span>
-      </div>
-      <div class="event-info-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span>Honk Parade: <strong>{event.honk_parade}</strong></span>
-      </div>
-      <a href="/schedule" onclick="window.print(); return false;" class="btn btn--outline print-btn no-print" aria-label="Print schedule">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Print
-      </a>
-    </div>
-  </div>
-
   <!-- FILTER BAR -->
   <div class="filter-bar no-print" id="filter-bar">
     <div class="container filter-bar-inner">
@@ -536,34 +510,13 @@ mapToggleBtn?.addEventListener("click", () => {
 
 <style>
 /* ---- EVENT BAR ---- */
-.event-bar {
-  background: var(--green);
-  color: var(--cream);
-  padding: .75rem 0;
-  border-bottom: 3px solid var(--gold);
-}
-.event-bar-inner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 2rem;
-  align-items: center;
-}
-.event-info-item {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  font-size: .9rem;
-  color: rgba(250,246,238,.9);
-}
-.event-info-item svg { opacity: .7; flex-shrink: 0; }
-.print-btn { margin-left: auto; padding: .4rem 1rem; font-size: .85rem; border-color: rgba(255,255,255,.4); color: var(--cream); }
-.print-btn:hover { background: rgba(255,255,255,.15); }
 
 /* ---- FILTER BAR ---- */
 .filter-bar {
   background: var(--white);
   border-bottom: 1px solid var(--cream-dark);
   padding: .75rem 0;
+  margin-top: 2rem;
   top: 72px;
   z-index: 90;
   transition: box-shadow 200ms;
@@ -972,8 +925,7 @@ mapToggleBtn?.addEventListener("click", () => {
   #porchfest-map { height: 300px; }
   .filter-bar-inner { gap: .6rem .75rem; }
   .filter-pills { gap: .3rem; }
-  .event-bar-inner { gap: .6rem 1.5rem; }
-  .performer-row { grid-template-columns: 90px 1fr; gap: .75rem; }
+.performer-row { grid-template-columns: 90px 1fr; gap: .75rem; }
 }
 
 @media (max-width: 480px) {
