@@ -140,7 +140,6 @@ const photos = [
 }
 .photo-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-3px) scale(1.01);
 }
 
 .photo-img-wrap {
@@ -232,6 +231,6 @@ const photos = [
 
 @media print {
   .photo-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem; }
-  .photo-card:hover { transform: none; box-shadow: none; }
+  .photo-card:hover { box-shadow: none; }
 }
 </style>

@@ -141,7 +141,6 @@ p { max-width: 68ch; }
 .btn--primary:hover {
   background: var(--coral-dark);
   box-shadow: 0 4px 16px rgba(201,74,46,.4);
-  transform: translateY(-1px);
 }
 
 .btn--secondary {
@@ -171,7 +170,6 @@ p { max-width: 68ch; }
 }
 .btn--gold:hover {
   background: var(--gold-dark);
-  transform: translateY(-1px);
 }
 
 .btn--green {
@@ -180,7 +178,6 @@ p { max-width: 68ch; }
 }
 .btn--green:hover {
   background: var(--green-light);
-  transform: translateY(-1px);
 }
 
 /* --- GENRE PILLS --- */
@@ -251,7 +248,6 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 
 .card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 /* --- SKIP LINK --- */
