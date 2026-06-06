@@ -76,7 +76,19 @@ const categories = [
       <div class="category-grid">
         {categories.map((cat) => (
           <div class:list={["category-card", `category-card--${cat.color}`]}>
-            <div class="category-icon">{cat.icon}</div>
+            <div class="category-icon">
+              {cat.color === "green" && (
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              )}
+              {cat.color === "gold" && (
+                <svg width="44" height="44" viewBox="0 0 16 16" aria-hidden="true">
+                  <path fill="currentColor" fill-rule="evenodd" d="m3.75 15.7l7.61-6.79c1.2.046 2.41-.389 3.33-1.3a4.466 4.466 0 0 0 0-6.31a4.466 4.466 0 0 0-6.31 0a4.43 4.43 0 0 0-1.3 3.33L.29 12.24a1.113 1.113 0 0 0 .044 1.53l1.89 1.89c.418.418 1.09.438 1.53.044zm6.83-7.43L7.71 5.4L6.49 6.77l2.72 2.72zm-2.11 1.89L5.83 7.52l-4.8 5.38a.117.117 0 0 0 .005.16l1.89 1.89a.117.117 0 0 0 .16.005l5.38-4.8zm-.395-5.81c.025-.854.363-1.7 1.01-2.35a3.47 3.47 0 0 1 4.9 0a3.47 3.47 0 0 1 0 4.9a3.42 3.42 0 0 1-2.35 1.01l-3.57-3.57z" clip-rule="evenodd"/>
+                </svg>
+              )}
+              {cat.color === "coral" && (
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              )}
+            </div>
             <h3 class="category-title">{cat.title}</h3>
             <p class="category-desc">{cat.description}</p>
             <ul class="category-details">
@@ -183,18 +195,34 @@ const categories = [
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border-top: 5px solid var(--gold);
-  transition: box-shadow var(--transition), transform var(--transition);
+  transition: box-shadow var(--transition);
 }
 .category-card:hover {
   box-shadow: var(--shadow-md);
 }
-.category-card--green { border-top-color: var(--green); }
-.category-card--gold  { border-top-color: var(--gold); }
-.category-card--coral { border-top-color: var(--coral); }
 
-.category-icon { font-size: 2.5rem; }
-.category-title { font-size: 1.3rem; }
+.category-icon { line-height: 0; color: var(--gold); }
+.category-card--green .category-icon { color: var(--green); }
+.category-card--gold  .category-icon { color: var(--gold); }
+.category-card--coral .category-icon { color: var(--coral); }
+.category-title {
+  font-size: 1.3rem;
+  padding-bottom: .6rem;
+  position: relative;
+}
+.category-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 36px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--gold);
+}
+.category-card--green .category-title::after { background: var(--green); }
+.category-card--gold  .category-title::after { background: var(--gold); }
+.category-card--coral .category-title::after { background: var(--coral); }
 .category-desc { color: var(--gray); font-size: .95rem; max-width: 100%; }
 
 .category-details {
