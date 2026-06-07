@@ -8,68 +8,81 @@ const photos = [
     caption: "The Honk Parade rolls through the Hilton neighborhood",
     credit: "Tom Melee",
     year: 2024,
+    highlight: true,
   },
   {
     src: "/images/photos/crowd-lawn-2024.jpg",
     caption: "Crowds gather on the lawn for a porch performance",
     credit: "Gregory Burrus",
     year: 2024,
-  },
-  {
-    src: "/images/photos/street-crowd-2023.jpg",
-    caption: "Musicians playing to an appreciative street crowd",
-    credit: "Scott Kettner",
-    year: 2023,
-  },
-  {
-    src: "/images/photos/young-fan-2021.jpg",
-    caption: "A young Porchfest fan enjoys the music",
-    credit: "Community volunteer",
-    year: 2021,
+    highlight: false,
   },
   {
     src: "/images/photos/shaded-porch-2024.jpg",
     caption: "Full-swing performance at a shaded porch",
     credit: "John Munson",
     year: 2024,
+    highlight: false,
   },
   {
     src: "/images/photos/golden-afternoon-2024.jpg",
     caption: "Golden afternoon light on a porch performance",
     credit: "John Munson",
     year: 2024,
+    highlight: true,
   },
   {
     src: "/images/photos/band-energy-2024.jpg",
     caption: "Band bringing the energy to a backyard crowd",
     credit: "John Munson",
     year: 2024,
+    highlight: false,
   },
   {
     src: "/images/photos/rites-of-springfield-2024.jpg",
     caption: "Rites of Springfield performing at Porchfest",
     credit: "John Munson",
     year: 2024,
+    highlight: false,
+  },
+  {
+    src: "/images/photos/street-crowd-2023.jpg",
+    caption: "Musicians playing to an appreciative street crowd",
+    credit: "Scott Kettner",
+    year: 2023,
+    highlight: false,
   },
   {
     src: "/images/photos/neighbor-audience-2023.jpg",
     caption: "Neighbor audience enjoying the street-side performance",
     credit: "Steve LeBlanc",
     year: 2023,
+    highlight: true,
   },
   {
     src: "/images/photos/lemonade-stand-2022.jpg",
     caption: "The lemonade stand in action on a warm Porchfest afternoon",
     credit: "Tracy Sham",
     year: 2022,
+    highlight: true,
+  },
+  {
+    src: "/images/photos/young-fan-2021.jpg",
+    caption: "A young Porchfest fan enjoys the music",
+    credit: "Community volunteer",
+    year: 2021,
+    highlight: true,
   },
   {
     src: "/images/photos/porchresters-2017.jpg",
     caption: "The Porchresters at the very first Maplewood Porchfest, 2017",
     credit: "Tracy Sham Photography",
     year: 2017,
+    highlight: true,
   },
 ];
+
+const years = [2024, 2023, 2022, 2021, 2017];
 ---
 
 <BaseLayout
@@ -79,15 +92,26 @@ const photos = [
 
   <PageHero
     title="Photos"
-    subtitle="Nine years of music, porches, and community — captured by John Munson, Tom Malee, George Burrus, Steve LeBlanc, Tracy Sham, and community volunteers."
+    subtitle="Nine years of music, porches, and community — captured across Maplewood's Hilton neighborhood."
   />
 
   <section class="section">
     <div class="container">
 
+      <div class="tab-strip" role="tablist">
+        <button class="tab-btn active" data-tab="highlights" role="tab" aria-selected="true">Highlights</button>
+        {years.map((year) => (
+          <button class="tab-btn" data-tab={String(year)} role="tab" aria-selected="false">{year}</button>
+        ))}
+      </div>
+
       <div class="photo-grid">
         {photos.map((photo) => (
-          <figure class="photo-card">
+          <figure
+            class="photo-card"
+            data-year={String(photo.year)}
+            data-highlight={photo.highlight ? "true" : "false"}
+          >
             <div class="photo-img-wrap">
               <img
                 src={photo.src}
@@ -98,16 +122,15 @@ const photos = [
             </div>
             <figcaption class="photo-caption">
               <p class="photo-desc">{photo.caption}</p>
-              <p class="photo-meta">
-                <span class="photo-year">{photo.year}</span>
-                <span class="photo-credit">Photo: {photo.credit}</span>
-              </p>
+              <p class="photo-meta">{photo.year} · {photo.credit}</p>
             </figcaption>
           </figure>
         ))}
       </div>
 
-      <div class="photo-credits-block">
+      <hr class="photo-divider" />
+
+      <div class="photo-attribution">
         <h3>Photo Credits</h3>
         <p>
           Photography by <strong>John Munson</strong>, <strong>Tom Melee</strong>,
@@ -124,26 +147,78 @@ const photos = [
 
 </BaseLayout>
 
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.photo-card');
+
+  function activate(tab: string) {
+    tabs.forEach(btn => {
+      const active = btn.dataset.tab === tab;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    cards.forEach(card => {
+      let visible = false;
+      if (tab === 'highlights') {
+        visible = card.dataset.highlight === 'true';
+      } else {
+        visible = card.dataset.year === tab;
+      }
+      card.style.display = visible ? '' : 'none';
+    });
+  }
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => activate(btn.dataset.tab!));
+  });
+
+  activate('highlights');
+</script>
+
 <style>
+.tab-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.75rem;
+}
+
+.tab-strip .tab-btn {
+  font-family: var(--font-body);
+  font-size: .875rem;
+  font-weight: 600;
+  padding: .4rem 1.1rem;
+  border-radius: 50px;
+  border: 1.5px solid var(--cream-dark);
+  background: var(--white);
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.tab-strip .tab-btn:hover:not(.active) {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.tab-strip .tab-btn.active {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}
+
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  gap: 2rem 1.5rem;
 }
 
 .photo-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition), transform var(--transition);
-}
-.photo-card:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .photo-img-wrap {
-  aspect-ratio: 4/3;
+  aspect-ratio: 3/2;
   overflow: hidden;
   background: var(--cream-dark);
 }
@@ -153,61 +228,36 @@ const photos = [
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 350ms ease;
-}
-
-.photo-card:hover .photo-img {
-  transform: scale(1.04);
 }
 
 .photo-caption {
-  padding: .75rem 1rem;
+  padding: .6rem 0 0;
 }
 
 .photo-desc {
   font-size: .85rem;
   color: var(--charcoal);
-  margin-bottom: .4rem;
+  margin-bottom: .25rem;
   line-height: 1.4;
-  max-width: 100%;
 }
 
 .photo-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 100%;
-}
-
-.photo-year {
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--gold-dark);
-  background: var(--cream-dark);
-  padding: .15rem .5rem;
-  border-radius: 50px;
-}
-
-.photo-credit {
   font-size: .75rem;
   color: var(--gray-light);
-  font-style: italic;
 }
 
-.photo-credits-block {
-  margin-top: 3rem;
-  padding: 2rem;
-  background: var(--cream-dark);
-  border-radius: var(--radius-lg);
-  border-left: 4px solid var(--gold);
+.photo-divider {
+  border: none;
+  border-top: 1px solid var(--cream-dark);
+  margin: 3rem 0 2rem;
 }
 
-.photo-credits-block h3 {
-  font-size: 1.1rem;
-  margin-bottom: .75rem;
+.photo-attribution h3 {
+  font-size: 1rem;
+  margin-bottom: .5rem;
 }
 
-.photo-credits-block p {
+.photo-attribution p {
   font-size: .9rem;
   color: var(--gray);
   max-width: 70ch;
@@ -232,5 +282,6 @@ const photos = [
 @media print {
   .photo-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem; }
   .photo-card:hover { box-shadow: none; }
+  .tab-strip { display: none; }
 }
 </style>
