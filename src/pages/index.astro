@@ -31,7 +31,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="section">
     <div class="container description-grid">
       <div class="description-text">
-        <div class="divider"></div>
         <h2>A neighborhood turns into a stage</h2>
         <p>
           Maplewood Porchfest is a free, all-volunteer, commercial-free afternoon of live music
@@ -47,7 +46,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </div>
       <div class="description-image">
         <img
-          src="https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1S7A8628-FINAL-3200PX.jpg?format=1000w"
+          src="/images/performance-hilton-porch.jpg"
           alt="Live music performance at a Hilton neighborhood porch during Maplewood Porchfest"
           class="section-photo"
           loading="lazy"
@@ -61,7 +60,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="container honk-inner">
       <div class="honk-image">
         <img
-          src="https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/7583f04f-c0fb-4a40-8321-ae78b484eabb/Honk-A-Photo-Tom_Melee.jpg?format=800w"
+          src="/images/honk-parade.jpg"
           alt="Honk Parade brass bands marching through the Hilton neighborhood at Porchfest"
           class="section-photo section-photo--square"
           loading="lazy"
@@ -69,7 +68,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </div>
       <div class="honk-text">
         <span class="section-badge">Before the Music</span>
-        <div class="divider"></div>
         <h2>Kick Off with the Honk Parade!</h2>
         <p>
           Before the porches come alive, join us for the Honk Parade — a raucous, brass-heavy
@@ -87,7 +85,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="section section--dark support-section">
     <div class="container support-inner">
       <div class="support-text">
-        <div class="divider" style="background: var(--gold-light);"></div>
         <h2 style="color: var(--cream);">100% Volunteer. 100% Free.<br/>100% Worth Supporting.</h2>
         <p style="color: rgba(250,246,238,.8); max-width: 52ch; margin-top: 1rem;">
           Porchfest is entirely non-profit and commercial-free. No tickets. No sponsors.
@@ -124,7 +121,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <!-- ===================== ABOUT ===================== -->
   <section class="section" id="about">
     <div class="container about-inner">
-      <div class="divider"></div>
       <h2>About Porchfest</h2>
       <div class="about-grid">
         <div class="about-col">
@@ -174,12 +170,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </div>
       <div class="instagram-grid" aria-label="Recent photos from @maplewood_porchfest on Instagram">
         {[
-          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1780188224915-IG9HY1T57DF7P4ECO49Q/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
-          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-H9SV0UTUFL80DKCWCQNQ/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
-          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775878816891-65G1F3FKWVFTCM0YYH3T/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
-          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-GS353DM8SOA10KA7UFRD/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
-          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-FF3UPU65CVAEYLQPE6NE/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
-          { url: "https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/1775889101981-XARZMHLCZWXAB20YLFBM/image-asset.jpeg?format=500w", alt: "Maplewood Porchfest on Instagram" },
+          { url: "/images/ig-1.jpg", alt: "Maplewood Porchfest on Instagram" },
+          { url: "/images/ig-2.jpg", alt: "Maplewood Porchfest on Instagram" },
+          { url: "/images/ig-3.jpg", alt: "Maplewood Porchfest on Instagram" },
+          { url: "/images/ig-4.jpg", alt: "Maplewood Porchfest on Instagram" },
+          { url: "/images/ig-5.jpg", alt: "Maplewood Porchfest on Instagram" },
+          { url: "/images/ig-6.jpg", alt: "Maplewood Porchfest on Instagram" },
         ].map((img, i) => (
           <a
             href="https://www.instagram.com/maplewood_porchfest/"
@@ -204,19 +200,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h2 class="nav-cards-heading">Get Involved</h2>
       <div class="nav-cards">
         <a href="/participate" class="nav-card">
-          <div class="nav-card-icon">🏡</div>
+          <div class="nav-card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
           <h3>Participate</h3>
           <p>Lend your porch, perform, volunteer, or run a lemonade stand.</p>
           <span class="nav-card-cta">Learn more &rarr;</span>
         </a>
         <a href="/schedule" class="nav-card nav-card--gold">
-          <div class="nav-card-icon">🎵</div>
+          <div class="nav-card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
           <h3>Schedule</h3>
           <p>Browse performers by porch, genre, and time. Plan your afternoon.</p>
           <span class="nav-card-cta">View schedule &rarr;</span>
         </a>
         <a href="/photos" class="nav-card">
-          <div class="nav-card-icon">📸</div>
+          <div class="nav-card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
           <h3>Photos</h3>
           <p>Browse images from past Porchfests captured by community photographers.</p>
           <span class="nav-card-cta">See photos &rarr;</span>
@@ -243,9 +245,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://images.squarespace-cdn.com/content/v1/62c07123d4144621a5a33ba1/71b5c943-d5cc-4785-b1f5-2d41ef6e4ac4/IMG_6544-C.jpg?format=2500w');
+  background-image: url('/images/hero-bg.jpg');
   background-size: cover;
-  background-position: center 30%;
+  background-position: center center;
   background-repeat: no-repeat;
 }
 
@@ -491,7 +493,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 }
 .nav-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
   border-color: var(--gold);
 }
 .nav-card--gold {
@@ -500,7 +501,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 }
 .nav-card--gold:hover { border-color: var(--gold-dark); }
 
-.nav-card-icon { font-size: 2rem; }
+.nav-card-icon { line-height: 0; color: var(--green); }
+.nav-card--gold .nav-card-icon { color: var(--charcoal); }
 .nav-card h3 { font-size: 1.3rem; }
 .nav-card p { font-size: .9rem; color: var(--gray); flex: 1; max-width: 100%; }
 .nav-card--gold p { color: rgba(28,26,23,.7); }

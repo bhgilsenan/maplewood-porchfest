@@ -69,6 +69,8 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--charcoal);
 }
 
+h2 { font-weight: 600; }
+
 h1 { font-size: clamp(2.4rem, 6vw, 4.5rem); }
 h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
 h3 { font-size: clamp(1.3rem, 2.5vw, 1.9rem); }
@@ -141,7 +143,6 @@ p { max-width: 68ch; }
 .btn--primary:hover {
   background: var(--coral-dark);
   box-shadow: 0 4px 16px rgba(201,74,46,.4);
-  transform: translateY(-1px);
 }
 
 .btn--secondary {
@@ -171,7 +172,6 @@ p { max-width: 68ch; }
 }
 .btn--gold:hover {
   background: var(--gold-dark);
-  transform: translateY(-1px);
 }
 
 .btn--green {
@@ -180,7 +180,6 @@ p { max-width: 68ch; }
 }
 .btn--green:hover {
   background: var(--green-light);
-  transform: translateY(-1px);
 }
 
 /* --- GENRE PILLS --- */
@@ -251,16 +250,6 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 
 .card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-/* --- DIVIDERS --- */
-.divider {
-  width: 60px;
-  height: 4px;
-  background: var(--gold);
-  border-radius: 2px;
-  margin-block: 1.25rem;
 }
 
 /* --- SKIP LINK --- */
