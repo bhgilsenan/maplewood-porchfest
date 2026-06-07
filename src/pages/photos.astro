@@ -15,14 +15,14 @@ const photos = [
     caption: "Crowds gather on the lawn for a porch performance",
     credit: "Gregory Burrus",
     year: 2024,
-    highlight: false,
+    highlight: true,
   },
   {
     src: "/images/photos/shaded-porch-2024.jpg",
     caption: "Full-swing performance at a shaded porch",
     credit: "John Munson",
     year: 2024,
-    highlight: false,
+    highlight: true,
   },
   {
     src: "/images/photos/golden-afternoon-2024.jpg",
@@ -50,7 +50,7 @@ const photos = [
     caption: "Musicians playing to an appreciative street crowd",
     credit: "Scott Kettner",
     year: 2023,
-    highlight: false,
+    highlight: true,
   },
   {
     src: "/images/photos/neighbor-audience-2023.jpg",
@@ -208,25 +208,22 @@ const years = [2024, 2023, 2022, 2021, 2017];
 }
 
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem 1.5rem;
+  column-count: 3;
+  column-gap: 1.5rem;
 }
 
 .photo-card {
-  overflow: hidden;
+  break-inside: avoid;
+  margin-bottom: 2rem;
 }
 
 .photo-img-wrap {
-  aspect-ratio: 3/2;
-  overflow: hidden;
   background: var(--cream-dark);
 }
 
 .photo-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
@@ -272,16 +269,15 @@ const years = [2024, 2023, 2022, 2021, 2017];
 .text-link:hover { color: var(--green-light); }
 
 @media (max-width: 900px) {
-  .photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .photo-grid { column-count: 2; }
 }
 
 @media (max-width: 600px) {
-  .photo-grid { grid-template-columns: 1fr; }
+  .photo-grid { column-count: 1; }
 }
 
 @media print {
-  .photo-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem; }
-  .photo-card:hover { box-shadow: none; }
+  .photo-grid { column-count: 2; }
   .tab-strip { display: none; }
 }
 </style>
