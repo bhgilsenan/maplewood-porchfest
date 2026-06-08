@@ -15,6 +15,8 @@ const {
   ogImage = "/og-default.jpg",
 } = Astro.props;
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const siteTitle = title === "Home"
   ? "Maplewood Porchfest 2026"
   : `${title} | Maplewood Porchfest 2026`;
@@ -36,7 +38,7 @@ const siteTitle = title === "Home"
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Favicon placeholder -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
 
   <!-- Preconnect for Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout
@@ -21,7 +22,7 @@ import PageHero from "../components/PageHero.astro";
         <p class="contact-intro">
           We appreciate your message and kindly request 48 hours to respond.
           Please note that registration inquiries are handled through the
-          <a href="/participate" class="text-link">Participate page</a>
+          <a href={`${base}/participate`} class="text-link">Participate page</a>
           once forms open in mid-June.
         </p>
 
@@ -91,7 +92,7 @@ import PageHero from "../components/PageHero.astro";
           <h3>Quick links</h3>
           <ul class="quick-links">
             <li>
-              <a href="/participate" class="quick-link">
+              <a href={`${base}/participate`} class="quick-link">
                 <span class="quick-link-icon">🏡</span>
                 <div>
                   <strong>Porch, performer &amp; volunteer signup</strong>
@@ -100,7 +101,7 @@ import PageHero from "../components/PageHero.astro";
               </a>
             </li>
             <li>
-              <a href="/schedule" class="quick-link">
+              <a href={`${base}/schedule`} class="quick-link">
                 <span class="quick-link-icon">🎵</span>
                 <div>
                   <strong>View the schedule</strong>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const categories = [
   {
@@ -155,7 +156,7 @@ const categories = [
         Can't find what you're looking for? Reach out via the contact page —
         we try to respond within 48 hours.
       </p>
-      <a href="/contact" class="btn btn--gold" style="margin-top: 1.5rem;">Get in Touch</a>
+      <a href={`${base}/contact`} class="btn btn--gold" style="margin-top: 1.5rem;">Get in Touch</a>
     </div>
   </section>
 

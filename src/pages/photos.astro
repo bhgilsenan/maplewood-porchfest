@@ -83,6 +83,7 @@ const photos = [
 ];
 
 const years = [2024, 2023, 2022, 2021, 2017];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout
@@ -114,7 +115,7 @@ const years = [2024, 2023, 2022, 2021, 2017];
           >
             <div class="photo-img-wrap">
               <img
-                src={photo.src}
+                src={`${base}${photo.src}`}
                 alt={photo.caption}
                 class="photo-img"
                 loading="lazy"
@@ -139,7 +140,7 @@ const years = [2024, 2023, 2022, 2021, 2017];
           Scott Kettner, Larry Seltzer, and Janet Painter.
           All images &copy; their respective photographers. Used with permission.
           To submit photos or inquire about usage rights, please
-          <a href="/contact" class="text-link">contact us</a>.
+          <a href={`${base}/contact`} class="text-link">contact us</a>.
         </p>
       </div>
 
