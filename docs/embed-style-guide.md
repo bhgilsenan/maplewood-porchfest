@@ -79,13 +79,52 @@ semantic split:
 | `--pf-cta-contrast` | black | `#000000` | Text/numbers on orange fills |
 | `--pf-cta-soft` | orange, 14% opacity | `rgba(255,93,0,.14)` | Honk Parade pill background |
 
-Map marker **hover** state uses `--pf-primary`/`--pf-primary-contrast`
+Porch map marker **hover** state uses `--pf-primary`/`--pf-primary-contrast`
 (not orange) — resting state is the identity color (orange), hover is the
 interactive-feedback color (purple), keeping the semantic split consistent
 between markers and every other interactive element.
 
 No dark-mode variant — the embed is a fixed light-theme widget sitting on
 a light Squarespace page, not a standalone theme-aware surface.
+
+## Map layer colors (a deliberate exception to the brand-only rule)
+
+Food, Lemonade, and Services pins each need their own identity on the map
+alongside Porches (orange). The brand palette only gives us purple/orange/
+black/neutrals — not enough for 4 distinct layers plus 7 Service
+sub-categories — so, by explicit choice, these three colors sit outside
+the locked 8-color palette. They're scoped to map pins only; nothing
+elsewhere in the embed uses them:
+
+| Token | Color | Hex | Usage |
+|---|---|---|---|
+| `--pf-food` | terracotta red | `#c0392b` | Food/restaurant map pins |
+| `--pf-food-contrast` | white | `#ffffff` | (unused by emoji icons, kept for consistency) |
+| `--pf-lemonade` | lemonade yellow | `#e8b923` | Lemonade stand map pins |
+| `--pf-lemonade-contrast` | black | `#000000` | (unused by emoji icons, kept for consistency) |
+| `--pf-services` | black | `#000000` | Services map pins (restroom, parking, community center, park, playground, quiet room, parade marker) — reuses `--pf-text`'s black rather than adding a 3rd new hue |
+| `--pf-services-contrast` | white | `#ffffff` | (unused by emoji icons, kept for consistency) |
+
+Each Service sub-category gets its own emoji icon instead of its own
+color (🚻 restroom, 🅿️ parking, 🏛️ community center, 🌳 park, 🛝
+playground, 🤫 quiet room, 🚩 parade marker; 🍴 food, 🥤 lemonade). Emoji
+were chosen over hand-drawn SVG icons specifically because they render
+reliably without a visual QA loop — full-color emoji glyphs render
+consistently regardless of the marker's background/text color CSS.
+
+Data source: `data/2026/map-import/Food (Hilton Neighborhood).csv`,
+`Lemonade Stands.csv`, and `Services.csv` — none of the three had
+lat/lng, so all ~40 addresses were geocoded via OpenStreetMap/Nominatim
+(same technique used for the Porches data). A handful of DeHart Park
+services (Community Center, Park, Playground, Parade Start) all geocode
+to the same point (120 Burnet Ave) and were given small manual offsets
+so all four pins are visible/clickable instead of stacking exactly on
+top of each other.
+
+The map layers are toggled via the chip row above the map (`Porches` /
+`Food` / `Lemonade` / `Services`) — each is a Leaflet `L.layerGroup`
+added to/removed from the map on click. Porches is on by default; the
+other three start off.
 
 ## The accent bar
 
@@ -100,14 +139,20 @@ central to the real site.
 
 ## Typography
 
-Their site can't be matched exactly — Kepler Std is a paid Adobe Fonts
-license we don't have inside a page pasted as raw embed code. The pairing
-below borrows their instinct (one warm editorial serif carrying content)
-with free faces, and keeps a plain sans for small interactive chrome where
-a serif would hurt legibility:
-
 | Role | Face | Used for |
 |---|---|---|
-| Display | Fraunces 600 | Headings |
-| Body | Source Serif 4 | Act descriptions, longer copy |
-| UI | DM Sans | Filter pills, buttons, time labels, view toggle |
+| Display | `kepler-std` (Georgia/serif fallback) | Headings |
+| Body | DM Sans (system-ui fallback) | Act/band descriptions, longer copy |
+| UI | DM Sans (BlinkMacSystemFont fallback) | Filter pills, buttons, time labels, view toggle |
+
+Headings use `kepler-std` directly — the real site's own paid Adobe
+Fonts/Typekit serif. We can't load it from a CDN ourselves, but since this
+embed's markup/CSS runs inside their actual page (pasted into a Code
+Block, not an iframe), it inherits whatever font kit their page already
+loads site-wide — so it renders in their real headline font on the live
+site. Everywhere else it can't resolve (local preview, or if their kit
+ever changes), it falls back to Georgia. Body and UI both resolve to DM
+Sans (loaded from Google Fonts, weights 400/500/700) with slightly
+different system-font fallback stacks — no more serif body face; Fraunces
+and Source Serif 4 were both dropped once headings moved to `kepler-std`
+and descriptions moved to DM Sans.

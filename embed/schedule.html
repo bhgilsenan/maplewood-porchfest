@@ -6,12 +6,18 @@
 
   Self-contained: styles + Leaflet map + full schedule data are all inline,
   so this single paste is the whole widget. Nothing else needs adding to
-  the page. Loads Leaflet + Google Fonts (Fraunces / Source Serif 4 / DM Sans)
-  from their public CDNs — if this Squarespace plan's Code Block strips
+  the page. Loads Leaflet + Google Fonts (DM Sans) from their public
+  CDNs — if this Squarespace plan's Code Block strips
   <link>/<script> tags, move just those three tags (Leaflet CSS+JS, Google
   Fonts) into Settings → Advanced → Code Injection → Header instead, and
   keep the rest (the <div class="pf-embed">…, <style>, and the last
   <script>) in the Code Block.
+
+  Headings use 'kepler-std' (Georgia/serif fallback) — the real site's own
+  Adobe Fonts/Typekit serif. Not loadable from a CDN; it only renders
+  because this embed's CSS runs inside their actual page, which already
+  loads that font kit site-wide. Falls back to Georgia everywhere else
+  (including local preview), which is expected, not a bug.
 
   To update the lineup: edit the PF_DATA object near the bottom of the
   script and re-paste. Source of truth for that data is
@@ -34,7 +40,7 @@
   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Source+Serif+4:wght@400;600&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -62,6 +68,13 @@
 
     <div class="pf-map-col" id="pf-map-col">
       <div class="pf-map-sticky">
+        <div class="pf-layer-toggles" id="pf-layer-toggles" role="group" aria-label="Map layers">
+          <span class="pf-layer-label">Map:</span>
+          <button class="pf-layer-pill pf-layer-pill--active" data-layer="porches" type="button">Porches</button>
+          <button class="pf-layer-pill pf-layer-pill--active" data-layer="food" type="button">Food</button>
+          <button class="pf-layer-pill pf-layer-pill--active" data-layer="lemonade" type="button">Lemonade</button>
+          <button class="pf-layer-pill pf-layer-pill--active" data-layer="services" type="button">Services</button>
+        </div>
         <div id="pf-map" aria-label="Porch locations map" role="application"></div>
         <p class="pf-map-note">Click a marker to highlight that porch</p>
       </div>
@@ -114,13 +127,23 @@
   --pf-cta-contrast: #000000;
   --pf-cta-soft: rgba(255,93,0,.14);
 
+  /* Map wayfinding colors — a deliberate exception to the brand-only rule
+     above, scoped to map pins only. Porches keep --pf-cta (orange); these
+     three give Food/Lemonade/Services their own identity on the map. */
+  --pf-food: #c0392b;
+  --pf-food-contrast: #ffffff;
+  --pf-lemonade: #e8b923;
+  --pf-lemonade-contrast: #000000;
+  --pf-services: #000000;
+  --pf-services-contrast: #ffffff;
+
   --pf-radius: 10px;
   --pf-radius-lg: 16px;
   --pf-shadow-sm: 0 1px 2px rgba(0,0,0,.08), 0 1px 1px rgba(0,0,0,.05);
   --pf-shadow-md: 0 6px 20px rgba(0,0,0,.12);
 
-  --pf-font-display: 'Fraunces', Georgia, serif;
-  --pf-font-body: 'Source Serif 4', Georgia, serif;
+  --pf-font-display: 'kepler-std', Georgia, serif;
+  --pf-font-body: 'DM Sans', -apple-system, "system-ui", sans-serif;
   --pf-font-ui: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   background: var(--pf-bg);
@@ -174,6 +197,21 @@
 .pf-map-col { display: none; }
 .pf-map-col--open { display: block; }
 .pf-map-sticky { padding-bottom: 1rem; }
+
+.pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; margin-bottom: .6rem; }
+.pf-layer-label {
+  font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0; margin-right: .15rem;
+}
+.pf-layer-pill {
+  padding: .22rem .65rem; border-radius: 50px; border: 1.5px solid var(--pf-border);
+  background: var(--pf-surface); color: var(--pf-text); font-family: var(--pf-font-ui);
+  font-size: .72rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  transition: background 150ms, border-color 150ms, color 150ms;
+}
+.pf-layer-pill:hover { border-color: var(--pf-cta); }
+.pf-layer-pill--active { background: var(--pf-cta); color: var(--pf-cta-contrast); border-color: var(--pf-cta); }
+
 #pf-map { height: 320px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
 .pf-map-note { font-size: .78rem; color: var(--pf-text-faint); text-align: center; margin-top: .5rem; font-style: italic; }
 
@@ -184,6 +222,16 @@
   box-shadow: 0 2px 8px rgba(0,0,0,.3); cursor: pointer; transition: background 150ms, transform 150ms;
 }
 .pf-map-marker:hover { background: var(--pf-primary); color: var(--pf-primary-contrast); transform: scale(1.1); }
+
+.pf-poi-marker {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--pf-bg);
+  display: flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3); cursor: pointer; transition: transform 150ms;
+}
+.pf-poi-marker:hover { transform: scale(1.15); }
+.pf-poi-marker--food { background: var(--pf-food); }
+.pf-poi-marker--lemonade { background: var(--pf-lemonade); }
+.pf-poi-marker--services { background: var(--pf-services); }
 
 /* ---- view toggle row ---- */
 .pf-view-toggle-row {
@@ -210,16 +258,17 @@
 .pf-time-act-card {
   background: var(--pf-surface); border-radius: var(--pf-radius); border: 1.5px solid var(--pf-border);
   padding: .9rem 1rem; transition: border-color 150ms, box-shadow 150ms; box-shadow: var(--pf-shadow-sm);
+  display: flex; flex-direction: column; gap: .4rem;
 }
 .pf-time-act-card:hover { border-color: var(--pf-primary); box-shadow: var(--pf-shadow-md); }
 .pf-time-act-card--highlighted { border-color: var(--pf-primary); box-shadow: 0 0 0 3px var(--pf-primary-soft); }
 .pf-time-act-card--parade { border-color: var(--pf-cta); border-left-width: 4px; }
 
-.pf-time-act-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .35rem; flex-wrap: wrap; }
+.pf-time-act-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
 .pf-time-act-name { font-family: var(--pf-font-display); font-weight: 600; font-size: 1rem; line-height: 1.3; }
-.pf-time-act-where { display: flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--pf-text-muted); margin-bottom: .4rem; }
+.pf-time-act-where { display: flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--pf-text-muted); }
 .pf-time-act-where svg { flex-shrink: 0; opacity: .65; }
-.pf-time-act-desc { font-family: var(--pf-font-body); font-size: .9rem; color: var(--pf-text); line-height: 1.55; }
+.pf-time-act-desc { font-family: var(--pf-font-body); font-size: .9rem; color: var(--pf-text); line-height: 1.25; }
 
 .pf-genre-pill {
   display: inline-block; padding: .18rem .6rem; border-radius: 50px; font-size: .7rem; font-weight: 700;
@@ -236,16 +285,15 @@
 }
 .pf-porch-card--highlighted { outline: 3px solid var(--pf-primary); box-shadow: var(--pf-shadow-md); }
 .pf-porch-card-header {
-  display: flex; align-items: flex-start; gap: 1.1rem; padding: 1.1rem 1.35rem .9rem;
+  display: flex; align-items: center; gap: 1.1rem; padding: 1.1rem 1.35rem .9rem;
   border-bottom: 1px solid var(--pf-border); background: linear-gradient(to right, var(--pf-surface-2), var(--pf-surface));
 }
 .pf-porch-number {
-  width: 44px; height: 44px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
+  width: 24px; height: 24px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
   display: flex; align-items: center; justify-content: center; font-family: var(--pf-font-display);
-  font-weight: 800; font-size: 1.15rem; flex-shrink: 0;
+  font-weight: 800; font-size: .7rem; flex-shrink: 0;
 }
 .pf-porch-address { font-family: var(--pf-font-display); font-weight: 600; font-size: 1.08rem; margin: 0; line-height: 1.3; }
-.pf-porch-note { font-size: .8rem; color: var(--pf-text-faint); margin-top: .2rem; }
 
 .pf-performer-row {
   display: grid; grid-template-columns: 100px 1fr; gap: 1rem; padding: .9rem 1.35rem;
@@ -1172,6 +1220,295 @@
       }
     ]
   };
+
+  var PF_FOOD = [
+    {
+      "name": "Park Wood Diner",
+      "address": "1958 Springfield Avenue",
+      "description": "Classic American diner serving breakfast, lunch, and dinner all day, family-run since 2005.",
+      "lat": 40.72034,
+      "lng": -74.273811
+    },
+    {
+      "name": "El Rey Mexican Restaurant",
+      "address": "1908 Springfield Avenue",
+      "description": "Family-owned Mexican restaurant with made-from-scratch tortillas, salsas, and classic dishes like tacos and enchiladas.",
+      "lat": 40.720473,
+      "lng": -74.271784
+    },
+    {
+      "name": "Panda Kitchen Restaurant",
+      "address": "1906 Springfield Avenue",
+      "description": "Casual Chinese takeout and delivery spot with a broad menu of classic dishes.",
+      "lat": 40.720491,
+      "lng": -74.271665
+    },
+    {
+      "name": "The Sandwicheria Eatery - Peruvian Street Food",
+      "address": "738 Prospect Street",
+      "description": "Fast-casual Peruvian sandwich shop known for carne asada and pulled pork sandwiches and rice bowls.",
+      "lat": 40.720508,
+      "lng": -74.270131
+    },
+    {
+      "name": "Woulibam Restaurant - Fine Haitian & Caribbean Cuisine",
+      "address": "1878 Springfield Avenue",
+      "description": "Haitian and Caribbean restaurant serving hearty dishes like conch sauté and fried goat.",
+      "lat": 40.720755,
+      "lng": -74.269867
+    },
+    {
+      "name": "Grandma Emma's",
+      "address": "1876 Springfield Avenue",
+      "description": "Bakery offering pastries, cobblers, and sweet treats, many vegan.",
+      "lat": 40.720767,
+      "lng": -74.269781
+    },
+    {
+      "name": "HLS Juice Bar & Grill",
+      "address": "1869 Springfield Avenue",
+      "description": "Fast-casual juice bar and grill serving smoothies, wraps, and health-focused soul food bites.",
+      "lat": 40.720711,
+      "lng": -74.26899
+    },
+    {
+      "name": "Avenue Pub",
+      "address": "1790 Springfield Avenue",
+      "description": "Neighborhood pub with a seafood-focused menu from Freeman's Fish Market, plus classic wings and burgers.",
+      "lat": 40.721347,
+      "lng": -74.265605
+    },
+    {
+      "name": "Hunan Wok",
+      "address": "1755 Springfield Avenue",
+      "description": "Longtime neighborhood Chinese restaurant offering dine-in, takeout, and delivery since 2001.",
+      "lat": 40.721325,
+      "lng": -74.264563
+    },
+    {
+      "name": "Sabor Catracho Restaurant",
+      "address": "3 Wellesley Street",
+      "description": "Honduran and Central American restaurant serving breakfast, grilled meats, and traditional specialties.",
+      "lat": 40.721303,
+      "lng": -74.263933
+    },
+    {
+      "name": "Cielo's Final Touch",
+      "address": "1673 Springfield Avenue",
+      "description": "Mexican deli and sandwich shop also serving American comfort food, known for birria dishes.",
+      "lat": 40.721925,
+      "lng": -74.260247
+    },
+    {
+      "name": "Honey & Hive Artisanal Ice Cream",
+      "address": "1611 Springfield Ave",
+      "description": "Artisanal ice cream and sorbet shop with a large rotating menu of house-made flavors.",
+      "lat": 40.722383,
+      "lng": -74.25697
+    },
+    {
+      "name": "Majestic Smoothie and Juice Bar",
+      "address": "1611 Springfield Ave Suite C",
+      "description": "Juice and smoothie bar offering fresh juices, smoothies, and fruit bowls.",
+      "lat": 40.722383,
+      "lng": -74.25697
+    },
+    {
+      "name": "Cornbread Maplewood",
+      "address": "1573 Springfield Avenue",
+      "description": "Soul food restaurant known for fried chicken, catfish, and Southern sides, BYOB.",
+      "lat": 40.722593,
+      "lng": -74.255478
+    },
+    {
+      "name": "Bradfords Barr",
+      "address": "1553 Springfield Ave",
+      "description": "Upscale soul food restaurant and catering business known for lobster mac and cheese and ribeye.",
+      "lat": 40.722703,
+      "lng": -74.254693
+    },
+    {
+      "name": "ARTIE'S",
+      "address": "15 Newark Way",
+      "description": "Italian wood-fired pizzeria and bakery serving bread, pastries, and house-made pasta.",
+      "lat": 40.719016,
+      "lng": -74.257908
+    },
+    {
+      "name": "Pallet Brewing Company",
+      "address": "30 Newark Way",
+      "description": "Family-friendly local craft brewery and taproom with rotating food vendors and live music.",
+      "lat": 40.718253,
+      "lng": -74.258185
+    },
+    {
+      "name": "Porta Rossa Pasta & Provisions",
+      "address": "160 Jacoby St",
+      "description": "Counter-service Italian shop for handmade pasta, sandwiches, focaccia, and sauces to go.",
+      "lat": 40.718221,
+      "lng": -74.255621
+    },
+    {
+      "name": "Perla Oyster Bar",
+      "address": "415 Boyden Ave",
+      "description": "Small seafood and raw bar restaurant specializing in oysters and New England-style dishes.",
+      "lat": 40.718244,
+      "lng": -74.255502
+    },
+    {
+      "name": "Wheelhouse Cheese & More",
+      "address": "417 Boyden Ave",
+      "description": "Specialty cheese shop and cafe offering charcuterie, sandwiches, and cheese plates.",
+      "lat": 40.718101,
+      "lng": -74.255342
+    },
+    {
+      "name": "Corner Slice",
+      "address": "419 Boyden Avenue",
+      "description": "Brooklyn-style square-slice pizzeria known for its garlic knots and Upside Down Pie.",
+      "lat": 40.718133,
+      "lng": -74.255533
+    }
+  ];
+
+  var PF_LEMONADE = [
+    {
+      "address": "75 Concord Ave",
+      "charity": "WWF https://www.worldwildlife.org/",
+      "lat": 40.717519,
+      "lng": -74.26834
+    },
+    {
+      "address": "779 Prospect Street",
+      "charity": "Maplewood Foundation",
+      "lat": 40.718855,
+      "lng": -74.269951
+    },
+    {
+      "address": "194 Hilton Ave",
+      "charity": "CHS Marching Band",
+      "lat": 40.72016,
+      "lng": -74.268929
+    },
+    {
+      "address": "228 Hilton Ave",
+      "charity": "Loeys Dietz Syndrome Foundation",
+      "lat": 40.719948,
+      "lng": -74.270463
+    },
+    {
+      "address": "169 Indiana st",
+      "charity": "Dolly Parton’s Imagination Library",
+      "lat": 40.71992,
+      "lng": -74.272415
+    },
+    {
+      "address": "44 Princeton St",
+      "charity": "Miles - East Orange Animal Alliance",
+      "lat": 40.719114,
+      "lng": -74.267595
+    },
+    {
+      "address": "33 Concord Ave",
+      "charity": "Associated Humane Societies",
+      "lat": 40.718322,
+      "lng": -74.26702
+    },
+    {
+      "address": "182 Franklin Ave",
+      "charity": "Together We Bloom",
+      "lat": 40.719573,
+      "lng": -74.268166
+    },
+    {
+      "address": "27 Wellesley Street",
+      "charity": "Soma Shares",
+      "lat": 40.720352,
+      "lng": -74.263711
+    },
+    {
+      "address": "31 Hilton Ave",
+      "charity": "MEND",
+      "lat": 40.721108,
+      "lng": -74.260971
+    }
+  ];
+
+  var PF_SERVICES = [
+    {
+      "name": "Honk Parade Start -120 Burnet Ave",
+      "address": "120 Burnet Ave",
+      "category": "Parade Marker",
+      "description": "Meet at DeHart Community Center at 12 Noon for rehearsal. Honk Parade kicks off at 12:30pm",
+      "lat": 40.718333,
+      "lng": -74.261195
+    },
+    {
+      "name": "Honk Parade End -121 Lexington Ave",
+      "address": "121 Lexington Ave",
+      "category": "Parade Marker",
+      "description": "Honk Parade ends at 121 Lexington Ave",
+      "lat": 40.718855,
+      "lng": -74.267003
+    },
+    {
+      "name": "Maplewood Community Center at DeHart Park",
+      "address": "120 Burnet Avenue",
+      "category": "Community Center",
+      "description": "",
+      "lat": 40.718513,
+      "lng": -74.261145
+    },
+    {
+      "name": "Restrooms at DeHart Community Center",
+      "address": "114 Burnet Avenue",
+      "category": "Restroom",
+      "description": "Bathrooms (Inside DeHart Center)",
+      "lat": 40.718453,
+      "lng": -74.261094
+    },
+    {
+      "name": "Municipal Parking DeHart Park",
+      "address": "106 Burnet Avenue",
+      "category": "Parking",
+      "description": "Parking",
+      "lat": 40.718213,
+      "lng": -74.261345
+    },
+    {
+      "name": "DeHart Park",
+      "address": "120 Burnet Avenue",
+      "category": "Park",
+      "description": "",
+      "lat": 40.718233,
+      "lng": -74.260975
+    },
+    {
+      "name": "DeHart Park Playground",
+      "address": "120 Burnet Avenue",
+      "category": "Playground",
+      "description": "",
+      "lat": 40.718383,
+      "lng": -74.261395
+    },
+    {
+      "name": "Together We Bloom - St Joes Church - 767 Prospect St",
+      "address": "767 Prospect St",
+      "category": "Quiet Room",
+      "description": "Together We Bloom sensory-friendly quiet room; If needed, please ask to use the restrooms.",
+      "lat": 40.719397,
+      "lng": -74.270082
+    },
+    {
+      "name": "Municipal Parking on Prospect Street",
+      "address": "747-751 Prospect St",
+      "category": "Parking",
+      "description": "747-751 Prospect Street",
+      "lat": 40.718828,
+      "lng": -74.269834
+    }
+  ];
+
   var TIME_SLOTS = [
     { label: "1:00 – 2:00 PM", hourStart: 13, hourEnd: 14 },
     { label: "2:00 – 3:00 PM", hourStart: 14, hourEnd: 15 },
@@ -1275,10 +1612,7 @@
     return '<div class="pf-porch-card" id="pf-porch-' + porch.id + '" data-porch-id="' + porch.id + '" data-genres="' + escapeHtml(genres) + '" data-performers="' + escapeHtml(names) + '">' +
       '<div class="pf-porch-card-header">' +
         '<div class="pf-porch-number" aria-label="Porch ' + porch.id + '">' + porch.id + '</div>' +
-        '<div class="pf-porch-address-block">' +
-          '<h3 class="pf-porch-address">' + escapeHtml(porch.address) + '</h3>' +
-          (porch.neighborhood_note ? '<p class="pf-porch-note">' + escapeHtml(porch.neighborhood_note) + '</p>' : '') +
-        '</div>' +
+        '<h3 class="pf-porch-address">' + escapeHtml(porch.address) + '</h3>' +
       '</div>' +
       '<div class="pf-performer-list">' +
       porch.performers.map(function (perf) {
@@ -1316,9 +1650,10 @@
   }).addTo(map);
 
   var markers = {};
+  var porchesLayer = L.layerGroup();
   PF_DATA.porches.forEach(function (porch) {
     var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [34, 34], iconAnchor: [17, 17] });
-    var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(map).bindPopup(
+    var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(porchesLayer).bindPopup(
       '<strong>#' + porch.id + ' — ' + escapeHtml(porch.address) + '</strong><br/>' +
       porch.performers.map(function (p) { return escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>')
     );
@@ -1342,6 +1677,51 @@
     });
     markers[porch.id] = marker;
   });
+  porchesLayer.addTo(map);
+
+  /* ---- Food / Lemonade / Services layers (on by default — toggled via the map-layer chips) ---- */
+  var POI_ICONS = {
+    "Restroom": "🚻", "Parking": "🅿️", "Community Center": "🏛️", "Park": "🌳",
+    "Playground": "🛝", "Quiet Room": "🤫", "Parade Marker": "🚩"
+  };
+
+  function poiIcon(emoji, modifierClass) {
+    return L.divIcon({
+      html: '<div class="pf-poi-marker ' + modifierClass + '">' + emoji + '</div>',
+      className: "", iconSize: [26, 26], iconAnchor: [13, 13]
+    });
+  }
+
+  function linkifyCharity(text) {
+    return escapeHtml(text).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  }
+
+  var foodLayer = L.layerGroup();
+  PF_FOOD.forEach(function (spot) {
+    L.marker([spot.lat, spot.lng], { icon: poiIcon("🍴", "pf-poi-marker--food") })
+      .addTo(foodLayer)
+      .bindPopup('<strong>' + escapeHtml(spot.name) + '</strong><br/>' + escapeHtml(spot.address) + '<br/>' + escapeHtml(spot.description));
+  });
+
+  var lemonadeLayer = L.layerGroup();
+  PF_LEMONADE.forEach(function (stand) {
+    L.marker([stand.lat, stand.lng], { icon: poiIcon("🥤", "pf-poi-marker--lemonade") })
+      .addTo(lemonadeLayer)
+      .bindPopup('<strong>Lemonade Stand</strong><br/>' + escapeHtml(stand.address) + '<br/>Supporting: ' + linkifyCharity(stand.charity));
+  });
+
+  var servicesLayer = L.layerGroup();
+  PF_SERVICES.forEach(function (svc) {
+    var emoji = POI_ICONS[svc.category] || "📍";
+    L.marker([svc.lat, svc.lng], { icon: poiIcon(emoji, "pf-poi-marker--services") })
+      .addTo(servicesLayer)
+      .bindPopup('<strong>' + escapeHtml(svc.name) + '</strong><br/>' + escapeHtml(svc.category) + (svc.description ? '<br/>' + escapeHtml(svc.description) : ''));
+  });
+
+  var MAP_LAYERS = { porches: porchesLayer, food: foodLayer, lemonade: lemonadeLayer, services: servicesLayer };
+  foodLayer.addTo(map);
+  lemonadeLayer.addTo(map);
+  servicesLayer.addTo(map);
 
   /* ===================== STATE + FILTERS ===================== */
   var activeGenres = new Set(["all"]);
@@ -1482,6 +1862,17 @@
   /* ---- clear-filters buttons (delegated, rendered dynamically) ---- */
   root.addEventListener("click", function (e) {
     if (e.target.closest("#pf-no-results-clear-time, #pf-no-results-clear-porch")) resetFilters();
+  });
+
+  /* ---- map layer toggles ---- */
+  var layerToggles = root.querySelector("#pf-layer-toggles");
+  layerToggles.addEventListener("click", function (e) {
+    var btn = e.target.closest(".pf-layer-pill");
+    if (!btn) return;
+    var layer = MAP_LAYERS[btn.dataset.layer];
+    if (!layer) return;
+    var active = btn.classList.toggle("pf-layer-pill--active");
+    if (active) map.addLayer(layer); else map.removeLayer(layer);
   });
 
   /* ---- mobile map toggle ---- */
