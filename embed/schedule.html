@@ -30,6 +30,21 @@
   corrupts the file — ask if you want the story). Harmless to paste as-is:
   a nested html/head/body inside Squarespace's own page just gets flattened
   away by the browser's parser, so only the real content survives.
+
+  The mobile/desktop layout switch uses a CSS @container query (keyed off
+  .pf-embed's own width via container-type: inline-size), not a viewport
+  @media query. Squarespace may render this Code Block inside an iframe or
+  a narrow page column — a viewport query would respond to that outer box
+  instead of the widget's actual rendered width, which is why an earlier
+  version of this file didn't re-layout on browser resize once pasted in.
+
+  .pf-embed has an explicit width: 100% (not just max-width: 100%) — under
+  container-type: inline-size, a box can fall back to a shrink-to-fit
+  intrinsic size instead of stretching to fill its parent if the parent's
+  own layout isn't a plain stretch-to-fill block context (Squarespace's
+  Code Block wrapper may not be). Without the explicit width, that showed
+  up as the whole widget rendering at a static pixel width that ignored
+  the surrounding page's responsive column entirely.
 -->
 <!doctype html>
 <html lang="en">
@@ -60,13 +75,13 @@
   <div class="pf-map-toggle-bar" id="pf-map-toggle-bar">
     <button class="pf-btn pf-btn--cta pf-map-toggle-btn" id="pf-map-toggle" type="button">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-      <span id="pf-map-toggle-label">Show Map</span>
+      <span id="pf-map-toggle-label">Hide Map</span>
     </button>
   </div>
 
   <div class="pf-schedule-layout" id="pf-schedule-layout">
 
-    <div class="pf-map-col" id="pf-map-col">
+    <div class="pf-map-col pf-map-col--open" id="pf-map-col">
       <div class="pf-map-sticky">
         <div class="pf-layer-toggles" id="pf-layer-toggles" role="group" aria-label="Map layers">
           <span class="pf-layer-label">Map:</span>
@@ -151,7 +166,9 @@
   font-family: var(--pf-font-ui);
   border-radius: var(--pf-radius-lg);
   padding: 1.25rem;
+  width: 100%;
   max-width: 100%;
+  container-type: inline-size;
 }
 .pf-embed, .pf-embed *, .pf-embed *::before, .pf-embed *::after { box-sizing: border-box; }
 .pf-embed p { margin: 0; }
@@ -179,7 +196,7 @@
 }
 
 /* ---- accent bar: nod to their homepage's solid-color band under the nav ---- */
-.pf-accent-bar { height: 8px; border-radius: 4px; background: var(--pf-cta); margin: 0 0 1.1rem; }
+.pf-accent-bar { height: 4px; border-radius: 4px; background: var(--pf-cta); margin: 0 0 1.1rem; }
 .pf-filter-select:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
 
 /* ---- mobile map toggle ---- */
@@ -198,7 +215,7 @@
 .pf-map-col--open { display: block; }
 .pf-map-sticky { padding-bottom: 1rem; }
 
-.pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; margin-bottom: .6rem; }
+.pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; margin-bottom: 1.1rem; }
 .pf-layer-label {
   font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
   color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0; margin-right: .15rem;
@@ -209,16 +226,17 @@
   font-size: .72rem; font-weight: 600; cursor: pointer; white-space: nowrap;
   transition: background 150ms, border-color 150ms, color 150ms;
 }
-.pf-layer-pill:hover { border-color: var(--pf-cta); }
-.pf-layer-pill--active { background: var(--pf-cta); color: var(--pf-cta-contrast); border-color: var(--pf-cta); }
+.pf-layer-pill:hover { border-color: var(--pf-primary); }
+.pf-layer-pill--active { background: var(--pf-primary); color: var(--pf-primary-contrast); border-color: var(--pf-primary); }
+.pf-layer-pill--active::before { content: "✓"; margin-right: .3rem; }
 
 #pf-map { height: 320px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
 .pf-map-note { font-size: .78rem; color: var(--pf-text-faint); text-align: center; margin-top: .5rem; font-style: italic; }
 
 .pf-map-marker {
-  width: 34px; height: 34px; background: var(--pf-cta); color: var(--pf-cta-contrast); border-radius: 50%;
-  border: 3px solid var(--pf-bg); display: flex; align-items: center; justify-content: center;
-  font-family: var(--pf-font-display); font-weight: 800; font-size: 13px;
+  width: 28px; height: 28px; background: var(--pf-cta); color: var(--pf-cta-contrast); border-radius: 50%;
+  border: 2px solid var(--pf-bg); display: flex; align-items: center; justify-content: center;
+  font-family: var(--pf-font-display); font-weight: 800; font-size: 11px;
   box-shadow: 0 2px 8px rgba(0,0,0,.3); cursor: pointer; transition: background 150ms, transform 150ms;
 }
 .pf-map-marker:hover { background: var(--pf-primary); color: var(--pf-primary-contrast); transform: scale(1.1); }
@@ -316,8 +334,13 @@
 .pf-no-results h3 { font-family: var(--pf-font-display); font-weight: 600; font-size: 1.2rem; margin: 0; }
 .pf-no-results p { color: var(--pf-text-muted); max-width: 34ch; margin-inline: auto; }
 
-/* ---- responsive: split layout from 900px up ---- */
-@media (min-width: 900px) {
+/* ---- responsive: driven by the embed's own rendered width, not the
+   browser viewport. Squarespace may render this Code Block inside an
+   iframe or a narrow page column, where a viewport @media query would
+   evaluate against the wrong box (or never change on resize at all).
+   @container queries respond to .pf-embed's actual width instead, so the
+   layout is correct regardless of what's wrapping it. ---- */
+@container (min-width: 900px) {
   .pf-map-toggle-bar { display: none; }
   .pf-schedule-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: 640px; }
   .pf-map-col { display: block; height: 100%; border-right: 1px solid var(--pf-border); }
@@ -327,7 +350,7 @@
   .pf-view-toggle-row { position: sticky; top: 0; background: var(--pf-bg); z-index: 2; }
 }
 
-@media (max-width: 480px) {
+@container (max-width: 480px) {
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
   .pf-porch-card-header { gap: .8rem; padding: 1rem; }
@@ -618,8 +641,8 @@
         "id": 12,
         "address": "17 Vermont Street",
         "neighborhood_note": null,
-        "lat": 40.721257,
-        "lng": -74.259641,
+        "lat": 40.721107,
+        "lng": -74.259521,
         "performers": [
           {
             "name": "Michael Glazier",
@@ -1310,8 +1333,8 @@
       "name": "Majestic Smoothie and Juice Bar",
       "address": "1611 Springfield Ave Suite C",
       "description": "Juice and smoothie bar offering fresh juices, smoothies, and fruit bowls.",
-      "lat": 40.722383,
-      "lng": -74.25697
+      "lat": 40.722233,
+      "lng": -74.25709
     },
     {
       "name": "Cornbread Maplewood",
@@ -1338,8 +1361,8 @@
       "name": "Pallet Brewing Company",
       "address": "30 Newark Way",
       "description": "Family-friendly local craft brewery and taproom with rotating food vendors and live music.",
-      "lat": 40.718253,
-      "lng": -74.258185
+      "lat": 40.718403,
+      "lng": -74.258065
     },
     {
       "name": "Porta Rossa Pasta & Provisions",
@@ -1359,15 +1382,15 @@
       "name": "Wheelhouse Cheese & More",
       "address": "417 Boyden Ave",
       "description": "Specialty cheese shop and cafe offering charcuterie, sandwiches, and cheese plates.",
-      "lat": 40.718101,
-      "lng": -74.255342
+      "lat": 40.718251,
+      "lng": -74.255222
     },
     {
       "name": "Corner Slice",
       "address": "419 Boyden Avenue",
       "description": "Brooklyn-style square-slice pizzeria known for its garlic knots and Upside Down Pie.",
-      "lat": 40.718133,
-      "lng": -74.255533
+      "lat": 40.718283,
+      "lng": -74.255413
     }
   ];
 
@@ -1375,38 +1398,38 @@
     {
       "address": "75 Concord Ave",
       "charity": "WWF https://www.worldwildlife.org/",
-      "lat": 40.717519,
-      "lng": -74.26834
+      "lat": 40.717669,
+      "lng": -74.26822
     },
     {
       "address": "779 Prospect Street",
       "charity": "Maplewood Foundation",
-      "lat": 40.718855,
-      "lng": -74.269951
+      "lat": 40.719005,
+      "lng": -74.269831
     },
     {
       "address": "194 Hilton Ave",
       "charity": "CHS Marching Band",
-      "lat": 40.72016,
-      "lng": -74.268929
+      "lat": 40.72031,
+      "lng": -74.268809
     },
     {
       "address": "228 Hilton Ave",
       "charity": "Loeys Dietz Syndrome Foundation",
-      "lat": 40.719948,
-      "lng": -74.270463
+      "lat": 40.720098,
+      "lng": -74.270343
     },
     {
       "address": "169 Indiana st",
       "charity": "Dolly Parton’s Imagination Library",
-      "lat": 40.71992,
-      "lng": -74.272415
+      "lat": 40.72007,
+      "lng": -74.272295
     },
     {
       "address": "44 Princeton St",
       "charity": "Miles - East Orange Animal Alliance",
-      "lat": 40.719114,
-      "lng": -74.267595
+      "lat": 40.719264,
+      "lng": -74.267475
     },
     {
       "address": "33 Concord Ave",
@@ -1448,8 +1471,8 @@
       "address": "121 Lexington Ave",
       "category": "Parade Marker",
       "description": "Honk Parade ends at 121 Lexington Ave",
-      "lat": 40.718855,
-      "lng": -74.267003
+      "lat": 40.719005,
+      "lng": -74.267123
     },
     {
       "name": "Maplewood Community Center at DeHart Park",
@@ -1543,7 +1566,7 @@
       p.performers.forEach(function (perf) { acc.push(perf.genre); });
       return acc;
     }, [])
-  )).sort();
+  )).filter(function (g) { return g !== "TBD"; }).sort();
 
   allGenres.forEach(function (genre) {
     var btn = document.createElement("button");
@@ -1652,7 +1675,7 @@
   var markers = {};
   var porchesLayer = L.layerGroup();
   PF_DATA.porches.forEach(function (porch) {
-    var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [34, 34], iconAnchor: [17, 17] });
+    var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [28, 28], iconAnchor: [14, 14] });
     var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(porchesLayer).bindPopup(
       '<strong>#' + porch.id + ' — ' + escapeHtml(porch.address) + '</strong><br/>' +
       porch.performers.map(function (p) { return escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>')
@@ -1696,16 +1719,22 @@
     return escapeHtml(text).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   }
 
+  /* POI markers always render above porches (which swing between
+     zIndexOffset 0 and 1000 depending on the genre filter) — they're
+     rarer and more specific, so they shouldn't get buried under the
+     more numerous, larger porch dots. */
+  var POI_Z_INDEX = 2000;
+
   var foodLayer = L.layerGroup();
   PF_FOOD.forEach(function (spot) {
-    L.marker([spot.lat, spot.lng], { icon: poiIcon("🍴", "pf-poi-marker--food") })
+    L.marker([spot.lat, spot.lng], { icon: poiIcon("🍴", "pf-poi-marker--food"), zIndexOffset: POI_Z_INDEX })
       .addTo(foodLayer)
       .bindPopup('<strong>' + escapeHtml(spot.name) + '</strong><br/>' + escapeHtml(spot.address) + '<br/>' + escapeHtml(spot.description));
   });
 
   var lemonadeLayer = L.layerGroup();
   PF_LEMONADE.forEach(function (stand) {
-    L.marker([stand.lat, stand.lng], { icon: poiIcon("🥤", "pf-poi-marker--lemonade") })
+    L.marker([stand.lat, stand.lng], { icon: poiIcon("🥤", "pf-poi-marker--lemonade"), zIndexOffset: POI_Z_INDEX })
       .addTo(lemonadeLayer)
       .bindPopup('<strong>Lemonade Stand</strong><br/>' + escapeHtml(stand.address) + '<br/>Supporting: ' + linkifyCharity(stand.charity));
   });
@@ -1713,7 +1742,7 @@
   var servicesLayer = L.layerGroup();
   PF_SERVICES.forEach(function (svc) {
     var emoji = POI_ICONS[svc.category] || "📍";
-    L.marker([svc.lat, svc.lng], { icon: poiIcon(emoji, "pf-poi-marker--services") })
+    L.marker([svc.lat, svc.lng], { icon: poiIcon(emoji, "pf-poi-marker--services"), zIndexOffset: POI_Z_INDEX })
       .addTo(servicesLayer)
       .bindPopup('<strong>' + escapeHtml(svc.name) + '</strong><br/>' + escapeHtml(svc.category) + (svc.description ? '<br/>' + escapeHtml(svc.description) : ''));
   });
@@ -1797,6 +1826,7 @@
       }
       var el = marker.getElement();
       if (el) el.style.opacity = visible ? "1" : "0.35";
+      marker.setZIndexOffset(visible ? 1000 : 0);
     });
   }
 
