@@ -1,0 +1,1497 @@
+<!--
+  Maplewood Porchfest — schedule & map embed
+  =============================================
+  Paste this ENTIRE file into the Squarespace Code Block's HTML source
+  (Content tab → Mode: HTML → toggle "Display Source Code" on → paste → Save).
+
+  Self-contained: styles + Leaflet map + full schedule data are all inline,
+  so this single paste is the whole widget. Nothing else needs adding to
+  the page. Loads Leaflet + Google Fonts (Fraunces / Source Serif 4 / DM Sans)
+  from their public CDNs — if this Squarespace plan's Code Block strips
+  <link>/<script> tags, move just those three tags (Leaflet CSS+JS, Google
+  Fonts) into Settings → Advanced → Code Injection → Header instead, and
+  keep the rest (the <div class="pf-embed">…, <style>, and the last
+  <script>) in the Code Block.
+
+  To update the lineup: edit the PF_DATA object near the bottom of the
+  script and re-paste. Source of truth for that data is
+  site/src/data/schedule.json in the repo — keep them in sync by hand for
+  now.
+
+  The surrounding doctype/html/head/body tags below exist only so this file
+  is a valid standalone document for local preview (the live-reload dev
+  server needs a proper closing body tag to inject into safely, or it
+  corrupts the file — ask if you want the story). Harmless to paste as-is:
+  a nested html/head/body inside Squarespace's own page just gets flattened
+  away by the browser's parser, so only the real content survives.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Maplewood Porchfest — Schedule (local preview)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Source+Serif+4:wght@400;600&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="pf-embed" id="pf-embed">
+
+  <div class="pf-filter-bar" id="pf-filter-bar">
+    <div class="pf-filter-group" role="group" aria-label="Filter by genre">
+      <span class="pf-filter-label">Genre:</span>
+      <div class="pf-filter-pills" id="pf-genre-filters">
+        <button class="pf-filter-pill pf-filter-pill--active" data-genre="all" type="button">All</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pf-map-toggle-bar" id="pf-map-toggle-bar">
+    <button class="pf-btn pf-btn--amber pf-map-toggle-btn" id="pf-map-toggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <span id="pf-map-toggle-label">Show Map</span>
+    </button>
+  </div>
+
+  <div class="pf-schedule-layout" id="pf-schedule-layout">
+
+    <div class="pf-map-col" id="pf-map-col">
+      <div class="pf-map-sticky">
+        <div id="pf-map" aria-label="Porch locations map" role="application"></div>
+        <p class="pf-map-note">Click a marker to highlight that porch</p>
+      </div>
+    </div>
+
+    <div class="pf-content-col" id="pf-content-col">
+
+      <div class="pf-view-toggle-row">
+        <div class="pf-view-toggle" role="group" aria-label="View mode">
+          <button class="pf-view-btn pf-view-btn--active" data-view="time" type="button">By Time</button>
+          <button class="pf-view-btn" data-view="porch" type="button">By Porch</button>
+        </div>
+        <select class="pf-filter-select" id="pf-time-filter" aria-label="Filter by time slot">
+          <option value="all">All times</option>
+          <option value="1">1–2 PM</option>
+          <option value="2">2–3 PM</option>
+          <option value="3">3–4 PM</option>
+          <option value="4">4–5 PM</option>
+        </select>
+      </div>
+
+      <div id="pf-time-view"></div>
+      <div id="pf-porch-view" hidden></div>
+
+    </div>
+
+  </div>
+</div>
+
+<style>
+.pf-embed {
+  --pf-bg: #FAF6EE;
+  --pf-surface: #FFFFFF;
+  --pf-surface-2: #F5EFDF;
+  --pf-border: #E9DFC9;
+  --pf-text: #1C1A17;
+  --pf-text-muted: #5A5550;
+  --pf-text-faint: #9E9890;
+
+  --pf-amber: #E8930D;
+  --pf-amber-strong: #A9660A;
+  --pf-amber-soft: #FBE6BE;
+  --pf-amber-contrast: #2A1B02;
+
+  --pf-plum: #8C3684;
+  --pf-plum-strong: #6A2764;
+  --pf-plum-soft: #F0DCEC;
+
+  --pf-green: #2C5F2E;
+
+  --pf-radius: 10px;
+  --pf-radius-lg: 16px;
+  --pf-shadow-sm: 0 1px 2px rgba(28,26,23,.08), 0 1px 1px rgba(28,26,23,.05);
+  --pf-shadow-md: 0 6px 20px rgba(28,26,23,.12);
+
+  --pf-font-display: 'Fraunces', Georgia, serif;
+  --pf-font-body: 'Source Serif 4', Georgia, serif;
+  --pf-font-ui: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  background: var(--pf-bg);
+  color: var(--pf-text);
+  font-family: var(--pf-font-ui);
+  border-radius: var(--pf-radius-lg);
+  padding: 1.25rem;
+  max-width: 100%;
+}
+.pf-embed, .pf-embed *, .pf-embed *::before, .pf-embed *::after { box-sizing: border-box; }
+.pf-embed p { margin: 0; }
+.pf-embed button, .pf-embed select { font-family: inherit; }
+
+/* ---- filter bar ---- */
+.pf-filter-bar { padding-bottom: .9rem; }
+.pf-filter-group { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.pf-filter-label {
+  font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0;
+}
+.pf-filter-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pf-filter-pill {
+  padding: .3rem .85rem; border-radius: 50px; border: 1.5px solid var(--pf-border);
+  background: var(--pf-surface); color: var(--pf-text); font-size: .8rem; font-weight: 600;
+  cursor: pointer; transition: background 150ms, border-color 150ms, color 150ms; white-space: nowrap;
+}
+.pf-filter-pill:hover { border-color: var(--pf-amber); }
+.pf-filter-pill--active { background: var(--pf-amber); color: var(--pf-amber-contrast); border-color: var(--pf-amber); }
+
+.pf-filter-select {
+  padding: .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
+  font-size: .85rem; color: var(--pf-text); background: var(--pf-surface); cursor: pointer;
+}
+.pf-filter-select:focus { outline: 2px solid var(--pf-amber); outline-offset: 1px; }
+
+/* ---- mobile map toggle ---- */
+.pf-map-toggle-bar { display: none; padding-bottom: .9rem; }
+.pf-btn {
+  font-family: var(--pf-font-ui); font-weight: 700; font-size: .85rem; padding: .55rem 1.1rem;
+  border-radius: 50px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem;
+}
+.pf-btn--amber { background: var(--pf-amber); color: var(--pf-amber-contrast); }
+.pf-btn--outline { background: transparent; border: 1.5px solid var(--pf-border); color: var(--pf-text); }
+
+/* ---- layout ---- */
+.pf-schedule-layout { display: block; }
+
+.pf-map-col { display: none; }
+.pf-map-col--open { display: block; }
+.pf-map-sticky { padding-bottom: 1rem; }
+#pf-map { height: 320px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
+.pf-map-note { font-size: .78rem; color: var(--pf-text-faint); text-align: center; margin-top: .5rem; font-style: italic; }
+
+.pf-map-marker {
+  width: 34px; height: 34px; background: var(--pf-green); color: var(--pf-bg); border-radius: 50%;
+  border: 3px solid var(--pf-bg); display: flex; align-items: center; justify-content: center;
+  font-family: var(--pf-font-display); font-weight: 800; font-size: 13px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3); cursor: pointer; transition: background 150ms, transform 150ms;
+}
+.pf-map-marker:hover { background: var(--pf-amber); color: var(--pf-amber-contrast); transform: scale(1.1); }
+
+/* ---- view toggle row ---- */
+.pf-view-toggle-row {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
+  padding-block: .1rem .9rem; border-bottom: 1px solid var(--pf-border); margin-bottom: 1rem;
+}
+.pf-view-toggle { display: inline-flex; border: 1.5px solid var(--pf-border); border-radius: 50px; overflow: hidden; }
+.pf-view-btn {
+  padding: .32rem 1rem; font-size: .82rem; font-weight: 700; background: var(--pf-surface);
+  color: var(--pf-text-muted); border: none; cursor: pointer; white-space: nowrap; letter-spacing: .02em;
+}
+.pf-view-btn + .pf-view-btn { border-left: 1.5px solid var(--pf-border); }
+.pf-view-btn:hover { background: var(--pf-surface-2); color: var(--pf-text); }
+.pf-view-btn--active, .pf-view-btn--active:hover { background: var(--pf-amber); color: var(--pf-amber-contrast); }
+
+/* ---- time view ---- */
+#pf-time-view:not([hidden]) { display: flex; flex-direction: column; gap: 1.75rem; }
+.pf-time-slot-heading {
+  font-family: var(--pf-font-display); font-weight: 600; font-size: 1.05rem; letter-spacing: .01em;
+  color: var(--pf-text); padding: 0 0 .6rem; border-bottom: 2px solid var(--pf-amber); margin: 0 0 1rem;
+}
+.pf-time-acts-grid { display: grid; grid-template-columns: 1fr; gap: .75rem; }
+
+.pf-time-act-card {
+  background: var(--pf-surface); border-radius: var(--pf-radius); border: 1.5px solid var(--pf-border);
+  padding: .9rem 1rem; transition: border-color 150ms, box-shadow 150ms; box-shadow: var(--pf-shadow-sm);
+}
+.pf-time-act-card:hover { border-color: var(--pf-amber); box-shadow: var(--pf-shadow-md); }
+.pf-time-act-card--highlighted { border-color: var(--pf-amber); box-shadow: 0 0 0 3px var(--pf-amber-soft); }
+.pf-time-act-card--parade { border-color: var(--pf-plum); border-left-width: 4px; }
+
+.pf-time-act-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .35rem; flex-wrap: wrap; }
+.pf-time-act-name { font-family: var(--pf-font-display); font-weight: 600; font-size: 1rem; line-height: 1.3; }
+.pf-time-act-where { display: flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--pf-text-muted); margin-bottom: .4rem; }
+.pf-time-act-where svg { flex-shrink: 0; opacity: .65; }
+.pf-time-act-desc { font-family: var(--pf-font-body); font-size: .9rem; color: var(--pf-text); line-height: 1.55; }
+
+.pf-genre-pill {
+  display: inline-block; padding: .18rem .6rem; border-radius: 50px; font-size: .7rem; font-weight: 700;
+  letter-spacing: .03em; background: var(--pf-surface-2); color: var(--pf-text-muted);
+  border: 1px solid var(--pf-border); white-space: nowrap; flex-shrink: 0;
+}
+.pf-genre-pill--parade { background: var(--pf-plum-soft); color: var(--pf-plum-strong); border-color: var(--pf-plum); }
+
+/* ---- porch view ---- */
+#pf-porch-view:not([hidden]) { display: flex; flex-direction: column; gap: 1.25rem; }
+.pf-porch-card {
+  background: var(--pf-surface); border-radius: var(--pf-radius-lg); box-shadow: var(--pf-shadow-sm);
+  overflow: hidden; transition: box-shadow 200ms, outline 150ms; scroll-margin-top: 1rem;
+}
+.pf-porch-card--highlighted { outline: 3px solid var(--pf-amber); box-shadow: var(--pf-shadow-md); }
+.pf-porch-card-header {
+  display: flex; align-items: flex-start; gap: 1.1rem; padding: 1.1rem 1.35rem .9rem;
+  border-bottom: 1px solid var(--pf-border); background: linear-gradient(to right, var(--pf-surface-2), var(--pf-surface));
+}
+.pf-porch-number {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--pf-green); color: var(--pf-bg);
+  display: flex; align-items: center; justify-content: center; font-family: var(--pf-font-display);
+  font-weight: 800; font-size: 1.15rem; flex-shrink: 0;
+}
+.pf-porch-address { font-family: var(--pf-font-display); font-weight: 600; font-size: 1.08rem; margin: 0; line-height: 1.3; }
+.pf-porch-note { font-size: .8rem; color: var(--pf-text-faint); margin-top: .2rem; }
+
+.pf-performer-row {
+  display: grid; grid-template-columns: 100px 1fr; gap: 1rem; padding: .9rem 1.35rem;
+  border-bottom: 1px solid var(--pf-border); align-items: start; transition: background 150ms;
+}
+.pf-performer-row:last-child { border-bottom: none; }
+.pf-performer-row:hover { background: var(--pf-surface-2); }
+.pf-performer-time { display: flex; flex-direction: column; gap: 1px; padding-top: 2px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.pf-time-start { font-weight: 700; font-size: .86rem; color: var(--pf-text); }
+.pf-time-sep { font-size: .7rem; color: var(--pf-text-faint); }
+.pf-time-end { font-size: .8rem; color: var(--pf-text-muted); }
+.pf-performer-name-row { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .3rem; }
+.pf-performer-name { font-family: var(--pf-font-display); font-weight: 600; font-size: .96rem; }
+.pf-performer-desc { font-family: var(--pf-font-body); font-size: .86rem; color: var(--pf-text); line-height: 1.5; }
+
+/* ---- no results ---- */
+.pf-no-results { padding: 3rem 1rem; text-align: center; }
+.pf-no-results-inner { display: flex; flex-direction: column; align-items: center; gap: .85rem; }
+.pf-no-results-icon { font-size: 2.4rem; }
+.pf-no-results h3 { font-family: var(--pf-font-display); font-weight: 600; font-size: 1.2rem; margin: 0; }
+.pf-no-results p { color: var(--pf-text-muted); max-width: 34ch; margin-inline: auto; }
+
+/* ---- responsive: split layout from 900px up ---- */
+@media (min-width: 900px) {
+  .pf-map-toggle-bar { display: none; }
+  .pf-schedule-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: 640px; }
+  .pf-map-col { display: block; height: 100%; border-right: 1px solid var(--pf-border); }
+  .pf-map-sticky { height: 100%; display: flex; flex-direction: column; padding-right: 1.1rem; }
+  #pf-map { flex: 1; min-height: 0; height: auto; }
+  .pf-content-col { height: 100%; overflow-y: auto; padding-left: 1.1rem; }
+  .pf-view-toggle-row { position: sticky; top: 0; background: var(--pf-bg); z-index: 2; }
+}
+
+@media (max-width: 480px) {
+  .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
+  .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
+  .pf-porch-card-header { gap: .8rem; padding: 1rem; }
+}
+</style>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var PF_DATA = {
+    "event": {
+      "date": "Sunday, September 6, 2026",
+      "rain_date": "Monday, September 7, 2026",
+      "hours": "1:00 PM – 5:00 PM",
+      "honk_parade": "12:30 PM from DeHart Community Center, 120 Burnett Ave"
+    },
+    "porches": [
+      {
+        "id": 1,
+        "address": "2 Henry Place",
+        "neighborhood_note": null,
+        "lat": 40.72036,
+        "lng": -74.254475,
+        "performers": [
+          {
+            "name": "Jason Didner and the GSPs",
+            "genre": "Rock",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Pure Jersey rock served up with a side of Jersey humor and a whole lot of heart."
+          },
+          {
+            "name": "Lorraine",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "High-energy pop-rock from a four-piece out of Summit, NJ."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "address": "18 Menzel Ave.",
+        "neighborhood_note": null,
+        "lat": 40.717282,
+        "lng": -74.25561,
+        "performers": [
+          {
+            "name": "HEEL STRIKE",
+            "genre": "Electronic",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "A mesmerizing, semi-improvised wash of ambient, industrial, and techno, built live on modular synths and samplers."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "address": "59 Schaefer Rd",
+        "neighborhood_note": null,
+        "lat": 40.715258,
+        "lng": -74.257966,
+        "performers": [
+          {
+            "name": "Pegasus Meteor Fist",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Monmouth County power trio chasing a cosmic explosion of sound across classic rock, emo, blues, punk, southern, and metal."
+          },
+          {
+            "name": "The Melancholy Kings",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Rock steeped in Guided By Voices, Wilco, and Big Star — Big Takeover Magazine called it \"pop smarts with indie cool.\""
+          },
+          {
+            "name": "Tri-State",
+            "genre": "Rock",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Big hooks, tight harmonies, and stabbing guitars built around stories from post-youth."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "address": "11 Field Rd.",
+        "neighborhood_note": null,
+        "lat": 40.715484,
+        "lng": -74.261427,
+        "performers": [
+          {
+            "name": "belikeAlice",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "A wonderland of rock, New Wave, indie, and punk spanning the 60s through the 2000s."
+          },
+          {
+            "name": "Cassette Tape Ministry",
+            "genre": "Experimental",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Collective improvisation with a rockist edge and a dash of original poetry."
+          },
+          {
+            "name": "Schplinkus",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Genre-bending alt rock out of Clifton, NJ, fueled by an upbeat, enthusiastic sound."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "address": "29 Schaefer Rd",
+        "neighborhood_note": null,
+        "lat": 40.716125,
+        "lng": -74.259269,
+        "performers": [
+          {
+            "name": "Rory D'Lasnow",
+            "genre": "Folk/Americana",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "NJ singer-songwriter pairing folk, Americana, and rock with thoughtful storytelling — stages have included The Hotel Cafe, Mercury Lounge, and the Stone Pony."
+          },
+          {
+            "name": "Delta",
+            "genre": "Blues",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "A Columbia High School blues trio with a fiery intensity that belies their age."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "address": "211 Jacoby Street",
+        "neighborhood_note": null,
+        "lat": 40.717583,
+        "lng": -74.256856,
+        "performers": [
+          {
+            "name": "Breaknrecords band",
+            "genre": "Soul/R&B/Funk",
+            "time_start": "2:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Rahway, NJ soul funk band with a twist, built for high-energy live shows."
+          },
+          {
+            "name": "Bangarang",
+            "genre": "Rock",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Four dads on a mission to blast the 90s grunge and alt-rock anthems they grew up on."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "address": "172 Jacoby Street",
+        "neighborhood_note": null,
+        "lat": 40.718039,
+        "lng": -74.255882,
+        "performers": [
+          {
+            "name": "Roe Knows Best",
+            "genre": "Indie",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Nutley, NJ singer-songwriter project with emotionally intelligent pop-punk and a distinctly Jersey feel."
+          },
+          {
+            "name": "Avery Sinclair",
+            "genre": "Singer-Songwriter",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "18-year-old homegrown singer-songwriter riding the wake of her debut album, Ebbs and Flows."
+          },
+          {
+            "name": "TheyLoveThem",
+            "genre": "TBD",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "More info to come."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "address": "419 Boyden Ave",
+        "neighborhood_note": null,
+        "lat": 40.718133,
+        "lng": -74.255533,
+        "performers": [
+          {
+            "name": "The Coverup",
+            "genre": "Rock",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "No gimmicks, no backing tracks — just killer classic rock played straight."
+          },
+          {
+            "name": "Tiger Bomb",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Local dad-band energy running through 90s alt-rock and classic rock, from The Cars to The Killers."
+          },
+          {
+            "name": "Over My Dad Body",
+            "genre": "Rock",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Self-described \"sad-dad rock,\" now in its 5th year at Porchfest."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "address": "417 Boyden Ave",
+        "neighborhood_note": null,
+        "lat": 40.718101,
+        "lng": -74.255342,
+        "performers": [
+          {
+            "name": "Alex Klint",
+            "genre": "Singer-Songwriter",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Maplewood local singer-songwriter with a catalog already out and more on the way."
+          },
+          {
+            "name": "Michael Sorensen",
+            "genre": "Electronic",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "South Jersey multi-instrumentalist working in electronic rock and experimental soundscapes."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "address": "30 Newark Way",
+        "neighborhood_note": null,
+        "lat": 40.718253,
+        "lng": -74.258185,
+        "performers": [
+          {
+            "name": "Smoove",
+            "genre": "Reggae",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Classic reggae and lovers rock in the vein of Marley, Gregory Isaacs, and Dennis Brown, played with a laid-back groove."
+          },
+          {
+            "name": "Carnival Dogs",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Top Shore musicians who pivot effortlessly from chill acoustic sets to full rock-and-roll party mode."
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "address": "21 Vermont st",
+        "neighborhood_note": null,
+        "lat": 40.721237,
+        "lng": -74.259636,
+        "performers": [
+          {
+            "name": "Chris Mozy",
+            "genre": "Rock",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Pop, rock, indie, and alt-country from a multi-instrumentalist shaped by Southern California's music scene."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "address": "17 Vermont Street",
+        "neighborhood_note": null,
+        "lat": 40.721257,
+        "lng": -74.259641,
+        "performers": [
+          {
+            "name": "Michael Glazier",
+            "genre": "Singer-Songwriter",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Acoustic singer-songwriter running through covers and originals for an eclectic, crowd-pleasing set."
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "address": "11 Vermont Street",
+        "neighborhood_note": null,
+        "lat": 40.721632,
+        "lng": -74.259718,
+        "performers": [
+          {
+            "name": "Mag Electric",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Full-volume classic hard rock from a power trio, with covers pulled from Hendrix and Mountain."
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "address": "31 Tuscan St",
+        "neighborhood_note": null,
+        "lat": 40.720905,
+        "lng": -74.261637,
+        "performers": [
+          {
+            "name": "Yeah Is What We Have",
+            "genre": "Pop",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Power pop built around hooks that won't leave your head."
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "address": "56 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.721089,
+        "lng": -74.262272,
+        "performers": [
+          {
+            "name": "Useful Engines",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Original jams running funk, classic rock, and modern alternative through the same engine."
+          },
+          {
+            "name": "The Accelerators",
+            "genre": "Pop",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "All-original power pop trio spanning the 60s British Invasion and surf rock through 70s and 80s punk and New Wave."
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "address": "58 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.721076,
+        "lng": -74.262358,
+        "performers": [
+          {
+            "name": "The Refugee Dogs",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Entirely original songs that swing from insightful to vaguely off-color, off their latest album, Running Late."
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "address": "78 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.720953,
+        "lng": -74.263221,
+        "performers": [
+          {
+            "name": "The Spectrums",
+            "genre": "Rock",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "NJ teen rock band running covers and originals through alternative, grunge, and metal influences."
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "address": "97 Hilton Ave.",
+        "neighborhood_note": null,
+        "lat": 40.720634,
+        "lng": -74.264272,
+        "performers": [
+          {
+            "name": "mombrain.",
+            "genre": "Punk",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "West Orange moms turned band, playing 90s grunge, punk, and indie under one motto: \"Life is hard. Start a band.\""
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "address": "99 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.720622,
+        "lng": -74.264357,
+        "performers": [
+          {
+            "name": "Paul Burroughs",
+            "genre": "Folk/Americana",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "A guitar-and-drums duo crafting original folk rock out of heartfelt songwriting."
+          },
+          {
+            "name": "Triskele NJ",
+            "genre": "Traditional Irish",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Traditional Irish music on flute, guitar, fiddle, and bodhran drum — jigs, reels, and hornpipes all set long."
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "address": "16 Princeton Street",
+        "neighborhood_note": null,
+        "lat": 40.720344,
+        "lng": -74.267903,
+        "performers": [
+          {
+            "name": "Somebody’s Uncle",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "High-energy covers spanning classic and alternative rock sing-along staples."
+          },
+          {
+            "name": "Travel Team",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "An all-star lineup pulled from The Brand New Steadies, Crystal Pepsi & The Zimas, Sheiks Garage, and Fishmarket Stew, making their debut as pure dad-band rock."
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "address": "184 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.720219,
+        "lng": -74.268501,
+        "performers": [
+          {
+            "name": "Flip Da Skrip",
+            "genre": "Soul/R&B/Funk",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Essex County R&B, pop, hip-hop, and soul collective running from high-octane uptempos to smooth ballads."
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "address": "194 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.72016,
+        "lng": -74.268929,
+        "performers": [
+          {
+            "name": "Double A band",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "12-year-old duo on guitar and drums/vocals, already winners of Amateur Night at the Apollo and regulars at NYC's The Bitter End."
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "address": "228 Hilton Ave",
+        "neighborhood_note": null,
+        "lat": 40.719948,
+        "lng": -74.270463,
+        "performers": [
+          {
+            "name": "Bearded Jon’s Artless Commerce Laboratory",
+            "genre": "Experimental",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Solo electric bass turned into deep, psychedelic ambient loops built for dystopian times."
+          },
+          {
+            "name": "Jay Daniels",
+            "genre": "Jazz",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Live piano and big vocals swinging through the Great American Songbook, classic pop, and Broadway."
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "address": "180 Indiana St",
+        "neighborhood_note": null,
+        "lat": 40.719514,
+        "lng": -74.272096,
+        "performers": [
+          {
+            "name": "Not Nothing But Something",
+            "genre": "Indie",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Indie by way of the band's own genre coinage: \"Minimalist 90's NJ Midwest Emo Talkcore.\""
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "address": "169 Indiana st",
+        "neighborhood_note": null,
+        "lat": 40.71992,
+        "lng": -74.272415,
+        "performers": [
+          {
+            "name": "oscar and the ladybugs",
+            "genre": "Indie",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Intimate indie-folk from a homegrown singer-songwriter drawing on Lomelda, Sufjan Stevens, and Adrianne Lenker."
+          },
+          {
+            "name": "Catch Me If You Can",
+            "genre": "Folk/Americana",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Ryan Hanratty's acoustic solo project, pairing narrative-driven lyrics with an edge borrowed from Frank Turner and Third Eye Blind."
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "address": "779 Prospect Street",
+        "neighborhood_note": null,
+        "lat": 40.718855,
+        "lng": -74.269951,
+        "performers": [
+          {
+            "name": "ZööS",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Faithful, high-energy renditions of classic rock from The Beatles to Led Zeppelin to Santana."
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "address": "208 Franklin Ave",
+        "neighborhood_note": null,
+        "lat": 40.71947,
+        "lng": -74.268922,
+        "performers": [
+          {
+            "name": "The Maybes",
+            "genre": "Pop",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "A family band out of the Hoboken scene, mixing pop, folk, and rock to get the whole crowd moving."
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "address": "184 Franklin Ave",
+        "neighborhood_note": null,
+        "lat": 40.719565,
+        "lng": -74.268224,
+        "performers": [
+          {
+            "name": "Içosery",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Warren, NJ high schoolers covering a spread from Linkin Park to Olivia Rodrigo."
+          },
+          {
+            "name": "Rebecca KellyG",
+            "genre": "Experimental",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "Performing as \"Sound Weaver\" — a voice doing two things at once, low and guttural one moment, high and ethereal the next."
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "address": "29 Princeton St",
+        "neighborhood_note": null,
+        "lat": 40.719705,
+        "lng": -74.267964,
+        "performers": [
+          {
+            "name": "DJ OP!",
+            "genre": "TBD",
+            "time_start": "2:00 PM",
+            "time_end": "4:00 PM",
+            "description": "More info to come."
+          },
+          {
+            "name": "EvrDream",
+            "genre": "Rock",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "A self-described mix of \"Beats, Synths & Riffs\" — alternative rock, metal, trap hip-hop, and electronica from an East Orange, NJ trio formed in 2018 by Christopher Sinanan and Eugene Jenkins III."
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "address": "144 Franklin Avenue",
+        "neighborhood_note": null,
+        "lat": 40.71982,
+        "lng": -74.26636,
+        "performers": [
+          {
+            "name": "Crow Magnum",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Real-life experience turned into hard-hitting rock anthems, pairing raw energy with introspective lyrics."
+          },
+          {
+            "name": "Dizzy Lizard",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "High schoolers running the crowd through decades of hits, from classic rock anthems to modern pop favorites."
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "address": "115 Franklin Ave",
+        "neighborhood_note": null,
+        "lat": 40.719854,
+        "lng": -74.264881,
+        "performers": [
+          {
+            "name": "Meant to be",
+            "genre": "Jazz",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Jazz standards flipped with a smooth Latin and R&B edge."
+          },
+          {
+            "name": "Gina Royale",
+            "genre": "Pop",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Thoughtful lyrics riding a high-energy sound that's drawn comparisons to Paramore and Taylor Swift."
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "address": "42 Tuscan Street",
+        "neighborhood_note": null,
+        "lat": 40.72064,
+        "lng": -74.261356,
+        "performers": [
+          {
+            "name": "The Mutts",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "North Jersey rock making its Porchfest debut with a mix of originals and classic covers."
+          },
+          {
+            "name": "Tweezer",
+            "genre": "Rock",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "A group of middle schoolers united by a shared love of Weezer — and recognized by members of Weezer themselves on social media."
+          },
+          {
+            "name": "Foggy Family (Foggy Minded Boys and Foggettes)",
+            "genre": "Bluegrass/Country",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "A killer mix of bluegrass, country, comedy, pop, and rock — donating their talents to nonprofits for over two decades."
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "address": "45 Wellesley St.",
+        "neighborhood_note": null,
+        "lat": 40.719616,
+        "lng": -74.263539,
+        "performers": [
+          {
+            "name": "Big Train",
+            "genre": "Soul/R&B/Funk",
+            "time_start": "3:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Horn-infused R&B and soul running from timeless classics to high-energy block-party grooves."
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "address": "121 Lexington Ave",
+        "neighborhood_note": null,
+        "lat": 40.718855,
+        "lng": -74.267003,
+        "performers": [
+          {
+            "name": "Bern & the Brights",
+            "genre": "Indie",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Montclair indie rock duo whose melodic, emotional songs have drawn comparisons to Jeff Buckley, Feist, and Indigo Girls."
+          },
+          {
+            "name": "The Nightly Noodle",
+            "genre": "Indie",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Instrumental indie and lo-fi guitar that plays like Khruangbin and John Mayer vacationing together."
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "address": "44 Princeton St",
+        "neighborhood_note": null,
+        "lat": 40.719114,
+        "lng": -74.267595,
+        "performers": [
+          {
+            "name": "Harrison Clock Band",
+            "genre": "Indie",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Indie rock described by listeners as \"beautiful, unique, and strangely moving.\""
+          },
+          {
+            "name": "The Resolve",
+            "genre": "Rock",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Local heavy rock trio running a high-energy set of originals and choice covers."
+          },
+          {
+            "name": "DC & the Desperados",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "SOMA hometown favorites keeping it loud with heavy riffs and straight-up rock and roll."
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "address": "155 Lexington Avenue",
+        "neighborhood_note": null,
+        "lat": 40.718615,
+        "lng": -74.268727,
+        "performers": [
+          {
+            "name": "Sh*tburger",
+            "genre": "Bluegrass/Country",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Old-school country and classic rock, billed as the antidote to work, kids, and back pain."
+          },
+          {
+            "name": "The Third Project",
+            "genre": "Rock",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "A family-and-friends band that reinvents itself every year — this time, a full set of Beatles covers."
+          },
+          {
+            "name": "Unheard Of",
+            "genre": "Rock",
+            "time_start": "4:00 PM",
+            "time_end": "5:00 PM",
+            "description": "Fuzzy, noisy art rock out of South Orange — anything but quiet."
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "address": "34 Revere ave",
+        "neighborhood_note": null,
+        "lat": 40.718046,
+        "lng": -74.269033,
+        "performers": [
+          {
+            "name": "My lost horse",
+            "genre": "Rock",
+            "time_start": "1:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Guitar/vocal duo of SOMA locals Jon and Mike playing 80s and 90s radio favorites, from U2 and Pearl Jam to Nirvana and Green Day."
+          },
+          {
+            "name": "Sarah Hodd + The Drive",
+            "genre": "Soul/R&B/Funk",
+            "time_start": "3:00 PM",
+            "time_end": "4:00 PM",
+            "description": "8-piece Maplewood band mixing explosive covers with bluesy, soulful originals."
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "address": "16 Revere Ave",
+        "neighborhood_note": null,
+        "lat": 40.718155,
+        "lng": -74.268256,
+        "performers": [
+          {
+            "name": "LAREDO and Friends",
+            "genre": "Folk/Americana",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "Neighborhood favorites serving up a true Americana smorgasbord."
+          },
+          {
+            "name": "Ziggy Grover",
+            "genre": "Singer-Songwriter",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Allendale, NJ singer-songwriter turning life stories into song."
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "address": "29 Concord Ave.",
+        "neighborhood_note": null,
+        "lat": 40.7184,
+        "lng": -74.266894,
+        "performers": [
+          {
+            "name": "In My Basement",
+            "genre": "Indie",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "NJ indie rock trio behind the 2025 debut album S.W.T.T., built on high-energy riffs and catchy melodies."
+          },
+          {
+            "name": "The Burrhead Ramblers",
+            "genre": "Bluegrass/Country",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "Authentic, high-energy bluegrass and folk from a set of down-to-earth musicians, making their Porchfest debut."
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "address": "75 Concord Ave",
+        "neighborhood_note": null,
+        "lat": 40.717519,
+        "lng": -74.26834,
+        "performers": [
+          {
+            "name": "Just For Fun",
+            "genre": "Soul/R&B/Funk",
+            "time_start": "1:00 PM",
+            "time_end": "2:00 PM",
+            "description": "5-piece cover band running soul, R&B, and pop-rock from Lake Street Dive to Fleetwood Mac."
+          },
+          {
+            "name": "No Left Turn",
+            "genre": "Rock",
+            "time_start": "2:00 PM",
+            "time_end": "3:00 PM",
+            "description": "North Jersey alternative rock splitting the difference between grunge and indie — Pearl Jam meets Radiohead."
+          }
+        ]
+      }
+    ]
+  };
+  var TIME_SLOTS = [
+    { label: "1:00 – 2:00 PM", hourStart: 13, hourEnd: 14 },
+    { label: "2:00 – 3:00 PM", hourStart: 14, hourEnd: 15 },
+    { label: "3:00 – 4:00 PM", hourStart: 15, hourEnd: 16 },
+    { label: "4:00 – 5:00 PM", hourStart: 16, hourEnd: 17 }
+  ];
+
+  var PIN_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function parseHour(t) {
+    var m = /(\d+)(?::\d+)?\s*(AM|PM)/i.exec(t);
+    if (!m) return 0;
+    var h = parseInt(m[1], 10);
+    if (m[2].toUpperCase() === "PM" && h !== 12) h += 12;
+    return h;
+  }
+
+  var root = document.getElementById("pf-embed");
+  var genreFiltersEl = root.querySelector("#pf-genre-filters");
+  var timeViewEl = root.querySelector("#pf-time-view");
+  var porchViewEl = root.querySelector("#pf-porch-view");
+  var timeFilterEl = root.querySelector("#pf-time-filter");
+
+  var allGenres = Array.from(new Set(
+    PF_DATA.porches.reduce(function (acc, p) {
+      p.performers.forEach(function (perf) { acc.push(perf.genre); });
+      return acc;
+    }, [])
+  )).sort();
+
+  allGenres.forEach(function (genre) {
+    var btn = document.createElement("button");
+    btn.className = "pf-filter-pill";
+    btn.type = "button";
+    btn.dataset.genre = genre;
+    btn.textContent = genre;
+    genreFiltersEl.appendChild(btn);
+  });
+
+  var timeSlots = TIME_SLOTS.map(function (slot) {
+    var acts = [];
+    PF_DATA.porches.forEach(function (porch) {
+      porch.performers.forEach(function (p) {
+        if (parseHour(p.time_start) < slot.hourEnd && parseHour(p.time_end) > slot.hourStart) {
+          acts.push(Object.assign({}, p, { porchId: porch.id, address: porch.address }));
+        }
+      });
+    });
+    return { label: slot.label, acts: acts };
+  });
+
+  var timeViewHtml =
+    '<div class="pf-time-slot-section">' +
+      '<h2 class="pf-time-slot-heading">12:30 PM – 1:00 PM</h2>' +
+      '<div class="pf-time-acts-grid">' +
+        '<div class="pf-time-act-card pf-time-act-card--parade">' +
+          '<div class="pf-time-act-top">' +
+            '<strong class="pf-time-act-name">Honk Parade</strong>' +
+            '<span class="pf-genre-pill pf-genre-pill--parade">Parade</span>' +
+          '</div>' +
+          '<p class="pf-time-act-where">' + PIN_SVG + ' DeHart Community Center, 120 Burnett Ave</p>' +
+          '<p class="pf-time-act-desc">Kicks off Porchfest. A brass-and-noise street parade — all are welcome to march or watch.</p>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  timeSlots.forEach(function (slot) {
+    timeViewHtml += '<div class="pf-time-slot-section" data-slot="' + escapeHtml(slot.label) + '">' +
+      '<h2 class="pf-time-slot-heading">' + escapeHtml(slot.label) + '</h2>' +
+      '<div class="pf-time-acts-grid">' +
+      slot.acts.map(function (act) {
+        return '<div class="pf-time-act-card" data-genre="' + escapeHtml(act.genre) + '" data-name="' + escapeHtml(act.name.toLowerCase()) + '" data-porch-id="' + act.porchId + '">' +
+          '<div class="pf-time-act-top">' +
+            '<strong class="pf-time-act-name">' + escapeHtml(act.name) + '</strong>' +
+            '<span class="pf-genre-pill" data-genre="' + escapeHtml(act.genre) + '">' + escapeHtml(act.genre) + '</span>' +
+          '</div>' +
+          '<p class="pf-time-act-where">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + escapeHtml(act.address) + '</p>' +
+          '<p class="pf-time-act-desc">' + escapeHtml(act.description) + '</p>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+    '</div>';
+  });
+
+  timeViewHtml += '<div class="pf-no-results" id="pf-no-results-time" hidden aria-live="polite">' +
+    '<div class="pf-no-results-inner"><span class="pf-no-results-icon" aria-hidden="true">🎵</span>' +
+    '<h3>No performers found</h3><p>Try clearing the filters to see the full schedule.</p>' +
+    '<button class="pf-btn pf-btn--outline" id="pf-no-results-clear-time" type="button">Clear all filters</button></div></div>';
+
+  timeViewEl.innerHTML = timeViewHtml;
+
+  var porchViewHtml = PF_DATA.porches.map(function (porch) {
+    var genres = porch.performers.map(function (p) { return p.genre; }).join(",");
+    var names = porch.performers.map(function (p) { return p.name.toLowerCase(); }).join(",");
+    return '<div class="pf-porch-card" id="pf-porch-' + porch.id + '" data-porch-id="' + porch.id + '" data-genres="' + escapeHtml(genres) + '" data-performers="' + escapeHtml(names) + '">' +
+      '<div class="pf-porch-card-header">' +
+        '<div class="pf-porch-number" aria-label="Porch ' + porch.id + '">' + porch.id + '</div>' +
+        '<div class="pf-porch-address-block">' +
+          '<h3 class="pf-porch-address">' + escapeHtml(porch.address) + '</h3>' +
+          (porch.neighborhood_note ? '<p class="pf-porch-note">' + escapeHtml(porch.neighborhood_note) + '</p>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="pf-performer-list">' +
+      porch.performers.map(function (perf) {
+        return '<div class="pf-performer-row" data-genre="' + escapeHtml(perf.genre) + '" data-name="' + escapeHtml(perf.name.toLowerCase()) + '" data-time-start="' + escapeHtml(perf.time_start) + '" data-time-end="' + escapeHtml(perf.time_end) + '">' +
+          '<div class="pf-performer-time">' +
+            '<span class="pf-time-start">' + escapeHtml(perf.time_start) + '</span>' +
+            '<span class="pf-time-sep">–</span>' +
+            '<span class="pf-time-end">' + escapeHtml(perf.time_end) + '</span>' +
+          '</div>' +
+          '<div class="pf-performer-info">' +
+            '<div class="pf-performer-name-row">' +
+              '<strong class="pf-performer-name">' + escapeHtml(perf.name) + '</strong>' +
+              '<span class="pf-genre-pill" data-genre="' + escapeHtml(perf.genre) + '">' + escapeHtml(perf.genre) + '</span>' +
+            '</div>' +
+            '<p class="pf-performer-desc">' + escapeHtml(perf.description) + '</p>' +
+          '</div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  porchViewHtml += '<div class="pf-no-results" id="pf-no-results-porch" hidden aria-live="polite">' +
+    '<div class="pf-no-results-inner"><span class="pf-no-results-icon" aria-hidden="true">🎵</span>' +
+    '<h3>No performers found</h3><p>Try clearing the filters to see the full schedule.</p>' +
+    '<button class="pf-btn pf-btn--outline" id="pf-no-results-clear-porch" type="button">Clear all filters</button></div></div>';
+
+  porchViewEl.innerHTML = porchViewHtml;
+
+  /* ===================== MAP ===================== */
+  var map = L.map(root.querySelector("#pf-map"), { center: [40.7193, -74.2643], zoom: 15, scrollWheelZoom: false, zoomControl: true });
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(map);
+
+  var markers = {};
+  PF_DATA.porches.forEach(function (porch) {
+    var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [34, 34], iconAnchor: [17, 17] });
+    var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(map).bindPopup(
+      '<strong>#' + porch.id + ' — ' + escapeHtml(porch.address) + '</strong><br/>' +
+      porch.performers.map(function (p) { return escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>')
+    );
+    marker.on("click", function () {
+      if (activeView === "porch") {
+        var card = root.querySelector("#pf-porch-" + porch.id);
+        if (card && card.style.display !== "none") {
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+          card.classList.add("pf-porch-card--highlighted");
+          setTimeout(function () { card.classList.remove("pf-porch-card--highlighted"); }, 2000);
+        }
+      } else {
+        root.querySelectorAll('.pf-time-act-card[data-porch-id="' + porch.id + '"]').forEach(function (c) {
+          if (c.style.display !== "none") {
+            c.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            c.classList.add("pf-time-act-card--highlighted");
+            setTimeout(function () { c.classList.remove("pf-time-act-card--highlighted"); }, 2000);
+          }
+        });
+      }
+    });
+    markers[porch.id] = marker;
+  });
+
+  /* ===================== STATE + FILTERS ===================== */
+  var activeGenres = new Set(["all"]);
+  var activeTime = "all";
+  var activeView = "time";
+
+  function slotMatchesTime(slotLabel) {
+    if (activeTime === "all") return true;
+    var slotStart = 12 + parseInt(activeTime, 10);
+    var hour = parseInt(slotLabel, 10);
+    return hour === slotStart - 12;
+  }
+
+  function timeInSlot(timeStart, timeEnd) {
+    if (activeTime === "all") return true;
+    var slotStart = 12 + parseInt(activeTime, 10);
+    var slotEnd = slotStart + 1;
+    return parseHour(timeStart) < slotEnd && parseHour(timeEnd) > slotStart;
+  }
+
+  function applyTimeViewFilters() {
+    var slots = root.querySelectorAll(".pf-time-slot-section");
+    var anyVisible = false;
+    slots.forEach(function (slot) {
+      var slotLabel = slot.dataset.slot || "";
+      if (slotLabel && !slotMatchesTime(slotLabel)) { slot.style.display = "none"; return; }
+      var cards = slot.querySelectorAll(".pf-time-act-card");
+      var slotVisible = false;
+      cards.forEach(function (card) {
+        var genre = card.dataset.genre;
+        var visible = activeGenres.has("all") || activeGenres.has(genre);
+        card.style.display = visible ? "" : "none";
+        if (visible) { slotVisible = true; anyVisible = true; }
+      });
+      slot.style.display = slotVisible ? "" : "none";
+    });
+    var noResults = root.querySelector("#pf-no-results-time");
+    if (noResults) noResults.hidden = anyVisible;
+  }
+
+  function applyPorchViewFilters() {
+    var cards = root.querySelectorAll(".pf-porch-card");
+    var visibleCount = 0;
+    cards.forEach(function (card) {
+      var rows = card.querySelectorAll(".pf-performer-row");
+      var cardVisible = false;
+      rows.forEach(function (row) {
+        var genre = row.dataset.genre;
+        var genreMatch = activeGenres.has("all") || activeGenres.has(genre);
+        var timeMatch = timeInSlot(row.dataset.timeStart, row.dataset.timeEnd);
+        var visible = genreMatch && timeMatch;
+        row.style.display = visible ? "" : "none";
+        if (visible) cardVisible = true;
+      });
+      card.style.display = cardVisible ? "" : "none";
+      if (cardVisible) visibleCount++;
+    });
+    var noResults = root.querySelector("#pf-no-results-porch");
+    if (noResults) noResults.hidden = visibleCount > 0;
+  }
+
+  function syncMapMarkers() {
+    PF_DATA.porches.forEach(function (porch) {
+      var marker = markers[porch.id];
+      if (!marker) return;
+      var visible;
+      if (activeView === "time") {
+        var cards = root.querySelectorAll('.pf-time-act-card[data-porch-id="' + porch.id + '"]');
+        visible = Array.prototype.some.call(cards, function (c) { return c.style.display !== "none"; });
+      } else {
+        var card = root.querySelector("#pf-porch-" + porch.id);
+        visible = card ? card.style.display !== "none" : false;
+      }
+      var el = marker.getElement();
+      if (el) el.style.opacity = visible ? "1" : "0.35";
+    });
+  }
+
+  function applyFilters() {
+    if (activeView === "time") applyTimeViewFilters(); else applyPorchViewFilters();
+    syncMapMarkers();
+  }
+
+  function resetFilters() {
+    activeGenres = new Set(["all"]);
+    activeTime = "all";
+    root.querySelectorAll(".pf-filter-pill").forEach(function (p) {
+      p.classList.toggle("pf-filter-pill--active", p.dataset.genre === "all");
+    });
+    timeFilterEl.value = "all";
+    applyFilters();
+  }
+
+  /* ---- view toggle ---- */
+  root.querySelectorAll(".pf-view-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var view = btn.dataset.view;
+      if (view === activeView) return;
+      activeView = view;
+      root.querySelectorAll(".pf-view-btn").forEach(function (b) {
+        b.classList.toggle("pf-view-btn--active", b.dataset.view === view);
+      });
+      timeViewEl.hidden = view !== "time";
+      porchViewEl.hidden = view !== "porch";
+      applyFilters();
+    });
+  });
+
+  /* ---- genre pills ---- */
+  genreFiltersEl.addEventListener("click", function (e) {
+    var btn = e.target.closest(".pf-filter-pill");
+    if (!btn) return;
+    var genre = btn.dataset.genre;
+    if (genre === "all") {
+      activeGenres = new Set(["all"]);
+    } else {
+      activeGenres.delete("all");
+      if (activeGenres.has(genre)) {
+        activeGenres.delete(genre);
+        if (activeGenres.size === 0) activeGenres.add("all");
+      } else {
+        activeGenres.add(genre);
+      }
+    }
+    root.querySelectorAll(".pf-filter-pill").forEach(function (p) {
+      var g = p.dataset.genre;
+      p.classList.toggle("pf-filter-pill--active", activeGenres.has("all") ? g === "all" : activeGenres.has(g));
+    });
+    applyFilters();
+  });
+
+  /* ---- time filter ---- */
+  timeFilterEl.addEventListener("change", function (e) {
+    activeTime = e.target.value;
+    applyFilters();
+  });
+
+  /* ---- clear-filters buttons (delegated, rendered dynamically) ---- */
+  root.addEventListener("click", function (e) {
+    if (e.target.closest("#pf-no-results-clear-time, #pf-no-results-clear-porch")) resetFilters();
+  });
+
+  /* ---- mobile map toggle ---- */
+  var mapToggleBtn = root.querySelector("#pf-map-toggle");
+  var mapToggleLabel = root.querySelector("#pf-map-toggle-label");
+  var mapCol = root.querySelector("#pf-map-col");
+  mapToggleBtn.addEventListener("click", function () {
+    var open = mapCol.classList.toggle("pf-map-col--open");
+    mapToggleLabel.textContent = open ? "Hide Map" : "Show Map";
+    setTimeout(function () { map.invalidateSize(); }, 350);
+  });
+
+  /* initial paint */
+  applyFilters();
+  setTimeout(function () { map.invalidateSize(); }, 200);
+})();
+</script>
+
+</body>
+</html>
