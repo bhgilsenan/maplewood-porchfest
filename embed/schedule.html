@@ -91,7 +91,7 @@
           <button class="pf-layer-pill pf-layer-pill--active" data-layer="services" type="button">Services</button>
         </div>
         <div id="pf-map" aria-label="Porch locations map" role="application"></div>
-        <p class="pf-map-note">Click a marker to highlight that porch</p>
+        <p class="pf-map-note">Click a marker for lineup times</p>
       </div>
     </div>
 
@@ -250,6 +250,7 @@
 .pf-poi-marker--food { background: var(--pf-food); }
 .pf-poi-marker--lemonade { background: var(--pf-lemonade); }
 .pf-poi-marker--services { background: var(--pf-services); }
+.pf-popup-details-link { display: inline-block; margin-top: 6px; color: var(--pf-primary); font-weight: 600; text-decoration: underline; }
 
 /* ---- view toggle row ---- */
 .pf-view-toggle-row {
@@ -1678,25 +1679,17 @@
     var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [28, 28], iconAnchor: [14, 14] });
     var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(porchesLayer).bindPopup(
       '<strong>#' + porch.id + ' — ' + escapeHtml(porch.address) + '</strong><br/>' +
-      porch.performers.map(function (p) { return escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>')
+      porch.performers.map(function (p) { return escapeHtml(p.time_start) + '–' + escapeHtml(p.time_end) + ' ' + escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>') +
+      '<br/><a href="#" class="pf-popup-details-link" data-porch-id="' + porch.id + '">More details</a>'
     );
-    marker.on("click", function () {
-      if (activeView === "porch") {
-        var card = root.querySelector("#pf-porch-" + porch.id);
-        if (card && card.style.display !== "none") {
-          card.scrollIntoView({ behavior: "smooth", block: "start" });
-          card.classList.add("pf-porch-card--highlighted");
-          setTimeout(function () { card.classList.remove("pf-porch-card--highlighted"); }, 2000);
-        }
-      } else {
-        root.querySelectorAll('.pf-time-act-card[data-porch-id="' + porch.id + '"]').forEach(function (c) {
-          if (c.style.display !== "none") {
-            c.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            c.classList.add("pf-time-act-card--highlighted");
-            setTimeout(function () { c.classList.remove("pf-time-act-card--highlighted"); }, 2000);
-          }
-        });
-      }
+    marker.on("popupopen", function (e) {
+      var link = e.popup.getElement().querySelector(".pf-popup-details-link");
+      if (!link) return;
+      link.addEventListener("click", function (evt) {
+        evt.preventDefault();
+        marker.closePopup();
+        goToPorchCard(porch.id);
+      });
     });
     markers[porch.id] = marker;
   });
@@ -1846,19 +1839,29 @@
   }
 
   /* ---- view toggle ---- */
-  root.querySelectorAll(".pf-view-btn").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var view = btn.dataset.view;
-      if (view === activeView) return;
-      activeView = view;
-      root.querySelectorAll(".pf-view-btn").forEach(function (b) {
-        b.classList.toggle("pf-view-btn--active", b.dataset.view === view);
-      });
-      timeViewEl.hidden = view !== "time";
-      porchViewEl.hidden = view !== "porch";
-      applyFilters();
+  function setView(view) {
+    if (view === activeView) return;
+    activeView = view;
+    root.querySelectorAll(".pf-view-btn").forEach(function (b) {
+      b.classList.toggle("pf-view-btn--active", b.dataset.view === view);
     });
+    timeViewEl.hidden = view !== "time";
+    porchViewEl.hidden = view !== "porch";
+    applyFilters();
+  }
+
+  root.querySelectorAll(".pf-view-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () { setView(btn.dataset.view); });
   });
+
+  function goToPorchCard(porchId) {
+    setView("porch");
+    var card = root.querySelector("#pf-porch-" + porchId);
+    if (!card || card.style.display === "none") return;
+    card.scrollIntoView({ behavior: "smooth", block: "start" });
+    card.classList.add("pf-porch-card--highlighted");
+    setTimeout(function () { card.classList.remove("pf-porch-card--highlighted"); }, 2000);
+  }
 
   /* ---- genre pills ---- */
   genreFiltersEl.addEventListener("click", function (e) {
