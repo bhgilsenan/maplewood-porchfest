@@ -167,7 +167,8 @@
   border-radius: var(--pf-radius-lg);
   padding: 1.25rem;
   width: 100%;
-  max-width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
   container-type: inline-size;
 }
 .pf-embed, .pf-embed *, .pf-embed *::before, .pf-embed *::after { box-sizing: border-box; }
@@ -204,9 +205,12 @@
 .pf-btn {
   font-family: var(--pf-font-ui); font-weight: 700; font-size: .85rem; padding: .55rem 1.1rem;
   border-radius: 50px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem;
+  text-decoration: none;
 }
 .pf-btn--cta { background: var(--pf-cta); color: var(--pf-cta-contrast); }
 .pf-btn--outline { background: transparent; border: 1.5px solid var(--pf-border); color: var(--pf-text); }
+.pf-btn--ghost { background: transparent; color: var(--pf-primary); }
+.pf-btn--ghost:hover { background: var(--pf-primary-soft); }
 
 /* ---- layout ---- */
 .pf-schedule-layout { display: block; }
@@ -287,6 +291,8 @@
 .pf-time-act-name { font-family: var(--pf-font-display); font-weight: 600; font-size: 1rem; line-height: 1.3; }
 .pf-time-act-where { display: flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--pf-text-muted); }
 .pf-time-act-where svg { flex-shrink: 0; opacity: .65; }
+.pf-time-act-where a { color: inherit; text-decoration: none; }
+.pf-time-act-where a:hover { text-decoration: underline; color: var(--pf-primary); }
 .pf-time-act-desc { font-family: var(--pf-font-body); font-size: .9rem; color: var(--pf-text); line-height: 1.25; }
 
 .pf-genre-pill {
@@ -303,10 +309,13 @@
   overflow: hidden; transition: box-shadow 200ms, outline 150ms; scroll-margin-top: 1rem;
 }
 .pf-porch-card--highlighted { outline: 3px solid var(--pf-primary); box-shadow: var(--pf-shadow-md); }
+.pf-back-to-map-btn { align-self: flex-start; }
 .pf-porch-card-header {
-  display: flex; align-items: center; gap: 1.1rem; padding: 1.1rem 1.35rem .9rem;
-  border-bottom: 1px solid var(--pf-border); background: linear-gradient(to right, var(--pf-surface-2), var(--pf-surface));
+  display: flex; align-items: center; justify-content: space-between; gap: 1.1rem; padding: 1.1rem 1.35rem .9rem;
+  border-bottom: 1px solid var(--pf-border); background: var(--pf-surface-2);
 }
+.pf-porch-card-title { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
+.pf-directions-btn { padding: .35rem .85rem; font-size: .75rem; flex-shrink: 0; }
 .pf-porch-number {
   width: 24px; height: 24px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
   display: flex; align-items: center; justify-content: center; font-family: var(--pf-font-display);
@@ -340,17 +349,8 @@
    iframe or a narrow page column, where a viewport @media query would
    evaluate against the wrong box (or never change on resize at all).
    @container queries respond to .pf-embed's actual width instead, so the
-   layout is correct regardless of what's wrapping it. ---- */
-@container (min-width: 900px) {
-  .pf-map-toggle-bar { display: none; }
-  .pf-schedule-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: 640px; }
-  .pf-map-col { display: block; height: 100%; border-right: 1px solid var(--pf-border); }
-  .pf-map-sticky { height: 100%; display: flex; flex-direction: column; padding-right: 1.1rem; }
-  #pf-map { flex: 1; min-height: 0; height: auto; }
-  .pf-content-col { height: 100%; overflow-y: auto; padding-left: 1.1rem; }
-  .pf-view-toggle-row { position: sticky; top: 0; background: var(--pf-bg); z-index: 2; }
-}
-
+   layout is correct regardless of what's wrapping it. Layout is stacked
+   (map above list) at every width. ---- */
 @container (max-width: 480px) {
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
@@ -1548,6 +1548,19 @@
     });
   }
 
+  var IS_APPLE_DEVICE = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+
+  function mapsHref(address) {
+    var query = encodeURIComponent(address + ", Maplewood, NJ");
+    return IS_APPLE_DEVICE
+      ? "https://maps.apple.com/?q=" + query
+      : "https://www.google.com/maps/search/?api=1&query=" + query;
+  }
+
+  function mapsLink(address) {
+    return '<a href="' + mapsHref(address) + '" target="_blank" rel="noopener">' + escapeHtml(address) + '</a>';
+  }
+
   function parseHour(t) {
     var m = /(\d+)(?::\d+)?\s*(AM|PM)/i.exec(t);
     if (!m) return 0;
@@ -1591,7 +1604,7 @@
   });
 
   var timeViewHtml =
-    '<div class="pf-time-slot-section">' +
+    '<div class="pf-time-slot-section pf-time-slot-section--parade">' +
       '<h2 class="pf-time-slot-heading">12:30 PM – 1:00 PM</h2>' +
       '<div class="pf-time-acts-grid">' +
         '<div class="pf-time-act-card pf-time-act-card--parade">' +
@@ -1615,7 +1628,7 @@
             '<strong class="pf-time-act-name">' + escapeHtml(act.name) + '</strong>' +
             '<span class="pf-genre-pill" data-genre="' + escapeHtml(act.genre) + '">' + escapeHtml(act.genre) + '</span>' +
           '</div>' +
-          '<p class="pf-time-act-where">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + escapeHtml(act.address) + '</p>' +
+          '<p class="pf-time-act-where">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + mapsLink(act.address) + '</p>' +
           '<p class="pf-time-act-desc">' + escapeHtml(act.description) + '</p>' +
         '</div>';
       }).join('') +
@@ -1635,8 +1648,11 @@
     var names = porch.performers.map(function (p) { return p.name.toLowerCase(); }).join(",");
     return '<div class="pf-porch-card" id="pf-porch-' + porch.id + '" data-porch-id="' + porch.id + '" data-genres="' + escapeHtml(genres) + '" data-performers="' + escapeHtml(names) + '">' +
       '<div class="pf-porch-card-header">' +
-        '<div class="pf-porch-number" aria-label="Porch ' + porch.id + '">' + porch.id + '</div>' +
-        '<h3 class="pf-porch-address">' + escapeHtml(porch.address) + '</h3>' +
+        '<div class="pf-porch-card-title">' +
+          '<div class="pf-porch-number" aria-label="Porch ' + porch.id + '">' + porch.id + '</div>' +
+          '<h3 class="pf-porch-address">' + escapeHtml(porch.address) + '</h3>' +
+        '</div>' +
+        '<a class="pf-btn pf-btn--ghost pf-directions-btn" href="' + mapsHref(porch.address) + '" target="_blank" rel="noopener">Directions</a>' +
       '</div>' +
       '<div class="pf-performer-list">' +
       porch.performers.map(function (perf) {
@@ -1678,7 +1694,7 @@
   PF_DATA.porches.forEach(function (porch) {
     var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [28, 28], iconAnchor: [14, 14] });
     var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(porchesLayer).bindPopup(
-      '<strong>#' + porch.id + ' — ' + escapeHtml(porch.address) + '</strong><br/>' +
+      '<strong>#' + porch.id + ' — ' + mapsLink(porch.address) + '</strong><br/>' +
       porch.performers.map(function (p) { return escapeHtml(p.time_start) + '–' + escapeHtml(p.time_end) + ' ' + escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>') +
       '<br/><a href="#" class="pf-popup-details-link" data-porch-id="' + porch.id + '">More details</a>'
     );
@@ -1722,14 +1738,14 @@
   PF_FOOD.forEach(function (spot) {
     L.marker([spot.lat, spot.lng], { icon: poiIcon("🍴", "pf-poi-marker--food"), zIndexOffset: POI_Z_INDEX })
       .addTo(foodLayer)
-      .bindPopup('<strong>' + escapeHtml(spot.name) + '</strong><br/>' + escapeHtml(spot.address) + '<br/>' + escapeHtml(spot.description));
+      .bindPopup('<strong>' + escapeHtml(spot.name) + '</strong><br/>' + mapsLink(spot.address) + '<br/>' + escapeHtml(spot.description));
   });
 
   var lemonadeLayer = L.layerGroup();
   PF_LEMONADE.forEach(function (stand) {
     L.marker([stand.lat, stand.lng], { icon: poiIcon("🥤", "pf-poi-marker--lemonade"), zIndexOffset: POI_Z_INDEX })
       .addTo(lemonadeLayer)
-      .bindPopup('<strong>Lemonade Stand</strong><br/>' + escapeHtml(stand.address) + '<br/>Supporting: ' + linkifyCharity(stand.charity));
+      .bindPopup('<strong>Lemonade Stand</strong><br/>' + mapsLink(stand.address) + '<br/>Supporting: ' + linkifyCharity(stand.charity));
   });
 
   var servicesLayer = L.layerGroup();
@@ -1768,6 +1784,10 @@
     var slots = root.querySelectorAll(".pf-time-slot-section");
     var anyVisible = false;
     slots.forEach(function (slot) {
+      if (slot.classList.contains("pf-time-slot-section--parade") && activeTime !== "all") {
+        slot.style.display = "none";
+        return;
+      }
       var slotLabel = slot.dataset.slot || "";
       if (slotLabel && !slotMatchesTime(slotLabel)) { slot.style.display = "none"; return; }
       var cards = slot.querySelectorAll(".pf-time-act-card");
@@ -1854,6 +1874,8 @@
     btn.addEventListener("click", function () { setView(btn.dataset.view); });
   });
 
+  var backToMapBtn = null;
+
   function goToPorchCard(porchId) {
     setView("porch");
     var card = root.querySelector("#pf-porch-" + porchId);
@@ -1861,6 +1883,24 @@
     card.scrollIntoView({ behavior: "smooth", block: "start" });
     card.classList.add("pf-porch-card--highlighted");
     setTimeout(function () { card.classList.remove("pf-porch-card--highlighted"); }, 2000);
+
+    if (backToMapBtn) backToMapBtn.remove();
+    backToMapBtn = document.createElement("button");
+    backToMapBtn.type = "button";
+    backToMapBtn.className = "pf-btn pf-btn--outline pf-back-to-map-btn";
+    backToMapBtn.textContent = "↑ Back to map";
+    backToMapBtn.addEventListener("click", function () {
+      if (!mapCol.classList.contains("pf-map-col--open")) {
+        mapCol.classList.add("pf-map-col--open");
+        mapToggleLabel.textContent = "Hide Map";
+        setTimeout(function () { map.invalidateSize(); }, 350);
+      }
+      var scrollTarget = root.querySelector("#pf-map-toggle-bar") || root.querySelector("#pf-map");
+      scrollTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+      backToMapBtn.remove();
+      backToMapBtn = null;
+    });
+    card.parentNode.insertBefore(backToMapBtn, card);
   }
 
   /* ---- genre pills ---- */
@@ -1917,6 +1957,14 @@
     mapToggleLabel.textContent = open ? "Hide Map" : "Show Map";
     setTimeout(function () { map.invalidateSize(); }, 350);
   });
+
+  var backToMapObserver = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting && backToMapBtn) {
+      backToMapBtn.remove();
+      backToMapBtn = null;
+    }
+  });
+  backToMapObserver.observe(root.querySelector("#pf-map-toggle-bar"));
 
   /* initial paint */
   applyFilters();
