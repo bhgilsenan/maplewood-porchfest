@@ -61,6 +61,27 @@
 
 <div class="pf-embed" id="pf-embed">
 
+  <div class="pf-hero" id="pf-hero">
+    <h1 class="pf-hero-title">Porchfest 2026</h1>
+    <p class="pf-hero-subtitle">
+      <span id="pf-hero-date"></span>
+      <span class="pf-hero-dot" aria-hidden="true">•</span>
+      <span id="pf-hero-hours" class="pf-hero-hours"></span>
+    </p>
+    <p class="pf-hero-raindate" id="pf-hero-raindate"></p>
+    <div class="pf-hero-links">
+      <!-- TODO: swap in the real 2026 PDF URLs once the committee finalizes them -->
+      <a class="pf-btn pf-hero-btn" id="pf-map-pdf-link" href="#printable-map-pending">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
+        Printable Map
+      </a>
+      <a class="pf-btn pf-hero-btn" id="pf-schedule-pdf-link" href="#printable-schedule-pending">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
+        Printable Schedule
+      </a>
+    </div>
+  </div>
+
   <div class="pf-filter-bar" id="pf-filter-bar">
     <div class="pf-filter-group" role="group" aria-label="Filter by genre">
       <span class="pf-filter-label">Genre:</span>
@@ -137,6 +158,7 @@
   --pf-primary: #93358d;
   --pf-primary-contrast: #ffffff;
   --pf-primary-soft: rgba(147,53,141,.35);
+  --pf-primary-faint: rgba(147,53,141,.08);
 
   --pf-cta: #ff5d00;
   --pf-cta-contrast: #000000;
@@ -176,6 +198,20 @@
 .pf-embed, .pf-embed *, .pf-embed *::before, .pf-embed *::after { box-sizing: border-box; }
 .pf-embed p { margin: 0; }
 .pf-embed button, .pf-embed select { font-family: inherit; }
+
+/* ---- hero ---- */
+.pf-hero { text-align: center; padding: 1.6rem 0 1.8rem; margin-bottom: 1.4rem; border-bottom: 1px solid var(--pf-border); }
+.pf-hero-title { font-family: var(--pf-font-display); font-weight: 700; font-size: 1.9rem; color: var(--pf-text); margin: 0 0 .25rem; }
+.pf-hero .pf-hero-subtitle { font-size: .95rem; color: var(--pf-text); margin: 0; }
+#pf-hero-date { color: var(--pf-primary); }
+.pf-hero-hours { color: var(--pf-text-muted); }
+.pf-hero-dot { color: var(--pf-primary); margin: 0 .4rem; font-size: .65rem; vertical-align: middle; }
+.pf-hero .pf-hero-raindate { font-size: .78rem; color: var(--pf-text-faint); font-style: italic; margin: 0 0 1.1rem; }
+.pf-hero-links { display: flex; justify-content: center; flex-wrap: wrap; gap: .7rem; }
+.pf-hero-btn {
+  background: var(--pf-primary-faint); color: var(--pf-primary); border: none; font-weight: 600;
+}
+.pf-hero-btn:hover { background: var(--pf-primary); color: var(--pf-primary-contrast); }
 
 /* ---- filter bar ---- */
 .pf-filter-bar { padding-bottom: .9rem; }
@@ -1615,6 +1651,9 @@
   }
 
   var root = document.getElementById("pf-embed");
+  root.querySelector("#pf-hero-date").textContent = PF_DATA.event.date;
+  root.querySelector("#pf-hero-hours").textContent = PF_DATA.event.hours;
+  root.querySelector("#pf-hero-raindate").textContent = "Rain date: " + PF_DATA.event.rain_date;
   var genreFiltersEl = root.querySelector("#pf-genre-filters");
   var timeViewEl = root.querySelector("#pf-time-view");
   var porchViewEl = root.querySelector("#pf-porch-view");
