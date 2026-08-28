@@ -68,30 +68,15 @@
       <span class="pf-hero-dot" aria-hidden="true">•</span>
       <span id="pf-hero-hours" class="pf-hero-hours"></span>
     </p>
+    <p class="pf-hero-parade-banner" id="pf-hero-parade-banner">
+      <span class="pf-hero-parade-icon" aria-hidden="true">🏁</span>
+      <span class="pf-hero-parade-copy">
+        <strong>Honk Parade</strong>
+        <span id="pf-hero-parade-text"></span>
+      </span>
+    </p>
     <p class="pf-hero-raindate" id="pf-hero-raindate"></p>
-    <div class="pf-hero-links">
-      <!-- TODO: swap in the real 2026 PDF URLs once the committee finalizes them -->
-      <a class="pf-btn pf-hero-btn" id="pf-map-pdf-link" href="#printable-map-pending">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
-        Printable Map
-      </a>
-      <a class="pf-btn pf-hero-btn" id="pf-schedule-pdf-link" href="#printable-schedule-pending">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
-        Printable Schedule
-      </a>
-    </div>
   </div>
-
-  <div class="pf-filter-bar" id="pf-filter-bar">
-    <div class="pf-filter-group" role="group" aria-label="Filter by genre">
-      <span class="pf-filter-label">Genre:</span>
-      <div class="pf-filter-pills" id="pf-genre-filters">
-        <button class="pf-filter-pill pf-filter-pill--active" data-genre="all" type="button">All</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="pf-accent-bar" aria-hidden="true"></div>
 
   <div class="pf-schedule-layout" id="pf-schedule-layout">
 
@@ -112,24 +97,51 @@
     <div class="pf-map-col pf-map-col--open" id="pf-map-col">
       <div class="pf-map-sticky">
         <div id="pf-map" aria-label="Porch locations map" role="application"></div>
-        <p class="pf-map-note">Click a marker for lineup times</p>
+        <div class="pf-map-footer">
+          <p class="pf-map-note">Click a marker for lineup times</p>
+          <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
+          <a class="pf-btn pf-download-btn" id="pf-map-pdf-link" href="#printable-map-pending">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
+            Printable Map
+          </a>
+        </div>
       </div>
     </div>
+
+    <details class="pf-genre-disclosure" id="pf-genre-disclosure">
+      <summary class="pf-genre-summary">
+        <span class="pf-filter-label">Genre:</span>
+        <span class="pf-genre-summary-state" id="pf-genre-summary-state">All</span>
+        <svg class="pf-genre-summary-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="pf-filter-group" role="group" aria-label="Filter by genre">
+        <div class="pf-filter-pills" id="pf-genre-filters">
+          <button class="pf-filter-pill pf-filter-pill--active" data-genre="all" type="button">All</button>
+        </div>
+      </div>
+    </details>
 
     <div class="pf-content-col" id="pf-content-col">
 
       <div class="pf-view-toggle-row">
-        <div class="pf-view-toggle" role="group" aria-label="View mode">
-          <button class="pf-view-btn pf-view-btn--active" data-view="time" type="button">By Time</button>
-          <button class="pf-view-btn" data-view="porch" type="button">By Porch</button>
+        <div class="pf-view-toggle-group">
+          <div class="pf-view-toggle" role="group" aria-label="View mode">
+            <button class="pf-view-btn pf-view-btn--active" data-view="time" type="button">By Time</button>
+            <button class="pf-view-btn" data-view="porch" type="button">By Porch</button>
+          </div>
+          <select class="pf-filter-select" id="pf-time-filter" aria-label="Filter by time slot">
+            <option value="all">All times</option>
+            <option value="1">1–2 PM</option>
+            <option value="2">2–3 PM</option>
+            <option value="3">3–4 PM</option>
+            <option value="4">4–5 PM</option>
+          </select>
         </div>
-        <select class="pf-filter-select" id="pf-time-filter" aria-label="Filter by time slot">
-          <option value="all">All times</option>
-          <option value="1">1–2 PM</option>
-          <option value="2">2–3 PM</option>
-          <option value="3">3–4 PM</option>
-          <option value="4">4–5 PM</option>
-        </select>
+        <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
+        <a class="pf-btn pf-download-btn" id="pf-schedule-pdf-link" href="#printable-schedule-pending">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
+          Printable Schedule
+        </a>
       </div>
 
       <div id="pf-time-view"></div>
@@ -165,14 +177,22 @@
   --pf-cta-soft: rgba(255,93,0,.14);
 
   /* Map wayfinding colors — a deliberate exception to the brand-only rule
-     above, scoped to map pins only. Porches keep --pf-cta (orange); these
-     three give Food/Lemonade/Services their own identity on the map. */
+     above, scoped to map pins only. Porches keep --pf-cta (orange). Services
+     & Facilities pins are grouped by what they mean to someone navigating on
+     foot, not one hue per category (9 distinct pin colors would be busy) —
+     Parking (highest search-intent) gets its own blue, Park + Playground
+     share a green ("head outside"), and Restroom + Community Center + Quiet
+     Room share a neutral slate ("functional stop, not a destination"). */
   --pf-food: #c0392b;
   --pf-food-contrast: #ffffff;
   --pf-lemonade: #e8b923;
   --pf-lemonade-contrast: #000000;
-  --pf-services: #2f6fea;
-  --pf-services-contrast: #ffffff;
+  --pf-parking: #2f6fea;
+  --pf-parking-contrast: #ffffff;
+  --pf-park: #2f9e5b;
+  --pf-park-contrast: #ffffff;
+  --pf-amenity: #5b6472;
+  --pf-amenity-contrast: #ffffff;
   --pf-parade: var(--pf-primary);
   --pf-parade-contrast: #ffffff;
 
@@ -203,20 +223,60 @@
 /* ---- hero ---- */
 .pf-hero { text-align: center; padding: 1.6rem 0 1.8rem; margin-bottom: 1.4rem; border-bottom: 1px solid var(--pf-border); }
 .pf-hero-title { font-family: var(--pf-font-display); font-weight: 400; font-size: 4.2rem; color: var(--pf-text); margin: 0 0 .25rem; }
-.pf-hero .pf-hero-subtitle { font-size: .95rem; color: var(--pf-text); margin: 0; }
-#pf-hero-date { color: var(--pf-primary); }
-.pf-hero-hours { color: var(--pf-text-muted); }
-.pf-hero-dot { color: var(--pf-primary); margin: 0 .4rem; font-size: .65rem; vertical-align: middle; }
-.pf-hero .pf-hero-raindate { font-size: .78rem; color: var(--pf-text-faint); font-style: italic; margin: 0 0 1.1rem; }
-.pf-hero-links { display: flex; justify-content: center; flex-wrap: wrap; gap: .7rem; }
-.pf-hero-btn {
-  background: var(--pf-primary-faint); color: var(--pf-primary); border: none; font-weight: 600;
+.pf-hero .pf-hero-subtitle {
+  font-size: .95rem; color: var(--pf-text); margin: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; row-gap: .2rem;
 }
-.pf-hero-btn:hover { background: var(--pf-primary); color: var(--pf-primary-contrast); }
+#pf-hero-date { color: var(--pf-primary); white-space: nowrap; }
+.pf-hero-hours { color: var(--pf-text-muted); white-space: nowrap; }
+.pf-hero-dot { color: var(--pf-primary); margin: 0 .4rem; font-size: .65rem; vertical-align: middle; }
+/* CSS can't detect "this text is about to wrap," so the date/hours break is
+   forced at a fixed width instead of left to find its own wrap point —
+   guarantees the break always falls cleanly between the two (never mid-date
+   or mid-hours) and lets the dot get hidden exactly when it happens. This
+   400px threshold is a best guess for where "Sunday, September 6, 2026 •
+   1:00 PM – 5:00 PM" actually runs out of room — no browser available to
+   confirm live, so nudge it if the two lines split too early or too late. */
+@container (max-width: 400px) {
+  .pf-hero-subtitle { flex-direction: column; gap: .15rem; }
+  .pf-hero-dot { display: none; }
+}
+.pf-hero .pf-hero-parade-banner {
+  display: inline-flex; align-items: flex-start; gap: .55rem; margin: .9rem 0 0;
+  padding: .7rem 1.1rem; border-radius: var(--pf-radius); border: 1.5px solid var(--pf-cta);
+  background: var(--pf-surface); box-shadow: var(--pf-shadow-sm);
+  color: var(--pf-text); font-size: .85rem; font-weight: 400;
+  text-align: left;
+}
+.pf-hero-parade-icon { font-size: 1.1rem; line-height: 1; flex-shrink: 0; margin-top: .1rem; }
+.pf-hero-parade-copy { line-height: 1.5; }
+.pf-hero-parade-banner strong { font-weight: 700; }
+.pf-hero .pf-hero-raindate { font-size: .78rem; color: var(--pf-text-faint); font-style: italic; margin: .7rem 0 1.1rem; }
+.pf-download-btn {
+  background: transparent; color: var(--pf-text-muted); border: none; font-weight: 600;
+  padding: .3rem .1rem; font-size: .76rem; text-decoration: none;
+}
+.pf-download-btn:hover { color: var(--pf-primary); text-decoration: underline; }
+.pf-view-toggle-group { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; }
 
-/* ---- filter bar ---- */
-.pf-filter-bar { padding-bottom: .9rem; }
-.pf-filter-group { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+/* ---- genre filter: collapsed by default (progressive disclosure), its own
+   bordered container so it reads as a secondary/optional control rather than
+   competing at equal weight with the map layers and view toggle above/below it ---- */
+.pf-genre-disclosure {
+  border: 1.5px solid var(--pf-border); border-radius: var(--pf-radius);
+  background: var(--pf-surface-2); margin-bottom: 1.1rem; padding: 0 .9rem;
+}
+.pf-genre-summary {
+  display: flex; align-items: center; gap: .5rem; padding: .7rem 0; cursor: pointer;
+  list-style: none; user-select: none;
+}
+.pf-genre-summary::-webkit-details-marker { display: none; }
+.pf-genre-summary-state {
+  font-size: .8rem; font-weight: 600; color: var(--pf-primary);
+}
+.pf-genre-summary-chevron { margin-left: auto; color: var(--pf-text-faint); transition: transform 150ms; flex-shrink: 0; }
+.pf-genre-disclosure[open] .pf-genre-summary-chevron { transform: rotate(180deg); }
+.pf-filter-group { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; padding: .1rem 0 .9rem; }
 .pf-filter-label {
   font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em;
   color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0;
@@ -241,8 +301,6 @@
   font-size: .85rem; color: var(--pf-text); background: var(--pf-surface); cursor: pointer;
 }
 
-/* ---- accent bar: nod to their homepage's solid-color band under the nav ---- */
-.pf-accent-bar { height: 4px; border-radius: 4px; background: var(--pf-cta); margin: 0 0 1.1rem; }
 .pf-filter-select:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
 
 /* ---- mobile map toggle ---- */
@@ -265,7 +323,7 @@
 
 .pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .6rem; margin-bottom: 1.1rem; }
 .pf-layer-label {
-  font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
+  font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em;
   color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0; margin-right: .15rem;
 }
 .pf-layer-pills { display: flex; flex-wrap: wrap; gap: .35rem; }
@@ -287,7 +345,8 @@
 }
 
 #pf-map { height: 320px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
-.pf-map-note { font-size: .78rem; color: var(--pf-text-faint); text-align: center; margin-top: .5rem; font-style: italic; }
+.pf-map-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-top: .6rem; }
+.pf-map-note { font-size: .78rem; color: var(--pf-text-faint); font-style: italic; margin: 0; }
 
 .pf-map-marker {
   width: 28px; height: 28px; background: var(--pf-cta); color: var(--pf-cta-contrast); border-radius: 50%;
@@ -302,11 +361,14 @@
   display: flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1;
   box-shadow: 0 2px 6px rgba(0,0,0,.3); cursor: pointer; transition: transform 150ms;
 }
+.pf-poi-marker svg { width: 14px; height: 14px; flex-shrink: 0; }
 .pf-poi-marker:hover { transform: scale(1.15); }
-.pf-poi-marker--food { background: var(--pf-food); }
-.pf-poi-marker--lemonade { background: var(--pf-lemonade); }
-.pf-poi-marker--services { background: var(--pf-services); }
-.pf-poi-marker--parade { background: var(--pf-parade); }
+.pf-poi-marker--food { background: var(--pf-food); color: var(--pf-food-contrast); }
+.pf-poi-marker--lemonade { background: var(--pf-lemonade); color: var(--pf-lemonade-contrast); }
+.pf-poi-marker--parking { background: var(--pf-parking); color: var(--pf-parking-contrast); }
+.pf-poi-marker--park { background: var(--pf-park); color: var(--pf-park-contrast); }
+.pf-poi-marker--amenity { background: var(--pf-amenity); color: var(--pf-amenity-contrast); }
+.pf-poi-marker--parade { background: var(--pf-parade); color: var(--pf-parade-contrast); }
 .pf-parade-route { stroke: var(--pf-parade); stroke-opacity: .85; }
 .pf-popup-details-link { display: inline-block; margin-top: 6px; color: var(--pf-primary); font-weight: 600; text-decoration: underline; }
 
@@ -339,7 +401,7 @@
 }
 .pf-time-act-card:hover { border-color: var(--pf-primary); box-shadow: var(--pf-shadow-md); }
 .pf-time-act-card--highlighted { border-color: var(--pf-primary); box-shadow: 0 0 0 3px var(--pf-primary-soft); }
-.pf-time-act-card--parade { border-color: var(--pf-cta); border-left-width: 4px; }
+.pf-time-act-card--parade { border-color: var(--pf-cta); }
 
 .pf-time-act-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
 .pf-time-act-name { font-family: var(--pf-font-display); font-weight: 600; font-size: 1rem; line-height: 1.3; }
@@ -434,7 +496,9 @@
       "date": "Sunday, September 6, 2026",
       "rain_date": "Monday, September 7, 2026",
       "hours": "1:00 PM – 5:00 PM",
-      "honk_parade": "12:30 PM from DeHart Community Center, 120 Burnet Avenue"
+      "honk_parade_rehearsal": "12:00 PM",
+      "honk_parade_kickoff": "12:30 PM",
+      "honk_parade_location": "DeHart Community Center"
     },
     "porches": [
       {
@@ -1667,7 +1731,12 @@
   root.querySelector("#pf-hero-date").textContent = PF_DATA.event.date;
   root.querySelector("#pf-hero-hours").textContent = PF_DATA.event.hours;
   root.querySelector("#pf-hero-raindate").textContent = "Rain date: " + PF_DATA.event.rain_date;
+  root.querySelector("#pf-hero-parade-text").innerHTML =
+    "— gather at " + PF_DATA.event.honk_parade_location + ": rehearsal <strong>" +
+    PF_DATA.event.honk_parade_rehearsal + "</strong>, kickoff <strong>" +
+    PF_DATA.event.honk_parade_kickoff + "</strong>";
   var genreFiltersEl = root.querySelector("#pf-genre-filters");
+  var genreSummaryStateEl = root.querySelector("#pf-genre-summary-state");
   var timeViewEl = root.querySelector("#pf-time-view");
   var porchViewEl = root.querySelector("#pf-porch-view");
   var timeFilterEl = root.querySelector("#pf-time-filter");
@@ -1814,15 +1883,41 @@
   });
   porchesLayer.addTo(map);
 
-  /* ---- Food / Lemonade / Services layers (on by default — toggled via the map-layer chips) ---- */
-  var POI_ICONS = {
-    "Restroom": "🚻", "Parking": "🅿️", "Community Center": "🏛️", "Park": "🌳",
-    "Playground": "🛝", "Quiet Room": "🤫", "Parade Marker": "🏁"
+  /* ---- Food / Lemonade / Services layers (on by default — toggled via the map-layer chips) ----
+     POI icons are real Lucide (lucide.dev, ISC-licensed) SVG paths, copied from the actual
+     library rather than hand-drawn — the same source as the download/chevron/map-toggle icons
+     already elsewhere in this file. Kept as inline SVG, not an icon font, so nothing loads over
+     the network and every icon renders identically everywhere, unlike the emoji they replace
+     (platform-inconsistent, and unreadable at 26px — e.g. the old fork-and-knife). Parade Marker
+     is the one exception, keeping its 🏁 emoji: that one already reads fine everywhere and was
+     deliberately chosen over a real flag / red-flag emoji for the color-clash reasons noted by
+     --pf-parade below. */
+  var ICON_SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  var ICON_SVGS = {
+    utensils: ICON_SVG_OPEN + '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>',
+    cupSoda: ICON_SVG_OPEN + '<path d="m6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.54a2 2 0 0 0 2-1.72L18 8"/><path d="M5 8h14"/><path d="M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/><path d="m12 8 1-6h2"/></svg>',
+    toilet: ICON_SVG_OPEN + '<path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"/><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/></svg>',
+    squareParking: ICON_SVG_OPEN + '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>',
+    landmark: ICON_SVG_OPEN + '<path d="M10 18v-7"/><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/></svg>',
+    trees: ICON_SVG_OPEN + '<path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"/><path d="M7 16v6"/><path d="M13 19v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/></svg>',
+    ferrisWheel: ICON_SVG_OPEN + '<circle cx="12" cy="12" r="2"/><path d="M12 2v4"/><path d="m6.8 15-3.5 2"/><path d="m20.7 7-3.5 2"/><path d="M6.8 9 3.3 7"/><path d="m20.7 17-3.5-2"/><path d="m9 22 3-8 3 8"/><path d="M8 22h8"/><path d="M18 18.7a9 9 0 1 0-12 0"/></svg>',
+    volumeX: ICON_SVG_OPEN + '<path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>'
   };
 
-  function poiIcon(emoji, modifierClass) {
+  /* Category → icon + color-tier. Blue=Parking (highest search-intent), green=Park/Playground
+     ("head outside"), slate=Restroom/Community Center/Quiet Room ("functional stop"). */
+  var SERVICE_CATEGORY_META = {
+    "Restroom":         { icon: ICON_SVGS.toilet,         cls: "pf-poi-marker--amenity" },
+    "Parking":          { icon: ICON_SVGS.squareParking,  cls: "pf-poi-marker--parking" },
+    "Community Center": { icon: ICON_SVGS.landmark,       cls: "pf-poi-marker--amenity" },
+    "Park":             { icon: ICON_SVGS.trees,          cls: "pf-poi-marker--park" },
+    "Playground":       { icon: ICON_SVGS.ferrisWheel,    cls: "pf-poi-marker--park" },
+    "Quiet Room":       { icon: ICON_SVGS.volumeX,        cls: "pf-poi-marker--amenity" }
+  };
+
+  function poiIcon(content, modifierClass) {
     return L.divIcon({
-      html: '<div class="pf-poi-marker ' + modifierClass + '">' + emoji + '</div>',
+      html: '<div class="pf-poi-marker ' + modifierClass + '">' + content + '</div>',
       className: "", iconSize: [26, 26], iconAnchor: [13, 13]
     });
   }
@@ -1839,24 +1934,26 @@
 
   var foodLayer = L.layerGroup();
   PF_FOOD.forEach(function (spot) {
-    L.marker([spot.lat, spot.lng], { icon: poiIcon("🍴", "pf-poi-marker--food"), zIndexOffset: POI_Z_INDEX })
+    L.marker([spot.lat, spot.lng], { icon: poiIcon(ICON_SVGS.utensils, "pf-poi-marker--food"), zIndexOffset: POI_Z_INDEX })
       .addTo(foodLayer)
       .bindPopup('<strong>' + escapeHtml(spot.name) + '</strong><br/>' + mapsLink(spot.address) + '<br/>' + escapeHtml(spot.description));
   });
 
   var lemonadeLayer = L.layerGroup();
   PF_LEMONADE.forEach(function (stand) {
-    L.marker([stand.lat, stand.lng], { icon: poiIcon("🥤", "pf-poi-marker--lemonade"), zIndexOffset: POI_Z_INDEX })
+    L.marker([stand.lat, stand.lng], { icon: poiIcon(ICON_SVGS.cupSoda, "pf-poi-marker--lemonade"), zIndexOffset: POI_Z_INDEX })
       .addTo(lemonadeLayer)
       .bindPopup('<strong>Lemonade Stand</strong><br/>' + mapsLink(stand.address) + '<br/>Supporting: ' + linkifyCharity(stand.charity));
   });
 
   var servicesLayer = L.layerGroup();
   PF_SERVICES.forEach(function (svc) {
-    var emoji = POI_ICONS[svc.category] || "📍";
     var isParade = svc.category === "Parade Marker";
     var targetLayer = isParade ? porchesLayer : servicesLayer;
-    L.marker([svc.lat, svc.lng], { icon: poiIcon(emoji, isParade ? "pf-poi-marker--parade" : "pf-poi-marker--services"), zIndexOffset: POI_Z_INDEX })
+    var meta = SERVICE_CATEGORY_META[svc.category];
+    var content = isParade ? "🏁" : (meta ? meta.icon : ICON_SVGS.landmark);
+    var modifierClass = isParade ? "pf-poi-marker--parade" : (meta ? meta.cls : "pf-poi-marker--amenity");
+    L.marker([svc.lat, svc.lng], { icon: poiIcon(content, modifierClass), zIndexOffset: POI_Z_INDEX })
       .addTo(targetLayer)
       .bindPopup('<strong>' + escapeHtml(svc.name) + '</strong><br/>' + escapeHtml(svc.category) + (svc.description ? '<br/>' + escapeHtml(svc.description) : ''));
   });
@@ -1963,12 +2060,24 @@
     syncMapMarkers();
   }
 
+  function updateGenreSummary() {
+    if (activeGenres.has("all")) {
+      genreSummaryStateEl.textContent = "All";
+      return;
+    }
+    var picked = Array.from(activeGenres);
+    genreSummaryStateEl.textContent = picked.length === 1
+      ? picked[0]
+      : picked.length + " selected";
+  }
+
   function resetFilters() {
     activeGenres = new Set(["all"]);
     activeTime = "all";
     root.querySelectorAll(".pf-filter-pill").forEach(function (p) {
       p.classList.toggle("pf-filter-pill--active", p.dataset.genre === "all");
     });
+    updateGenreSummary();
     timeFilterEl.value = "all";
     applyFilters();
   }
@@ -2040,6 +2149,7 @@
       var g = p.dataset.genre;
       p.classList.toggle("pf-filter-pill--active", activeGenres.has("all") ? g === "all" : activeGenres.has(g));
     });
+    updateGenreSummary();
     applyFilters();
   });
 
@@ -2048,6 +2158,7 @@
     root.querySelectorAll(".pf-filter-pill").forEach(function (p) {
       p.classList.toggle("pf-filter-pill--active", p.dataset.genre === "all");
     });
+    updateGenreSummary();
     applyFilters();
   });
 
