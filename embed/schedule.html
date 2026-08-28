@@ -72,24 +72,24 @@
 
   <div class="pf-accent-bar" aria-hidden="true"></div>
 
-  <div class="pf-map-toggle-bar" id="pf-map-toggle-bar">
-    <button class="pf-btn pf-btn--cta pf-map-toggle-btn" id="pf-map-toggle" type="button">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-      <span id="pf-map-toggle-label">Hide Map</span>
-    </button>
-  </div>
-
   <div class="pf-schedule-layout" id="pf-schedule-layout">
+
+    <div class="pf-layer-toggles" id="pf-layer-toggles" role="group" aria-label="Map layers">
+      <span class="pf-layer-label">Map:</span>
+      <div class="pf-layer-pills">
+        <button class="pf-layer-pill pf-layer-pill--active" data-layer="porches" type="button">Music</button>
+        <button class="pf-layer-pill pf-layer-pill--active" data-layer="food" type="button">Food</button>
+        <button class="pf-layer-pill pf-layer-pill--active" data-layer="lemonade" type="button">Lemonade Stands</button>
+        <button class="pf-layer-pill pf-layer-pill--active" data-layer="services" type="button">Services & Facilities</button>
+      </div>
+      <button class="pf-btn pf-btn--ghost pf-map-toggle-btn" id="pf-map-toggle" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        <span id="pf-map-toggle-label">Hide Map</span>
+      </button>
+    </div>
 
     <div class="pf-map-col pf-map-col--open" id="pf-map-col">
       <div class="pf-map-sticky">
-        <div class="pf-layer-toggles" id="pf-layer-toggles" role="group" aria-label="Map layers">
-          <span class="pf-layer-label">Map:</span>
-          <button class="pf-layer-pill pf-layer-pill--active" data-layer="porches" type="button">Porches</button>
-          <button class="pf-layer-pill pf-layer-pill--active" data-layer="food" type="button">Food</button>
-          <button class="pf-layer-pill pf-layer-pill--active" data-layer="lemonade" type="button">Lemonade</button>
-          <button class="pf-layer-pill pf-layer-pill--active" data-layer="services" type="button">Services</button>
-        </div>
         <div id="pf-map" aria-label="Porch locations map" role="application"></div>
         <p class="pf-map-note">Click a marker for lineup times</p>
       </div>
@@ -149,8 +149,10 @@
   --pf-food-contrast: #ffffff;
   --pf-lemonade: #e8b923;
   --pf-lemonade-contrast: #000000;
-  --pf-services: #000000;
+  --pf-services: #2f6fea;
   --pf-services-contrast: #ffffff;
+  --pf-parade: var(--pf-primary);
+  --pf-parade-contrast: #ffffff;
 
   --pf-radius: 10px;
   --pf-radius-lg: 16px;
@@ -190,6 +192,12 @@
 }
 .pf-filter-pill:hover { border-color: var(--pf-primary); }
 .pf-filter-pill--active { background: var(--pf-primary); color: var(--pf-primary-contrast); border-color: var(--pf-primary); }
+.pf-genre-clear-btn {
+  padding: .3rem .85rem; border-radius: 50px; border: none; background: transparent;
+  color: var(--pf-primary); font-size: .8rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  transition: background 150ms;
+}
+.pf-genre-clear-btn:hover { background: var(--pf-primary-soft); }
 
 .pf-filter-select {
   padding: .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
@@ -201,7 +209,6 @@
 .pf-filter-select:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
 
 /* ---- mobile map toggle ---- */
-.pf-map-toggle-bar { display: block; padding-bottom: .9rem; }
 .pf-btn {
   font-family: var(--pf-font-ui); font-weight: 700; font-size: .85rem; padding: .55rem 1.1rem;
   border-radius: 50px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem;
@@ -219,11 +226,12 @@
 .pf-map-col--open { display: block; }
 .pf-map-sticky { padding-bottom: 1rem; }
 
-.pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; margin-bottom: 1.1rem; }
+.pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .6rem; margin-bottom: 1.1rem; }
 .pf-layer-label {
   font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
   color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0; margin-right: .15rem;
 }
+.pf-layer-pills { display: flex; flex-wrap: wrap; gap: .35rem; }
 .pf-layer-pill {
   padding: .22rem .65rem; border-radius: 50px; border: 1.5px solid var(--pf-border);
   background: var(--pf-surface); color: var(--pf-text); font-family: var(--pf-font-ui);
@@ -233,6 +241,13 @@
 .pf-layer-pill:hover { border-color: var(--pf-primary); }
 .pf-layer-pill--active { background: var(--pf-primary); color: var(--pf-primary-contrast); border-color: var(--pf-primary); }
 .pf-layer-pill--active::before { content: "✓"; margin-right: .3rem; }
+.pf-map-toggle-btn { margin-left: auto; padding: .3rem .85rem; font-size: .78rem; }
+
+@container (max-width: 700px) {
+  .pf-layer-label { order: 1; }
+  .pf-map-toggle-btn { order: 2; }
+  .pf-layer-pills { order: 3; flex-basis: 100%; }
+}
 
 #pf-map { height: 320px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
 .pf-map-note { font-size: .78rem; color: var(--pf-text-faint); text-align: center; margin-top: .5rem; font-style: italic; }
@@ -254,6 +269,8 @@
 .pf-poi-marker--food { background: var(--pf-food); }
 .pf-poi-marker--lemonade { background: var(--pf-lemonade); }
 .pf-poi-marker--services { background: var(--pf-services); }
+.pf-poi-marker--parade { background: var(--pf-parade); }
+.pf-parade-route { stroke: var(--pf-parade); stroke-opacity: .85; }
 .pf-popup-details-link { display: inline-block; margin-top: 6px; color: var(--pf-primary); font-weight: 600; text-decoration: underline; }
 
 /* ---- view toggle row ---- */
@@ -1492,72 +1509,72 @@
       "address": "120 Burnet Avenue",
       "category": "Parade Marker",
       "description": "Meet at DeHart Community Center at 12 Noon for rehearsal. Honk Parade kicks off at 12:30pm",
-      "lat": 40.718333,
-      "lng": -74.261195
+      "lat": 40.719335,
+      "lng": -74.262029
     },
     {
       "name": "Honk Parade End -121 Lexington Ave",
       "address": "121 Lexington Avenue",
       "category": "Parade Marker",
       "description": "Honk Parade ends at 121 Lexington Ave",
-      "lat": 40.719005,
-      "lng": -74.267123
+      "lat": 40.718995,
+      "lng": -74.267042
     },
     {
       "name": "Maplewood Community Center at DeHart Park",
       "address": "120 Burnet Avenue",
       "category": "Community Center",
       "description": "",
-      "lat": 40.718513,
-      "lng": -74.261145
+      "lat": 40.719044,
+      "lng": -74.261827
     },
     {
       "name": "Restrooms at DeHart Community Center",
       "address": "114 Burnet Avenue",
       "category": "Restroom",
       "description": "Bathrooms (Inside DeHart Center)",
-      "lat": 40.718453,
-      "lng": -74.261094
+      "lat": 40.719132,
+      "lng": -74.261617
     },
     {
       "name": "Municipal Parking DeHart Park",
       "address": "106 Burnet Avenue",
       "category": "Parking",
       "description": "Parking",
-      "lat": 40.718213,
-      "lng": -74.261345
+      "lat": 40.719308,
+      "lng": -74.261435
     },
     {
       "name": "DeHart Park",
       "address": "120 Burnet Avenue",
       "category": "Park",
       "description": "",
-      "lat": 40.718233,
-      "lng": -74.260975
+      "lat": 40.718577,
+      "lng": -74.261014
     },
     {
       "name": "DeHart Park Playground",
       "address": "120 Burnet Avenue",
       "category": "Playground",
       "description": "",
-      "lat": 40.718383,
-      "lng": -74.261395
+      "lat": 40.718796,
+      "lng": -74.261977
     },
     {
       "name": "Together We Bloom - St Joes Church - 767 Prospect St",
       "address": "767 Prospect Street",
       "category": "Quiet Room",
       "description": "Together We Bloom sensory-friendly quiet room; If needed, please ask to use the restrooms.",
-      "lat": 40.719397,
-      "lng": -74.270082
+      "lat": 40.719381,
+      "lng": -74.270225
     },
     {
       "name": "Municipal Parking on Prospect Street",
       "address": "747-751 Prospect Street",
       "category": "Parking",
       "description": "747-751 Prospect Street",
-      "lat": 40.718828,
-      "lng": -74.269834
+      "lat": 40.720152,
+      "lng": -74.270285
     }
   ];
 
@@ -1618,6 +1635,12 @@
     btn.textContent = genre;
     genreFiltersEl.appendChild(btn);
   });
+
+  var genreClearBtn = document.createElement("button");
+  genreClearBtn.className = "pf-genre-clear-btn";
+  genreClearBtn.type = "button";
+  genreClearBtn.textContent = "Clear";
+  genreFiltersEl.appendChild(genreClearBtn);
 
   var timeSlots = TIME_SLOTS.map(function (slot) {
     var acts = [];
@@ -1742,7 +1765,7 @@
   /* ---- Food / Lemonade / Services layers (on by default — toggled via the map-layer chips) ---- */
   var POI_ICONS = {
     "Restroom": "🚻", "Parking": "🅿️", "Community Center": "🏛️", "Park": "🌳",
-    "Playground": "🛝", "Quiet Room": "🤫", "Parade Marker": "🚩"
+    "Playground": "🛝", "Quiet Room": "🤫", "Parade Marker": "🏁"
   };
 
   function poiIcon(emoji, modifierClass) {
@@ -1779,10 +1802,22 @@
   var servicesLayer = L.layerGroup();
   PF_SERVICES.forEach(function (svc) {
     var emoji = POI_ICONS[svc.category] || "📍";
-    L.marker([svc.lat, svc.lng], { icon: poiIcon(emoji, "pf-poi-marker--services"), zIndexOffset: POI_Z_INDEX })
-      .addTo(servicesLayer)
+    var isParade = svc.category === "Parade Marker";
+    var targetLayer = isParade ? porchesLayer : servicesLayer;
+    L.marker([svc.lat, svc.lng], { icon: poiIcon(emoji, isParade ? "pf-poi-marker--parade" : "pf-poi-marker--services"), zIndexOffset: POI_Z_INDEX })
+      .addTo(targetLayer)
       .bindPopup('<strong>' + escapeHtml(svc.name) + '</strong><br/>' + escapeHtml(svc.category) + (svc.description ? '<br/>' + escapeHtml(svc.description) : ''));
   });
+
+  /* Honk Parade route, traced from the committee's own Google My Maps route
+     (Maplewood Porchfest 2026.kmz) — grouped with Porches since the parade
+     kicks off the schedule, not a standing amenity like the Services pins. */
+  L.polyline([
+    [40.71936, -74.261959],
+    [40.719801, -74.261022],
+    [40.7194, -74.263942],
+    [40.719011, -74.266883]
+  ], { className: "pf-parade-route", weight: 4, dashArray: "8 8" }).addTo(porchesLayer);
 
   var MAP_LAYERS = { porches: porchesLayer, food: foodLayer, lemonade: lemonadeLayer, services: servicesLayer };
   foodLayer.addTo(map);
@@ -1921,9 +1956,11 @@
       if (!mapCol.classList.contains("pf-map-col--open")) {
         mapCol.classList.add("pf-map-col--open");
         mapToggleLabel.textContent = "Hide Map";
+        layerLabel.style.display = "";
+        layerPills.style.display = "";
         setTimeout(function () { map.invalidateSize(); }, 350);
       }
-      var scrollTarget = root.querySelector("#pf-map-toggle-bar") || root.querySelector("#pf-map");
+      var scrollTarget = root.querySelector("#pf-map");
       scrollTarget.scrollIntoView({ behavior: "smooth", block: "start" });
       backToMapBtn.remove();
       backToMapBtn = null;
@@ -1954,6 +1991,14 @@
     applyFilters();
   });
 
+  genreClearBtn.addEventListener("click", function () {
+    activeGenres = new Set(["all"]);
+    root.querySelectorAll(".pf-filter-pill").forEach(function (p) {
+      p.classList.toggle("pf-filter-pill--active", p.dataset.genre === "all");
+    });
+    applyFilters();
+  });
+
   /* ---- time filter ---- */
   timeFilterEl.addEventListener("change", function (e) {
     activeTime = e.target.value;
@@ -1980,9 +2025,13 @@
   var mapToggleBtn = root.querySelector("#pf-map-toggle");
   var mapToggleLabel = root.querySelector("#pf-map-toggle-label");
   var mapCol = root.querySelector("#pf-map-col");
+  var layerLabel = root.querySelector(".pf-layer-label");
+  var layerPills = root.querySelector(".pf-layer-pills");
   mapToggleBtn.addEventListener("click", function () {
     var open = mapCol.classList.toggle("pf-map-col--open");
     mapToggleLabel.textContent = open ? "Hide Map" : "Show Map";
+    layerLabel.style.display = open ? "" : "none";
+    layerPills.style.display = open ? "" : "none";
     setTimeout(function () { map.invalidateSize(); }, 350);
   });
 
@@ -1992,7 +2041,7 @@
       backToMapBtn = null;
     }
   });
-  backToMapObserver.observe(root.querySelector("#pf-map-toggle-bar"));
+  backToMapObserver.observe(root.querySelector("#pf-map"));
 
   /* initial paint */
   applyFilters();

@@ -102,12 +102,17 @@ elsewhere in the embed uses them:
 | `--pf-food-contrast` | white | `#ffffff` | (unused by emoji icons, kept for consistency) |
 | `--pf-lemonade` | lemonade yellow | `#e8b923` | Lemonade stand map pins |
 | `--pf-lemonade-contrast` | black | `#000000` | (unused by emoji icons, kept for consistency) |
-| `--pf-services` | black | `#000000` | Services map pins (restroom, parking, community center, park, playground, quiet room, parade marker) — reuses `--pf-text`'s black rather than adding a 3rd new hue |
+| `--pf-services` | blue | `#2f6fea` | Services & Facilities map pins (restroom, parking, community center, park, playground, quiet room) — was black, changed since black read poorly as a pin color |
 | `--pf-services-contrast` | white | `#ffffff` | (unused by emoji icons, kept for consistency) |
+| `--pf-parade` | brand purple | `var(--pf-primary)` (`#93358d`) | Honk Parade start/end map pins and the parade route line — reuses the brand's primary purple; grouped with the Porches layer, not Services. (Originally a one-off magenta matching Brendan's Google My Maps route color, but that read too close to `--pf-food`'s red at pin size.) |
+| `--pf-parade-contrast` | white | `#ffffff` | (unused by emoji icons, kept for consistency) |
 
 Each Service sub-category gets its own emoji icon instead of its own
 color (🚻 restroom, 🅿️ parking, 🏛️ community center, 🌳 park, 🛝
-playground, 🤫 quiet room, 🚩 parade marker; 🍴 food, 🥤 lemonade). Emoji
+playground, 🤫 quiet room; 🍴 food, 🥤 lemonade). The 🏁 parade marker
+icon uses its own dedicated `--pf-parade` color rather than
+`--pf-services`, and its markers/route line live in the Porches layer
+group, not Services. Emoji
 were chosen over hand-drawn SVG icons specifically because they render
 reliably without a visual QA loop — full-color emoji glyphs render
 consistently regardless of the marker's background/text color CSS.
