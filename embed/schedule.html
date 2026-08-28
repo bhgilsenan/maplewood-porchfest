@@ -100,9 +100,9 @@
         <div class="pf-map-footer">
           <p class="pf-map-note">Click a marker for lineup times</p>
           <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
-          <a class="pf-btn pf-download-btn" id="pf-map-pdf-link" href="#printable-map-pending">
+          <a class="pf-btn pf-btn--ghost pf-download-btn" id="pf-map-pdf-link" href="#printable-map-pending">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
-            Printable Map
+            <span class="pf-download-btn-label">Printable Map</span>
           </a>
         </div>
       </div>
@@ -137,10 +137,33 @@
             <option value="4">4–5 PM</option>
           </select>
         </div>
+        <div class="pf-band-search" id="pf-band-search">
+          <input
+            type="text"
+            class="pf-band-search-input"
+            id="pf-band-search-input"
+            role="combobox"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-controls="pf-band-search-listbox"
+            aria-autocomplete="list"
+            aria-label="Search performers by name"
+            placeholder="Search performers…"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="button" class="pf-band-search-clear" id="pf-band-search-clear" aria-label="Clear performer search" hidden>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <ul class="pf-band-search-listbox" id="pf-band-search-listbox" role="listbox" aria-label="Performers" hidden></ul>
+        </div>
+      </div>
+
+      <div class="pf-schedule-actions-row">
         <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
-        <a class="pf-btn pf-download-btn" id="pf-schedule-pdf-link" href="#printable-schedule-pending">
+        <a class="pf-btn pf-btn--ghost pf-download-btn" id="pf-schedule-pdf-link" href="#printable-schedule-pending">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
-          Printable Schedule
+          <span class="pf-download-btn-label">Printable Schedule</span>
         </a>
       </div>
 
@@ -252,11 +275,6 @@
 .pf-hero-parade-copy { line-height: 1.5; }
 .pf-hero-parade-banner strong { font-weight: 700; }
 .pf-hero .pf-hero-raindate { font-size: .78rem; color: var(--pf-text-faint); font-style: italic; margin: .7rem 0 1.1rem; }
-.pf-download-btn {
-  background: transparent; color: var(--pf-text-muted); border: none; font-weight: 600;
-  padding: .3rem .1rem; font-size: .76rem; text-decoration: none;
-}
-.pf-download-btn:hover { color: var(--pf-primary); text-decoration: underline; }
 .pf-view-toggle-group { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; }
 
 /* ---- genre filter: collapsed by default (progressive disclosure), its own
@@ -313,6 +331,17 @@
 .pf-btn--outline { background: transparent; border: 1.5px solid var(--pf-border); color: var(--pf-text); }
 .pf-btn--ghost { background: transparent; color: var(--pf-primary); }
 .pf-btn--ghost:hover { background: var(--pf-primary-soft); }
+
+/* ---- printable-PDF links: secondary/low-frequency, so they reuse the
+   ghost-button language instead of a bespoke style, just smaller than a
+   primary ghost button. margin-left: auto docks them to the trailing edge
+   of their row even if flex-wrap kicks in, instead of snapping to the
+   row's leading edge (which used to read as an orphaned leftover line).
+   Below 480px they drop to icon-only entirely — see the shared 480px
+   @container block below — so their row stops wrapping in the first
+   place rather than needing the trailing-edge fallback at all. ---- */
+.pf-download-btn { margin-left: auto; font-size: .78rem; padding: .4rem .85rem; }
+.pf-download-btn-label { white-space: nowrap; }
 
 /* ---- layout ---- */
 .pf-schedule-layout { display: block; }
@@ -375,8 +404,50 @@
 /* ---- view toggle row ---- */
 .pf-view-toggle-row {
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
-  padding-block: .1rem .9rem; border-bottom: 1px solid var(--pf-border); margin-bottom: 1rem;
+  padding-block: .1rem .6rem;
 }
+/* Divider lives here, not on .pf-view-toggle-row above, so it closes off the
+   whole controls cluster (toggle+select+search+print) as one visual group
+   rather than cutting between two rows that both belong together. */
+.pf-schedule-actions-row {
+  display: flex;
+  padding-block: 0 .9rem; border-bottom: 1px solid var(--pf-border); margin-bottom: 1rem;
+}
+
+/* ---- band-name search (combobox) ---- */
+.pf-band-search { position: relative; flex: 1 1 160px; min-width: 140px; }
+.pf-band-search-input {
+  width: 100%; padding: .35rem 2rem .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
+  font-size: .85rem; color: var(--pf-text); background: var(--pf-surface); font-family: inherit;
+}
+.pf-band-search-input:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
+.pf-band-search-clear {
+  position: absolute; top: 50%; right: .4rem; transform: translateY(-50%);
+  width: 22px; height: 22px; align-items: center; justify-content: center;
+  padding: 0; border: none; border-radius: 50%; background: transparent;
+  color: var(--pf-text-faint); cursor: pointer;
+}
+/* display lives here, not on the base rule above — an unconditional
+   display:flex on .pf-band-search-clear would beat the browser's own
+   [hidden]{display:none} UA rule (author styles always win over UA styles
+   regardless of specificity), so el.hidden=true in JS would do nothing. */
+.pf-band-search-clear:not([hidden]) { display: flex; }
+.pf-band-search-clear:hover { background: var(--pf-primary-faint); color: var(--pf-primary); }
+.pf-band-search-listbox { margin: 0; padding: .3rem; list-style: none; }
+.pf-band-search-listbox:not([hidden]) {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20;
+  max-height: 260px; overflow-y: auto;
+  background: var(--pf-surface); border: 1.5px solid var(--pf-border);
+  border-radius: var(--pf-radius); box-shadow: var(--pf-shadow-md);
+}
+.pf-band-option {
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  padding: .55rem .6rem; min-height: 44px; border-radius: calc(var(--pf-radius) - 4px);
+  cursor: pointer; font-size: .85rem; color: var(--pf-text);
+}
+.pf-band-option-meta { font-size: .72rem; color: var(--pf-text-faint); white-space: nowrap; flex-shrink: 0; }
+.pf-band-option:hover, .pf-band-option--active { background: var(--pf-primary-faint); }
+.pf-band-search-empty { padding: .6rem; font-size: .8rem; color: var(--pf-text-faint); font-style: italic; }
 .pf-view-toggle { display: inline-flex; border: 1.5px solid var(--pf-border); border-radius: 50px; overflow: hidden; }
 .pf-view-btn {
   padding: .32rem 1rem; font-size: .82rem; font-weight: 700; background: var(--pf-surface);
@@ -471,6 +542,17 @@
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
   .pf-porch-card-header { gap: .8rem; padding: 1rem; }
+  /* Printable Map / Printable Schedule collapse to a 40px icon-only ghost
+     button (40px meets the mobile tap-target minimum) — the text label
+     stays in the DOM for screen readers but is visually clipped, standard
+     sr-only pattern. This keeps the row from ever wrapping on phones,
+     which is what orphaned the text version onto its own left-aligned line. */
+  .pf-download-btn { width: 40px; height: 40px; padding: 0; justify-content: center; gap: 0; }
+  .pf-band-search { flex: 1 1 100%; }
+  .pf-download-btn-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
 }
 
 /* .pf-embed's own left/right padding can't be tuned with @container like
@@ -1740,6 +1822,9 @@
   var timeViewEl = root.querySelector("#pf-time-view");
   var porchViewEl = root.querySelector("#pf-porch-view");
   var timeFilterEl = root.querySelector("#pf-time-filter");
+  var bandSearchInput = root.querySelector("#pf-band-search-input");
+  var bandListboxEl = root.querySelector("#pf-band-search-listbox");
+  var bandClearBtn = root.querySelector("#pf-band-search-clear");
 
   var allGenres = Array.from(new Set(
     PF_DATA.porches.reduce(function (acc, p) {
@@ -1762,6 +1847,23 @@
   genreClearBtn.type = "button";
   genreClearBtn.textContent = "Clear";
   genreFiltersEl.appendChild(genreClearBtn);
+
+  var allBands = (function () {
+    var seen = new Set();
+    var list = PF_DATA.porches.reduce(function (acc, porch) {
+      porch.performers.forEach(function (perf) {
+        var name = (perf.name || "").trim();
+        if (!name || name === "TBD") return;
+        var key = name.toLowerCase() + "|" + porch.id;
+        if (seen.has(key)) return;
+        seen.add(key);
+        acc.push({ name: name, nameLower: name.toLowerCase(), porchId: porch.id });
+      });
+      return acc;
+    }, []);
+    list.sort(function (a, b) { return a.nameLower < b.nameLower ? -1 : a.nameLower > b.nameLower ? 1 : 0; });
+    return list;
+  })();
 
   var timeSlots = TIME_SLOTS.map(function (slot) {
     var acts = [];
@@ -1977,6 +2079,7 @@
   var activeGenres = new Set(["all"]);
   var activeTime = "all";
   var activeView = "time";
+  var activeBand = null; // lowercased performer name; null = no band filter active
 
   function slotMatchesTime(slotLabel) {
     if (activeTime === "all") return true;
@@ -1996,7 +2099,7 @@
     var slots = root.querySelectorAll(".pf-time-slot-section");
     var anyVisible = false;
     slots.forEach(function (slot) {
-      if (slot.classList.contains("pf-time-slot-section--parade") && activeTime !== "all") {
+      if (slot.classList.contains("pf-time-slot-section--parade") && (activeTime !== "all" || activeBand)) {
         slot.style.display = "none";
         return;
       }
@@ -2006,7 +2109,9 @@
       var slotVisible = false;
       cards.forEach(function (card) {
         var genre = card.dataset.genre;
-        var visible = activeGenres.has("all") || activeGenres.has(genre);
+        var genreMatch = activeGenres.has("all") || activeGenres.has(genre);
+        var nameMatch = !activeBand || card.dataset.name === activeBand;
+        var visible = genreMatch && nameMatch;
         card.style.display = visible ? "" : "none";
         if (visible) { slotVisible = true; anyVisible = true; }
       });
@@ -2026,7 +2131,8 @@
         var genre = row.dataset.genre;
         var genreMatch = activeGenres.has("all") || activeGenres.has(genre);
         var timeMatch = timeInSlot(row.dataset.timeStart, row.dataset.timeEnd);
-        var visible = genreMatch && timeMatch;
+        var nameMatch = !activeBand || row.dataset.name === activeBand;
+        var visible = genreMatch && timeMatch && nameMatch;
         row.style.display = visible ? "" : "none";
         if (visible) cardVisible = true;
       });
@@ -2071,7 +2177,7 @@
       : picked.length + " selected";
   }
 
-  function resetFilters() {
+  function resetGenreAndTime() {
     activeGenres = new Set(["all"]);
     activeTime = "all";
     root.querySelectorAll(".pf-filter-pill").forEach(function (p) {
@@ -2079,12 +2185,24 @@
     });
     updateGenreSummary();
     timeFilterEl.value = "all";
+  }
+
+  function clearBandSearch() {
+    activeBand = null;
+    bandSearchInput.value = "";
+    bandClearBtn.hidden = true;
+  }
+
+  function resetFilters() {
+    resetGenreAndTime();
+    clearBandSearch();
     applyFilters();
   }
 
   /* ---- view toggle ---- */
   function setView(view) {
     if (view === activeView) return;
+    clearBandSearch();
     activeView = view;
     root.querySelectorAll(".pf-view-btn").forEach(function (b) {
       b.classList.toggle("pf-view-btn--active", b.dataset.view === view);
@@ -2150,6 +2268,7 @@
       p.classList.toggle("pf-filter-pill--active", activeGenres.has("all") ? g === "all" : activeGenres.has(g));
     });
     updateGenreSummary();
+    clearBandSearch();
     applyFilters();
   });
 
@@ -2159,13 +2278,147 @@
       p.classList.toggle("pf-filter-pill--active", p.dataset.genre === "all");
     });
     updateGenreSummary();
+    clearBandSearch();
     applyFilters();
   });
 
   /* ---- time filter ---- */
   timeFilterEl.addEventListener("change", function (e) {
     activeTime = e.target.value;
+    clearBandSearch();
     applyFilters();
+  });
+
+  /* ---- band-name search (ARIA 1.2 editable combobox with list autocomplete) ----
+     Selecting an option is the only thing that sets activeBand and re-filters
+     the schedule (typing alone only filters this list). Any manual change to
+     genre/time/view clears activeBand via clearBandSearch() (see those handlers
+     above and setView()/resetFilters()) — selecting a band is symmetrically
+     exclusive with the other three filter axes. */
+  var bandVisibleEntries = allBands;
+  var bandActiveIndex = -1;
+
+  function renderBandOptions(entries) {
+    bandVisibleEntries = entries;
+    bandActiveIndex = -1;
+    bandSearchInput.removeAttribute("aria-activedescendant");
+    if (entries.length === 0) {
+      bandListboxEl.innerHTML = '<li class="pf-band-search-empty" role="presentation">No performers match</li>';
+      return;
+    }
+    bandListboxEl.innerHTML = entries.map(function (entry, i) {
+      return '<li class="pf-band-option" id="pf-band-option-' + i + '" role="option" data-index="' + i + '" aria-selected="false">' +
+        '<span class="pf-band-option-name">' + escapeHtml(entry.name) + '</span>' +
+        '<span class="pf-band-option-meta">Porch ' + entry.porchId + '</span>' +
+      '</li>';
+    }).join('');
+  }
+
+  function openBandListbox() {
+    bandListboxEl.hidden = false;
+    bandSearchInput.setAttribute("aria-expanded", "true");
+  }
+
+  function closeBandListbox() {
+    bandListboxEl.hidden = true;
+    bandSearchInput.setAttribute("aria-expanded", "false");
+    bandSearchInput.removeAttribute("aria-activedescendant");
+    bandActiveIndex = -1;
+  }
+
+  function filterBandOptions(query) {
+    var q = query.trim().toLowerCase();
+    renderBandOptions(!q ? allBands : allBands.filter(function (e) { return e.nameLower.indexOf(q) !== -1; }));
+  }
+
+  function setBandActiveIndex(i) {
+    var options = bandListboxEl.querySelectorAll(".pf-band-option");
+    if (options.length === 0) return;
+    if (i < 0) i = options.length - 1;
+    if (i >= options.length) i = 0;
+    options.forEach(function (opt) {
+      opt.classList.remove("pf-band-option--active");
+      opt.setAttribute("aria-selected", "false");
+    });
+    bandActiveIndex = i;
+    var active = options[i];
+    active.classList.add("pf-band-option--active");
+    active.setAttribute("aria-selected", "true");
+    bandSearchInput.setAttribute("aria-activedescendant", active.id);
+    active.scrollIntoView({ block: "nearest" });
+  }
+
+  function syncBandInputToState() {
+    var match = activeBand ? allBands.find(function (e) { return e.nameLower === activeBand; }) : null;
+    bandSearchInput.value = match ? match.name : "";
+    bandClearBtn.hidden = !bandSearchInput.value;
+  }
+
+  function selectBand(entry) {
+    activeBand = entry.nameLower;
+    bandSearchInput.value = entry.name;
+    bandClearBtn.hidden = false;
+    resetGenreAndTime();
+    closeBandListbox();
+    applyFilters();
+  }
+
+  bandSearchInput.addEventListener("focus", function () {
+    filterBandOptions(bandSearchInput.value);
+    openBandListbox();
+  });
+
+  bandSearchInput.addEventListener("input", function () {
+    filterBandOptions(bandSearchInput.value);
+    openBandListbox();
+    bandClearBtn.hidden = !bandSearchInput.value;
+  });
+
+  bandClearBtn.addEventListener("mousedown", function (e) {
+    e.preventDefault(); // keep focus on the input, skip the blur/refocus round-trip
+  });
+  bandClearBtn.addEventListener("click", function () {
+    clearBandSearch();
+    applyFilters();
+    bandSearchInput.focus();
+    filterBandOptions("");
+    openBandListbox();
+  });
+
+  bandSearchInput.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (bandListboxEl.hidden) { filterBandOptions(bandSearchInput.value); openBandListbox(); }
+      setBandActiveIndex(bandActiveIndex + 1);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (bandListboxEl.hidden) { filterBandOptions(bandSearchInput.value); openBandListbox(); }
+      setBandActiveIndex(bandActiveIndex - 1);
+    } else if (e.key === "Enter") {
+      if (bandListboxEl.hidden) return;
+      e.preventDefault();
+      if (bandActiveIndex >= 0 && bandVisibleEntries[bandActiveIndex]) {
+        selectBand(bandVisibleEntries[bandActiveIndex]);
+      } else if (bandVisibleEntries.length === 1) {
+        selectBand(bandVisibleEntries[0]);
+      }
+    } else if (e.key === "Escape") {
+      closeBandListbox();
+      syncBandInputToState();
+    }
+  });
+
+  bandListboxEl.addEventListener("mousedown", function (e) {
+    var opt = e.target.closest(".pf-band-option");
+    if (!opt) return;
+    e.preventDefault(); // fires before the input's blur, keeps focus on the input
+    var i = parseInt(opt.dataset.index, 10);
+    if (bandVisibleEntries[i]) selectBand(bandVisibleEntries[i]);
+  });
+
+  bandSearchInput.addEventListener("blur", function () {
+    closeBandListbox();
+    syncBandInputToState();
   });
 
   /* ---- clear-filters buttons (delegated, rendered dynamically) ---- */
