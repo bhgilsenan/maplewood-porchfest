@@ -261,7 +261,10 @@
    1:00 PM – 5:00 PM" actually runs out of room — no browser available to
    confirm live, so nudge it if the two lines split too early or too late. */
 @container (max-width: 400px) {
-  .pf-hero-subtitle { flex-direction: column; gap: .15rem; }
+  /* align-items: baseline (base rule above) doesn't mean anything once this
+     switches to a column, and falls back to left-aligning the cross axis —
+     override it here or the date/hours text goes left-justified on phones. */
+  .pf-hero-subtitle { flex-direction: column; align-items: center; gap: .15rem; }
   .pf-hero-dot { display: none; }
 }
 .pf-hero .pf-hero-parade-banner {
@@ -542,17 +545,7 @@
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
   .pf-porch-card-header { gap: .8rem; padding: 1rem; }
-  /* Printable Map / Printable Schedule collapse to a 40px icon-only ghost
-     button (40px meets the mobile tap-target minimum) — the text label
-     stays in the DOM for screen readers but is visually clipped, standard
-     sr-only pattern. This keeps the row from ever wrapping on phones,
-     which is what orphaned the text version onto its own left-aligned line. */
-  .pf-download-btn { width: 40px; height: 40px; padding: 0; justify-content: center; gap: 0; }
   .pf-band-search { flex: 1 1 100%; }
-  .pf-download-btn-label {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-  }
 }
 
 /* .pf-embed's own left/right padding can't be tuned with @container like
@@ -1897,12 +1890,12 @@
       '<h2 class="pf-time-slot-heading">' + escapeHtml(slot.label) + '</h2>' +
       '<div class="pf-time-acts-grid">' +
       slot.acts.map(function (act) {
-        return '<div class="pf-time-act-card" data-genre="' + escapeHtml(act.genre) + '" data-name="' + escapeHtml(act.name.toLowerCase()) + '" data-porch-id="' + act.porchId + '">' +
+        return '<div class="pf-time-act-card" data-genre="' + escapeHtml(act.genre) + '" data-name="' + escapeHtml(act.name.toLowerCase()) + '" data-porch-id="' + act.porchId + '" data-time-start="' + escapeHtml(act.time_start) + '" data-time-end="' + escapeHtml(act.time_end) + '">' +
           '<div class="pf-time-act-top">' +
             '<strong class="pf-time-act-name">' + escapeHtml(act.name) + '</strong>' +
             '<span class="pf-genre-pill" data-genre="' + escapeHtml(act.genre) + '">' + escapeHtml(act.genre) + '</span>' +
           '</div>' +
-          '<p class="pf-time-act-where">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + mapsLink(act.address) + '</p>' +
+          '<p class="pf-time-act-where">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + mapsLink(act.address) + ' · ' + escapeHtml(act.time_start) + ' – ' + escapeHtml(act.time_end) + '</p>' +
           '<p class="pf-time-act-desc">' + escapeHtml(act.description) + '</p>' +
         '</div>';
       }).join('') +
@@ -2099,6 +2092,8 @@
     var slots = root.querySelectorAll(".pf-time-slot-section");
     var anyVisible = false;
     slots.forEach(function (slot) {
+      var heading = slot.querySelector(".pf-time-slot-heading");
+      if (heading && heading.dataset.originalLabel) heading.textContent = heading.dataset.originalLabel;
       if (slot.classList.contains("pf-time-slot-section--parade") && (activeTime !== "all" || activeBand)) {
         slot.style.display = "none";
         return;
@@ -2117,6 +2112,49 @@
       });
       slot.style.display = slotVisible ? "" : "none";
     });
+
+    /* Band search only: a multi-hour act renders as duplicate cards across
+       its overlapping hour-bucket sections (see timeSlots derivation above).
+       Collapse those into one card under a relabeled heading showing the
+       act's real full range. Grouped by porch, not name alone, since two
+       different porches can coincidentally share a performer name — see
+       the allBands dedup key below for the same reasoning. A duplicate's
+       whole section is only hidden if nothing else in it is still visible,
+       since that section could also legitimately hold a different porch's
+       distinct same-named act. */
+    if (activeBand) {
+      var groups = {};
+      var groupOrder = [];
+      root.querySelectorAll('.pf-time-act-card[data-name="' + activeBand + '"]').forEach(function (card) {
+        if (card.style.display === "none") return;
+        var pid = card.dataset.porchId;
+        if (!groups[pid]) { groups[pid] = []; groupOrder.push(pid); }
+        groups[pid].push(card);
+      });
+      groupOrder.forEach(function (pid) {
+        var group = groups[pid];
+        if (group.length < 2) return;
+        var host = group[0]; // document order == chronological bucket order
+        var hostSection = host.closest(".pf-time-slot-section");
+        var hostHeading = hostSection && hostSection.querySelector(".pf-time-slot-heading");
+        if (hostHeading) {
+          if (!hostHeading.dataset.originalLabel) hostHeading.dataset.originalLabel = hostHeading.textContent;
+          hostHeading.textContent = host.dataset.timeStart + " – " + host.dataset.timeEnd;
+        }
+        for (var i = 1; i < group.length; i++) {
+          var dup = group[i];
+          dup.style.display = "none";
+          var dupSection = dup.closest(".pf-time-slot-section");
+          if (!dupSection) continue;
+          var stillVisible = Array.prototype.some.call(
+            dupSection.querySelectorAll(".pf-time-act-card"),
+            function (c) { return c.style.display !== "none"; }
+          );
+          if (!stillVisible) dupSection.style.display = "none";
+        }
+      });
+    }
+
     var noResults = root.querySelector("#pf-no-results-time");
     if (noResults) noResults.hidden = anyVisible;
   }
@@ -2379,10 +2417,8 @@
   });
   bandClearBtn.addEventListener("click", function () {
     clearBandSearch();
+    closeBandListbox();
     applyFilters();
-    bandSearchInput.focus();
-    filterBandOptions("");
-    openBandListbox();
   });
 
   bandSearchInput.addEventListener("keydown", function (e) {
