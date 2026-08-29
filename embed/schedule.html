@@ -479,10 +479,23 @@
 
 .pf-time-act-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
 .pf-time-act-name { font-family: var(--pf-font-display); font-weight: 600; font-size: 1rem; line-height: 1.3; }
-.pf-time-act-where { display: flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--pf-text-muted); }
-.pf-time-act-where svg { flex-shrink: 0; opacity: .65; }
-.pf-time-act-where a { color: inherit; text-decoration: none; }
-.pf-time-act-where a:hover { text-decoration: underline; color: var(--pf-primary); }
+/* Two flex children — .pf-time-act-location and .pf-time-act-time — not a
+   flat run of icon/text/link. A flat run would make flexbox treat the icon,
+   "Porch N", the address link, and the time each as their own flex item,
+   letting every one wrap independently within its own narrow column (the
+   cause of the old broken mid-phrase wrapping on phones). Grouping location
+   into one span lets it wrap as one normal continuous phrase again, and
+   margin-left:auto on the time span keeps it pinned to the right edge even
+   when it wraps onto its own line, unlike justify-content:space-between
+   (which would snap a lone wrapped item back to the left). */
+.pf-time-act-where {
+  display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .5rem; row-gap: .15rem;
+  font-size: .78rem; color: var(--pf-text-muted);
+}
+.pf-time-act-location { min-width: 0; }
+.pf-time-act-location svg { vertical-align: -2px; opacity: .65; margin-right: .35rem; }
+.pf-time-act-location a { color: var(--pf-primary); text-decoration: underline; }
+.pf-time-act-time { margin-left: auto; white-space: nowrap; }
 .pf-time-act-desc { font-family: var(--pf-font-body); font-size: .9rem; color: var(--pf-text); line-height: 1.25; }
 
 .pf-genre-pill {
@@ -1879,8 +1892,8 @@
             '<strong class="pf-time-act-name">Honk Parade</strong>' +
             '<span class="pf-genre-pill pf-genre-pill--parade">Parade</span>' +
           '</div>' +
-          '<p class="pf-time-act-where">' + PIN_SVG + ' DeHart Community Center, 120 Burnet Avenue</p>' +
-          '<p class="pf-time-act-desc">Kicks off Porchfest. A brass-and-noise street parade — all are welcome to march or watch.</p>' +
+          '<p class="pf-time-act-where"><span class="pf-time-act-location">' + PIN_SVG + ' ' + mapsLink("DeHart Community Center, 120 Burnet Avenue") + '</span><span class="pf-time-act-time">' + escapeHtml(PF_DATA.event.honk_parade_kickoff) + '</span></p>' +
+          '<p class="pf-time-act-desc">Kicks off Porchfest — a brass-and-noise street parade, starting from DeHart Community Center and marching through the heart of the Hilton neighborhood down Lexington Ave. All are welcome to march or watch. For those marching, rehearsal starts at ' + escapeHtml(PF_DATA.event.honk_parade_rehearsal) + ' at DeHart Community Center.</p>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -1895,7 +1908,7 @@
             '<strong class="pf-time-act-name">' + escapeHtml(act.name) + '</strong>' +
             '<span class="pf-genre-pill" data-genre="' + escapeHtml(act.genre) + '">' + escapeHtml(act.genre) + '</span>' +
           '</div>' +
-          '<p class="pf-time-act-where">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + mapsLink(act.address) + ' · ' + escapeHtml(act.time_start) + ' – ' + escapeHtml(act.time_end) + '</p>' +
+          '<p class="pf-time-act-where"><span class="pf-time-act-location">' + PIN_SVG + ' Porch ' + act.porchId + ' · ' + mapsLink(act.address) + '</span><span class="pf-time-act-time">' + escapeHtml(act.time_start) + ' – ' + escapeHtml(act.time_end) + '</span></p>' +
           '<p class="pf-time-act-desc">' + escapeHtml(act.description) + '</p>' +
         '</div>';
       }).join('') +
