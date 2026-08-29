@@ -235,7 +235,7 @@
   border-radius: var(--pf-radius-lg);
   padding: 1.25rem;
   width: 100%;
-  max-width: 760px;
+  max-width: 960px;
   margin-inline: auto;
   container-type: inline-size;
 }
@@ -248,25 +248,11 @@
 .pf-hero-title { font-family: var(--pf-font-display); font-weight: 400; font-size: 4.2rem; color: var(--pf-text); margin: 0 0 .25rem; }
 .pf-hero .pf-hero-subtitle {
   font-size: .95rem; color: var(--pf-text); margin: 0;
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; row-gap: .2rem;
+  display: flex; flex-wrap: nowrap; justify-content: center; align-items: baseline;
 }
 #pf-hero-date { color: var(--pf-primary); white-space: nowrap; }
 .pf-hero-hours { color: var(--pf-text-muted); white-space: nowrap; }
 .pf-hero-dot { color: var(--pf-primary); margin: 0 .4rem; font-size: .65rem; vertical-align: middle; }
-/* CSS can't detect "this text is about to wrap," so the date/hours break is
-   forced at a fixed width instead of left to find its own wrap point —
-   guarantees the break always falls cleanly between the two (never mid-date
-   or mid-hours) and lets the dot get hidden exactly when it happens. This
-   400px threshold is a best guess for where "Sunday, September 6, 2026 •
-   1:00 PM – 5:00 PM" actually runs out of room — no browser available to
-   confirm live, so nudge it if the two lines split too early or too late. */
-@container (max-width: 400px) {
-  /* align-items: baseline (base rule above) doesn't mean anything once this
-     switches to a column, and falls back to left-aligning the cross axis —
-     override it here or the date/hours text goes left-justified on phones. */
-  .pf-hero-subtitle { flex-direction: column; align-items: center; gap: .15rem; }
-  .pf-hero-dot { display: none; }
-}
 .pf-hero .pf-hero-parade-banner {
   display: inline-flex; align-items: flex-start; gap: .55rem; margin: .9rem 0 0;
   padding: .7rem 1.1rem; border-radius: var(--pf-radius); border: 1.5px solid var(--pf-cta);
@@ -296,8 +282,12 @@
   border: 1.5px solid var(--pf-border); border-radius: 20px;
   margin-bottom: .6rem; padding: 0 .9rem;
 }
+/* 41px, not 44px — the visible border lives on the parent .pf-genre-disclosure
+   (1.5px top + bottom = 3px), so summary + that border needs to sum to 44px
+   total to match the toggle/select/search controls below it. Same reasoning
+   applies to .pf-view-btn below (its border is on the .pf-view-toggle wrapper). */
 .pf-genre-summary {
-  display: flex; align-items: center; gap: .5rem; padding: .7rem 0; cursor: pointer;
+  display: flex; align-items: center; gap: .5rem; height: 41px; padding: 0; cursor: pointer;
   list-style: none; user-select: none;
 }
 .pf-genre-summary::-webkit-details-marker { display: none; }
@@ -327,7 +317,8 @@
 .pf-genre-clear-btn:hover { background: var(--pf-primary-soft); }
 
 .pf-filter-select {
-  padding: .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
+  flex: 1 1 0%; min-width: 90px;
+  height: 44px; padding: 0 .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
   font-size: .85rem; font-weight: 600; color: var(--pf-text); background: var(--pf-surface); cursor: pointer;
 }
 
@@ -429,7 +420,7 @@
 /* ---- band-name search (combobox) ---- */
 .pf-band-search { position: relative; flex: 1 1 160px; min-width: 140px; }
 .pf-band-search-input {
-  width: 100%; padding: .35rem 2rem .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
+  width: 100%; height: 44px; padding: 0 2rem 0 .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
   font-size: .85rem; font-weight: 600; color: var(--pf-text); background: var(--pf-surface); font-family: inherit;
 }
 .pf-band-search-input:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
@@ -464,9 +455,15 @@
 .pf-band-option-meta { font-size: .72rem; color: var(--pf-text-faint); white-space: nowrap; flex-shrink: 0; }
 .pf-band-option:hover, .pf-band-option--active { background: var(--pf-primary-faint); }
 .pf-band-search-empty { padding: .6rem; font-size: .8rem; color: var(--pf-text-faint); font-style: italic; }
-.pf-view-toggle { display: inline-flex; border: 1.5px solid var(--pf-border); border-radius: 50px; overflow: hidden; }
+/* flex-grow:1 + min-width:max-content — grows to share space equally with
+   .pf-filter-select when there's room, but never shrinks past its own
+   content's natural width. When there isn't room for both to be equal, this
+   floor wins and .pf-filter-select's own flex-grow absorbs 100% of whatever
+   toggle didn't need — one rule, not a breakpoint-specific override. */
+.pf-view-toggle { display: inline-flex; flex: 1 1 0%; min-width: max-content; border: 1.5px solid var(--pf-border); border-radius: 50px; overflow: hidden; }
 .pf-view-btn {
-  padding: .32rem 1rem; font-size: .85rem; font-weight: 600; background: var(--pf-surface);
+  display: flex; align-items: center; justify-content: center; flex: 1 1 0%; height: 41px; padding: 0 1rem;
+  font-size: .85rem; font-weight: 600; background: var(--pf-surface);
   color: var(--pf-text); border: none; cursor: pointer; white-space: nowrap; letter-spacing: .02em;
 }
 .pf-view-btn + .pf-view-btn { border-left: 1.5px solid var(--pf-border); }
@@ -476,7 +473,7 @@
 /* ---- time view ---- */
 #pf-time-view:not([hidden]) { display: flex; flex-direction: column; gap: 1.75rem; }
 .pf-time-slot-heading {
-  font-family: var(--pf-font-display); font-weight: 600; font-size: 1.05rem; letter-spacing: .01em;
+  font-family: var(--pf-font-display); font-weight: 600; font-size: 1.25rem; letter-spacing: .01em;
   color: var(--pf-text); padding: 0 0 .6rem; border-bottom: 2px solid var(--pf-primary); margin: 0 0 1rem;
 }
 .pf-time-acts-grid { display: grid; grid-template-columns: 1fr; gap: .75rem; }
@@ -568,6 +565,11 @@
    layout is correct regardless of what's wrapping it. Layout is stacked
    (map above list) at every width. ---- */
 @container (max-width: 480px) {
+  /* 2.2rem is an estimate, not verified live (no browser available) — "2026
+     Schedule" was wrapping into two full-width lines at the base 4.2rem, so
+     this needs a substantial cut, not a small nudge, to fit on one line at
+     typical phone widths. Adjust if it's still wrapping or has room to grow. */
+  .pf-hero-title { font-size: 3.2rem; }
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
   .pf-porch-card-header { gap: .8rem; padding: 1rem; }
@@ -577,6 +579,13 @@
      wrap pushing it further up the page. Desktop/wide layout is untouched:
      order only matters once something actually wraps. */
   .pf-band-search { flex: 1 1 100%; order: -1; }
+  /* Once search wraps away, .pf-view-toggle-group is alone on its row and
+     needs to actually claim the full width for the toggle/select 50-50-or-
+     fill split above to have any space to work with — otherwise it just
+     sits at its own natural content width with dead space beside it.
+     Scoped here rather than globally so wide desktop (search still
+     alongside) is untouched. */
+  .pf-view-toggle-group { flex: 1 1 auto; }
 }
 
 /* .pf-embed's own left/right padding can't be tuned with @container like
@@ -588,7 +597,7 @@
    padding, unlike the layout-switch rules above where guessing wrong used
    to break the whole page. */
 @media (max-width: 480px) {
-  .pf-embed { padding-left: .75rem; padding-right: .75rem; }
+  .pf-embed { padding-left: 0; padding-right: 0; }
 }
 </style>
 
