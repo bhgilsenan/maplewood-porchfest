@@ -283,9 +283,18 @@
 /* ---- genre filter: collapsed by default (progressive disclosure), its own
    bordered container so it reads as a secondary/optional control rather than
    competing at equal weight with the map layers and view toggle above/below it ---- */
+/* Border matches the same 1.5px var(--pf-border) stroke used by the view
+   toggle, time select, and search input below it — no gray fill anymore, so
+   it reads as one more bordered control in that same family rather than a
+   heavier, separately-styled box. Fixed 20px in both open and closed states
+   — a deliberate middle ground: rounder than every other container box's
+   var(--pf-radius) (~10px) to lean toward the pill language of the other
+   controls in this row, but well short of a true pill (which would need
+   50px+ closed and 150px+ open to fully qualify at each height) so it
+   doesn't turn into an exaggerated bubble once open. */
 .pf-genre-disclosure {
-  border: 1.5px solid var(--pf-border); border-radius: var(--pf-radius);
-  background: var(--pf-surface-2); margin-bottom: 1.1rem; padding: 0 .9rem;
+  border: 1.5px solid var(--pf-border); border-radius: 20px;
+  margin-bottom: .6rem; padding: 0 .9rem;
 }
 .pf-genre-summary {
   display: flex; align-items: center; gap: .5rem; padding: .7rem 0; cursor: pointer;
@@ -319,7 +328,7 @@
 
 .pf-filter-select {
   padding: .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
-  font-size: .85rem; color: var(--pf-text); background: var(--pf-surface); cursor: pointer;
+  font-size: .85rem; font-weight: 600; color: var(--pf-text); background: var(--pf-surface); cursor: pointer;
 }
 
 .pf-filter-select:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
@@ -407,23 +416,27 @@
 /* ---- view toggle row ---- */
 .pf-view-toggle-row {
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
-  padding-block: .1rem .6rem;
+  padding-block: .1rem .5rem;
 }
 /* Divider lives here, not on .pf-view-toggle-row above, so it closes off the
    whole controls cluster (toggle+select+search+print) as one visual group
    rather than cutting between two rows that both belong together. */
 .pf-schedule-actions-row {
   display: flex;
-  padding-block: 0 .9rem; border-bottom: 1px solid var(--pf-border); margin-bottom: 1rem;
+  padding-block: 0 .7rem; border-bottom: 1px solid var(--pf-border); margin-bottom: .6rem;
 }
 
 /* ---- band-name search (combobox) ---- */
 .pf-band-search { position: relative; flex: 1 1 160px; min-width: 140px; }
 .pf-band-search-input {
   width: 100%; padding: .35rem 2rem .35rem .75rem; border: 1.5px solid var(--pf-border); border-radius: 50px;
-  font-size: .85rem; color: var(--pf-text); background: var(--pf-surface); font-family: inherit;
+  font-size: .85rem; font-weight: 600; color: var(--pf-text); background: var(--pf-surface); font-family: inherit;
 }
 .pf-band-search-input:focus { outline: 2px solid var(--pf-primary); outline-offset: 1px; }
+/* Placeholder stays lighter/regular-weight on purpose — it's an instruction,
+   not a value, and should read as "empty" rather than matching the 600-weight
+   black text a real selection/typed query gets once the field is filled. */
+.pf-band-search-input::placeholder { font-weight: 400; color: var(--pf-text-faint); }
 .pf-band-search-clear {
   position: absolute; top: 50%; right: .4rem; transform: translateY(-50%);
   width: 22px; height: 22px; align-items: center; justify-content: center;
@@ -453,8 +466,8 @@
 .pf-band-search-empty { padding: .6rem; font-size: .8rem; color: var(--pf-text-faint); font-style: italic; }
 .pf-view-toggle { display: inline-flex; border: 1.5px solid var(--pf-border); border-radius: 50px; overflow: hidden; }
 .pf-view-btn {
-  padding: .32rem 1rem; font-size: .82rem; font-weight: 700; background: var(--pf-surface);
-  color: var(--pf-text-muted); border: none; cursor: pointer; white-space: nowrap; letter-spacing: .02em;
+  padding: .32rem 1rem; font-size: .85rem; font-weight: 600; background: var(--pf-surface);
+  color: var(--pf-text); border: none; cursor: pointer; white-space: nowrap; letter-spacing: .02em;
 }
 .pf-view-btn + .pf-view-btn { border-left: 1.5px solid var(--pf-border); }
 .pf-view-btn:hover { background: var(--pf-surface-2); color: var(--pf-text); }
@@ -520,7 +533,7 @@
 .pf-porch-card-title { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
 .pf-directions-btn { padding: .35rem .85rem; font-size: .75rem; flex-shrink: 0; }
 .pf-porch-number {
-  width: 24px; height: 24px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
+  width: 20px; height: 20px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
   display: flex; align-items: center; justify-content: center; font-family: var(--pf-font-display);
   font-weight: 800; font-size: .7rem; flex-shrink: 0;
 }
@@ -558,7 +571,12 @@
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
   .pf-porch-card-header { gap: .8rem; padding: 1rem; }
-  .pf-band-search { flex: 1 1 100%; }
+  /* order:-1 puts search above the toggle+select group once it wraps to its
+     own row — keeps the toggle/dropdown (which directly controls what's
+     shown below) close to the schedule content it affects, instead of the
+     wrap pushing it further up the page. Desktop/wide layout is untouched:
+     order only matters once something actually wraps. */
+  .pf-band-search { flex: 1 1 100%; order: -1; }
 }
 
 /* .pf-embed's own left/right padding can't be tuned with @container like
@@ -1825,6 +1843,7 @@
     PF_DATA.event.honk_parade_kickoff + "</strong>";
   var genreFiltersEl = root.querySelector("#pf-genre-filters");
   var genreSummaryStateEl = root.querySelector("#pf-genre-summary-state");
+  var genreDisclosureEl = root.querySelector("#pf-genre-disclosure");
   var timeViewEl = root.querySelector("#pf-time-view");
   var porchViewEl = root.querySelector("#pf-porch-view");
   var timeFilterEl = root.querySelector("#pf-time-filter");
@@ -2410,6 +2429,7 @@
     bandSearchInput.value = entry.name;
     bandClearBtn.hidden = false;
     resetGenreAndTime();
+    genreDisclosureEl.open = false; // already reset to "All" above; collapse it too — noise once a band is picked
     closeBandListbox();
     applyFilters();
   }
