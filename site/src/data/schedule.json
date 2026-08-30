@@ -1,0 +1,881 @@
+{
+  "event": {
+    "date": "Sunday, September 6, 2026",
+    "rain_date": "Monday, September 7, 2026",
+    "hours": "1:00 PM – 5:00 PM",
+    "honk_parade": "12:30 PM from DeHart Community Center, 120 Burnett Ave"
+  },
+  "porches": [
+    {
+      "id": 1,
+      "address": "2 Henry Place",
+      "neighborhood_note": null,
+      "lat": 40.72036,
+      "lng": -74.254475,
+      "performers": [
+        {
+          "name": "Jason Didner and the GSPs",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Pure Jersey rock served up with a side of Jersey humor and a whole lot of heart."
+        },
+        {
+          "name": "Lorraine",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "High-energy pop-rock from a four-piece out of Summit, NJ."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "address": "18 Menzel Ave.",
+      "neighborhood_note": null,
+      "lat": 40.717282,
+      "lng": -74.25561,
+      "performers": [
+        {
+          "name": "HEEL STRIKE",
+          "genre": "Electronic",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "A mesmerizing, semi-improvised wash of ambient, industrial, and techno, built live on modular synths and samplers."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "address": "59 Schaefer Rd",
+      "neighborhood_note": null,
+      "lat": 40.715258,
+      "lng": -74.257966,
+      "performers": [
+        {
+          "name": "Pegasus Meteor Fist",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Monmouth County power trio chasing a cosmic explosion of sound across classic rock, emo, blues, punk, southern, and metal."
+        },
+        {
+          "name": "The Melancholy Kings",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Rock steeped in Guided By Voices, Wilco, and Big Star — Big Takeover Magazine called it \"pop smarts with indie cool.\""
+        },
+        {
+          "name": "Tri-State",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Big hooks, tight harmonies, and stabbing guitars built around stories from post-youth."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "address": "11 Field Rd.",
+      "neighborhood_note": null,
+      "lat": 40.715484,
+      "lng": -74.261427,
+      "performers": [
+        {
+          "name": "belikeAlice",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "A wonderland of rock, New Wave, indie, and punk spanning the 60s through the 2000s."
+        },
+        {
+          "name": "Cassette Tape Ministry",
+          "genre": "Experimental",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Collective improvisation with a rockist edge and a dash of original poetry."
+        },
+        {
+          "name": "Schplinkus",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Genre-bending alt rock out of Clifton, NJ, fueled by an upbeat, enthusiastic sound."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "address": "29 Schaefer Rd",
+      "neighborhood_note": null,
+      "lat": 40.716125,
+      "lng": -74.259269,
+      "performers": [
+        {
+          "name": "Rory D'Lasnow",
+          "genre": "Folk/Americana",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "NJ singer-songwriter pairing folk, Americana, and rock with thoughtful storytelling — stages have included The Hotel Cafe, Mercury Lounge, and the Stone Pony."
+        },
+        {
+          "name": "Delta",
+          "genre": "Blues",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "A Columbia High School blues trio with a fiery intensity that belies their age."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "address": "211 Jacoby Street",
+      "neighborhood_note": null,
+      "lat": 40.717583,
+      "lng": -74.256856,
+      "performers": [
+        {
+          "name": "Breaknrecords band",
+          "genre": "Soul/R&B/Funk",
+          "time_start": "2:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Rahway, NJ soul funk band with a twist, built for high-energy live shows."
+        },
+        {
+          "name": "Bangarang",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Four dads on a mission to blast the 90s grunge and alt-rock anthems they grew up on."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "address": "172 Jacoby Street",
+      "neighborhood_note": null,
+      "lat": 40.718039,
+      "lng": -74.255882,
+      "performers": [
+        {
+          "name": "Roe Knows Best",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Nutley, NJ singer-songwriter project with emotionally intelligent pop-punk and a distinctly Jersey feel."
+        },
+        {
+          "name": "Avery Sinclair",
+          "genre": "Singer-Songwriter",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "18-year-old homegrown singer-songwriter riding the wake of her debut album, Ebbs and Flows."
+        },
+        {
+          "name": "TheyLoveThem",
+          "genre": "TBD",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "More info to come."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "address": "419 Boyden Ave",
+      "neighborhood_note": null,
+      "lat": 40.718133,
+      "lng": -74.255533,
+      "performers": [
+        {
+          "name": "The Coverup",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "No gimmicks, no backing tracks — just killer classic rock played straight."
+        },
+        {
+          "name": "Tiger Bomb",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Local dad-band energy running through 90s alt-rock and classic rock, from The Cars to The Killers."
+        },
+        {
+          "name": "Over My Dad Body",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Self-described \"sad-dad rock,\" now in its 5th year at Porchfest."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "address": "417 Boyden Ave",
+      "neighborhood_note": null,
+      "lat": 40.718101,
+      "lng": -74.255342,
+      "performers": [
+        {
+          "name": "Alex Klint",
+          "genre": "Singer-Songwriter",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Maplewood local singer-songwriter with a catalog already out and more on the way."
+        },
+        {
+          "name": "Michael Sorensen",
+          "genre": "Electronic",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "South Jersey multi-instrumentalist working in electronic rock and experimental soundscapes."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "address": "30 Newark Way",
+      "neighborhood_note": null,
+      "lat": 40.718253,
+      "lng": -74.258185,
+      "performers": [
+        {
+          "name": "Smoove",
+          "genre": "Reggae",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Classic reggae and lovers rock in the vein of Marley, Gregory Isaacs, and Dennis Brown, played with a laid-back groove."
+        },
+        {
+          "name": "Carnival Dogs",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Top Shore musicians who pivot effortlessly from chill acoustic sets to full rock-and-roll party mode."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "address": "21 Vermont st",
+      "neighborhood_note": null,
+      "lat": 40.721237,
+      "lng": -74.259636,
+      "performers": [
+        {
+          "name": "Chris Mozy",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Pop, rock, indie, and alt-country from a multi-instrumentalist shaped by Southern California's music scene."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "address": "17 Vermont Street",
+      "neighborhood_note": null,
+      "lat": 40.721257,
+      "lng": -74.259641,
+      "performers": [
+        {
+          "name": "Michael Glazier",
+          "genre": "Singer-Songwriter",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Acoustic singer-songwriter running through covers and originals for an eclectic, crowd-pleasing set."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "address": "11 Vermont Street",
+      "neighborhood_note": null,
+      "lat": 40.721632,
+      "lng": -74.259718,
+      "performers": [
+        {
+          "name": "Mag Electric",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Full-volume classic hard rock from a power trio, with covers pulled from Hendrix and Mountain."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "address": "31 Tuscan St",
+      "neighborhood_note": null,
+      "lat": 40.720905,
+      "lng": -74.261637,
+      "performers": [
+        {
+          "name": "Yeah Is What We Have",
+          "genre": "Pop",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Power pop built around hooks that won't leave your head."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "address": "56 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.721089,
+      "lng": -74.262272,
+      "performers": [
+        {
+          "name": "Useful Engines",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Original jams running funk, classic rock, and modern alternative through the same engine."
+        },
+        {
+          "name": "The Accelerators",
+          "genre": "Pop",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "All-original power pop trio spanning the 60s British Invasion and surf rock through 70s and 80s punk and New Wave."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "address": "58 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.721076,
+      "lng": -74.262358,
+      "performers": [
+        {
+          "name": "The Refugee Dogs",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Entirely original songs that swing from insightful to vaguely off-color, off their latest album, Running Late."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "address": "78 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.720953,
+      "lng": -74.263221,
+      "performers": [
+        {
+          "name": "The Spectrums",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "NJ teen rock band running covers and originals through alternative, grunge, and metal influences."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "address": "97 Hilton Ave.",
+      "neighborhood_note": null,
+      "lat": 40.720634,
+      "lng": -74.264272,
+      "performers": [
+        {
+          "name": "mombrain.",
+          "genre": "Punk",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "West Orange moms turned band, playing 90s grunge, punk, and indie under one motto: \"Life is hard. Start a band.\""
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "address": "99 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.720622,
+      "lng": -74.264357,
+      "performers": [
+        {
+          "name": "Paul Burroughs",
+          "genre": "Folk/Americana",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "A guitar-and-drums duo crafting original folk rock out of heartfelt songwriting."
+        },
+        {
+          "name": "Triskele NJ",
+          "genre": "Traditional Irish",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Traditional Irish music on flute, guitar, fiddle, and bodhran drum — jigs, reels, and hornpipes all set long."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "address": "16 Princeton Street",
+      "neighborhood_note": null,
+      "lat": 40.720344,
+      "lng": -74.267903,
+      "performers": [
+        {
+          "name": "Somebody’s Uncle",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "High-energy covers spanning classic and alternative rock sing-along staples."
+        },
+        {
+          "name": "Travel Team",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "An all-star lineup pulled from The Brand New Steadies, Crystal Pepsi & The Zimas, Sheiks Garage, and Fishmarket Stew, making their debut as pure dad-band rock."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "address": "184 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.720219,
+      "lng": -74.268501,
+      "performers": [
+        {
+          "name": "Flip Da Skrip",
+          "genre": "Soul/R&B/Funk",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Essex County R&B, pop, hip-hop, and soul collective running from high-octane uptempos to smooth ballads."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "address": "194 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.72016,
+      "lng": -74.268929,
+      "performers": [
+        {
+          "name": "Double A band",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "12-year-old duo on guitar and drums/vocals, already winners of Amateur Night at the Apollo and regulars at NYC's The Bitter End."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "address": "228 Hilton Ave",
+      "neighborhood_note": null,
+      "lat": 40.719948,
+      "lng": -74.270463,
+      "performers": [
+        {
+          "name": "Bearded Jon’s Artless Commerce Laboratory",
+          "genre": "Experimental",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Solo electric bass turned into deep, psychedelic ambient loops built for dystopian times."
+        },
+        {
+          "name": "Jay Daniels",
+          "genre": "Jazz",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Live piano and big vocals swinging through the Great American Songbook, classic pop, and Broadway."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "address": "180 Indiana St",
+      "neighborhood_note": null,
+      "lat": 40.719514,
+      "lng": -74.272096,
+      "performers": [
+        {
+          "name": "Not Nothing But Something",
+          "genre": "Indie",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Indie by way of the band's own genre coinage: \"Minimalist 90's NJ Midwest Emo Talkcore.\""
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "address": "169 Indiana st",
+      "neighborhood_note": null,
+      "lat": 40.71992,
+      "lng": -74.272415,
+      "performers": [
+        {
+          "name": "oscar and the ladybugs",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Intimate indie-folk from a homegrown singer-songwriter drawing on Lomelda, Sufjan Stevens, and Adrianne Lenker."
+        },
+        {
+          "name": "Catch Me If You Can",
+          "genre": "Folk/Americana",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Ryan Hanratty's acoustic solo project, pairing narrative-driven lyrics with an edge borrowed from Frank Turner and Third Eye Blind."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "address": "779 Prospect Street",
+      "neighborhood_note": null,
+      "lat": 40.718855,
+      "lng": -74.269951,
+      "performers": [
+        {
+          "name": "ZööS",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Faithful, high-energy renditions of classic rock from The Beatles to Led Zeppelin to Santana."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "address": "208 Franklin Ave",
+      "neighborhood_note": null,
+      "lat": 40.71947,
+      "lng": -74.268922,
+      "performers": [
+        {
+          "name": "The Maybes",
+          "genre": "Pop",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "A family band out of the Hoboken scene, mixing pop, folk, and rock to get the whole crowd moving."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "address": "184 Franklin Ave",
+      "neighborhood_note": null,
+      "lat": 40.719565,
+      "lng": -74.268224,
+      "performers": [
+        {
+          "name": "Içosery",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Warren, NJ high schoolers covering a spread from Linkin Park to Olivia Rodrigo."
+        },
+        {
+          "name": "Rebecca KellyG",
+          "genre": "Experimental",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "Performing as \"Sound Weaver\" — a voice doing two things at once, low and guttural one moment, high and ethereal the next."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "address": "29 Princeton St",
+      "neighborhood_note": null,
+      "lat": 40.719705,
+      "lng": -74.267964,
+      "performers": [
+        {
+          "name": "DJ OP!",
+          "genre": "TBD",
+          "time_start": "2:00 PM",
+          "time_end": "4:00 PM",
+          "description": "More info to come."
+        },
+        {
+          "name": "EvrDream",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "A self-described mix of \"Beats, Synths & Riffs\" — alternative rock, metal, trap hip-hop, and electronica from an East Orange, NJ trio formed in 2018 by Christopher Sinanan and Eugene Jenkins III."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "address": "144 Franklin Avenue",
+      "neighborhood_note": null,
+      "lat": 40.71982,
+      "lng": -74.26636,
+      "performers": [
+        {
+          "name": "Crow Magnum",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Real-life experience turned into hard-hitting rock anthems, pairing raw energy with introspective lyrics."
+        },
+        {
+          "name": "Dizzy Lizard",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "High schoolers running the crowd through decades of hits, from classic rock anthems to modern pop favorites."
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "address": "115 Franklin Ave",
+      "neighborhood_note": null,
+      "lat": 40.719854,
+      "lng": -74.264881,
+      "performers": [
+        {
+          "name": "Meant to be",
+          "genre": "Jazz",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Jazz standards flipped with a smooth Latin and R&B edge."
+        },
+        {
+          "name": "Gina Royale",
+          "genre": "Pop",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Thoughtful lyrics riding a high-energy sound that's drawn comparisons to Paramore and Taylor Swift."
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "address": "42 Tuscan Street",
+      "neighborhood_note": null,
+      "lat": 40.72064,
+      "lng": -74.261356,
+      "performers": [
+        {
+          "name": "The Mutts",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "North Jersey rock making its Porchfest debut with a mix of originals and classic covers."
+        },
+        {
+          "name": "Tweezer",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "A group of middle schoolers united by a shared love of Weezer — and recognized by members of Weezer themselves on social media."
+        },
+        {
+          "name": "Foggy Family (Foggy Minded Boys and Foggettes)",
+          "genre": "Bluegrass/Country",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "A killer mix of bluegrass, country, comedy, pop, and rock — donating their talents to nonprofits for over two decades."
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "address": "45 Wellesley St.",
+      "neighborhood_note": null,
+      "lat": 40.719616,
+      "lng": -74.263539,
+      "performers": [
+        {
+          "name": "Big Train",
+          "genre": "Soul/R&B/Funk",
+          "time_start": "3:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Horn-infused R&B and soul running from timeless classics to high-energy block-party grooves."
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "address": "121 Lexington Ave",
+      "neighborhood_note": null,
+      "lat": 40.718855,
+      "lng": -74.267003,
+      "performers": [
+        {
+          "name": "Bern & the Brights",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Montclair indie rock duo whose melodic, emotional songs have drawn comparisons to Jeff Buckley, Feist, and Indigo Girls."
+        },
+        {
+          "name": "The Nightly Noodle",
+          "genre": "Indie",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Instrumental indie and lo-fi guitar that plays like Khruangbin and John Mayer vacationing together."
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "address": "44 Princeton St",
+      "neighborhood_note": null,
+      "lat": 40.719114,
+      "lng": -74.267595,
+      "performers": [
+        {
+          "name": "Harrison Clock Band",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Indie rock described by listeners as \"beautiful, unique, and strangely moving.\""
+        },
+        {
+          "name": "The Resolve",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Local heavy rock trio running a high-energy set of originals and choice covers."
+        },
+        {
+          "name": "DC & the Desperados",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "SOMA hometown favorites keeping it loud with heavy riffs and straight-up rock and roll."
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "address": "155 Lexington Avenue",
+      "neighborhood_note": null,
+      "lat": 40.718615,
+      "lng": -74.268727,
+      "performers": [
+        {
+          "name": "Sh*tburger",
+          "genre": "Bluegrass/Country",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Old-school country and classic rock, billed as the antidote to work, kids, and back pain."
+        },
+        {
+          "name": "The Third Project",
+          "genre": "Rock",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "A family-and-friends band that reinvents itself every year — this time, a full set of Beatles covers."
+        },
+        {
+          "name": "Unheard Of",
+          "genre": "Rock",
+          "time_start": "4:00 PM",
+          "time_end": "5:00 PM",
+          "description": "Fuzzy, noisy art rock out of South Orange — anything but quiet."
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "address": "34 Revere ave",
+      "neighborhood_note": null,
+      "lat": 40.718046,
+      "lng": -74.269033,
+      "performers": [
+        {
+          "name": "My lost horse",
+          "genre": "Rock",
+          "time_start": "1:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Guitar/vocal duo of SOMA locals Jon and Mike playing 80s and 90s radio favorites, from U2 and Pearl Jam to Nirvana and Green Day."
+        },
+        {
+          "name": "Sarah Hodd + The Drive",
+          "genre": "Soul/R&B/Funk",
+          "time_start": "3:00 PM",
+          "time_end": "4:00 PM",
+          "description": "8-piece Maplewood band mixing explosive covers with bluesy, soulful originals."
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "address": "16 Revere Ave",
+      "neighborhood_note": null,
+      "lat": 40.718155,
+      "lng": -74.268256,
+      "performers": [
+        {
+          "name": "LAREDO and Friends",
+          "genre": "Folk/Americana",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "Neighborhood favorites serving up a true Americana smorgasbord."
+        },
+        {
+          "name": "Ziggy Grover",
+          "genre": "Singer-Songwriter",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Allendale, NJ singer-songwriter turning life stories into song."
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "address": "29 Concord Ave.",
+      "neighborhood_note": null,
+      "lat": 40.7184,
+      "lng": -74.266894,
+      "performers": [
+        {
+          "name": "In My Basement",
+          "genre": "Indie",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "NJ indie rock trio behind the 2025 debut album S.W.T.T., built on high-energy riffs and catchy melodies."
+        },
+        {
+          "name": "The Burrhead Ramblers",
+          "genre": "Bluegrass/Country",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "Authentic, high-energy bluegrass and folk from a set of down-to-earth musicians, making their Porchfest debut."
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "address": "75 Concord Ave",
+      "neighborhood_note": null,
+      "lat": 40.717519,
+      "lng": -74.26834,
+      "performers": [
+        {
+          "name": "Just For Fun",
+          "genre": "Soul/R&B/Funk",
+          "time_start": "1:00 PM",
+          "time_end": "2:00 PM",
+          "description": "5-piece cover band running soul, R&B, and pop-rock from Lake Street Dive to Fleetwood Mac."
+        },
+        {
+          "name": "No Left Turn",
+          "genre": "Rock",
+          "time_start": "2:00 PM",
+          "time_end": "3:00 PM",
+          "description": "North Jersey alternative rock splitting the difference between grunge and indie — Pearl Jam meets Radiohead."
+        }
+      ]
+    }
+  ]
+}
