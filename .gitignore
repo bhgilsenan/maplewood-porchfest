@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local-only reference data (kept out of git, not needed for the site build)
+/data/
