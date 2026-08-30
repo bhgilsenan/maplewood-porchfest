@@ -4,14 +4,33 @@
   Paste this ENTIRE file into the Squarespace Code Block's HTML source
   (Content tab → Mode: HTML → toggle "Display Source Code" on → paste → Save).
 
-  Self-contained: styles + Leaflet map + full schedule data are all inline,
-  so this single paste is the whole widget. Nothing else needs adding to
-  the page. Loads Leaflet + Google Fonts (DM Sans) from their public
-  CDNs — if this Squarespace plan's Code Block strips
-  <link>/<script> tags, move just those three tags (Leaflet CSS+JS, Google
-  Fonts) into Settings → Advanced → Code Injection → Header instead, and
-  keep the rest (the <div class="pf-embed">…, <style>, and the last
-  <script>) in the Code Block.
+  Self-contained: styles + full schedule data are all inline, so this
+  single paste is the whole widget. Nothing else needs adding to the page.
+  The map is a plain Google My Maps <iframe> embed (see "Map" note below) —
+  it's ordinary markup, not a <link>/<script> tag, so it's unaffected by
+  the note below. Loads only Google Fonts (DM Sans) from a public CDN — if
+  this Squarespace plan's Code Block strips <link>/<script> tags, move
+  those two Fonts <link> tags into Settings → Advanced → Code Injection →
+  Header instead, and keep the rest (the <div class="pf-embed">…, <style>,
+  and the last <script>) in the Code Block.
+
+  Map: this used to be a custom Leaflet/OpenStreetMap map built from this
+  file's own porch/POI data. It was swapped for a plain Google My Maps
+  <iframe> embed (Aug 2026) because OSM's building-footprint tracing is
+  patchy in this part of Maplewood — pins looked "wrong" next to missing
+  house outlines — while the committee's own My Maps document (built from
+  the same data) renders correctly, since it's the map they already trust.
+  A full Google Maps JavaScript API migration was considered and rejected
+  (no budget for a Google Cloud billing account); the My Maps iframe embed
+  is free and needs no API key. Real trade-offs from this swap, both
+  permanent given an iframe has zero scripting access from this page: (1)
+  the Music/Food/Lemonade Stands/Services & Facilities layer-toggle chips
+  are gone — everything in the My Maps document always shows at once now;
+  (2) clicking a map pin no longer jumps to that porch's schedule card
+  below (no "More details"/"Back to map" link) — a pin's popup now shows
+  whatever's in the My Maps document's own placemark description, nothing
+  wired to this page's data. To update the map itself, edit the actual
+  Google My Maps document directly — nothing in this file's data feeds it.
 
   Headings use 'kepler-std' (Georgia/serif fallback) — the real site's own
   Adobe Fonts/Typekit serif. Not loadable from a CDN; it only renders
@@ -51,8 +70,6 @@
 <head>
 <meta charset="utf-8">
 <title>Maplewood Porchfest — Schedule (local preview)</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -80,14 +97,7 @@
 
   <div class="pf-schedule-layout" id="pf-schedule-layout">
 
-    <div class="pf-layer-toggles" id="pf-layer-toggles" role="group" aria-label="Map layers">
-      <span class="pf-layer-label">Map:</span>
-      <div class="pf-layer-pills">
-        <button class="pf-layer-pill pf-layer-pill--active" data-layer="porches" type="button">Music</button>
-        <button class="pf-layer-pill pf-layer-pill--active" data-layer="food" type="button">Food</button>
-        <button class="pf-layer-pill pf-layer-pill--active" data-layer="lemonade" type="button">Lemonade Stands</button>
-        <button class="pf-layer-pill pf-layer-pill--active" data-layer="services" type="button">Services & Facilities</button>
-      </div>
+    <div class="pf-map-toggle-row" id="pf-map-toggle-row">
       <button class="pf-btn pf-btn--ghost pf-map-toggle-btn" id="pf-map-toggle" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
         <span id="pf-map-toggle-label">Hide Map</span>
@@ -96,9 +106,14 @@
 
     <div class="pf-map-col pf-map-col--open" id="pf-map-col">
       <div class="pf-map-sticky">
-        <div id="pf-map" aria-label="Porch locations map" role="application"></div>
+        <iframe
+          id="pf-map"
+          src="https://www.google.com/maps/d/u/0/embed?mid=1BdF9F9VBZwKVFPumgYlu57XXHtihNTw&ehbc=2E312F&noprof=1"
+          title="Map of Porchfest porches, food, lemonade stands, and services"
+          loading="lazy"
+        ></iframe>
         <div class="pf-map-footer">
-          <p class="pf-map-note">Click a marker for lineup times</p>
+          <p class="pf-map-note">Tap a pin on the map for details</p>
           <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
           <a class="pf-btn pf-btn--ghost pf-download-btn" id="pf-map-pdf-link" href="#printable-map-pending">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
@@ -198,26 +213,6 @@
   --pf-cta: #ff5d00;
   --pf-cta-contrast: #000000;
   --pf-cta-soft: rgba(255,93,0,.14);
-
-  /* Map wayfinding colors — a deliberate exception to the brand-only rule
-     above, scoped to map pins only. Porches keep --pf-cta (orange). Services
-     & Facilities pins are grouped by what they mean to someone navigating on
-     foot, not one hue per category (9 distinct pin colors would be busy) —
-     Parking (highest search-intent) gets its own blue, Park + Playground
-     share a green ("head outside"), and Restroom + Community Center + Quiet
-     Room share a neutral slate ("functional stop, not a destination"). */
-  --pf-food: #c0392b;
-  --pf-food-contrast: #ffffff;
-  --pf-lemonade: #e8b923;
-  --pf-lemonade-contrast: #000000;
-  --pf-parking: #2f6fea;
-  --pf-parking-contrast: #ffffff;
-  --pf-park: #2f9e5b;
-  --pf-park-contrast: #ffffff;
-  --pf-amenity: #5b6472;
-  --pf-amenity-contrast: #ffffff;
-  --pf-parade: var(--pf-primary);
-  --pf-parade-contrast: #ffffff;
 
   --pf-radius: 10px;
   --pf-radius-lg: 16px;
@@ -353,56 +348,12 @@
 .pf-map-col--open { display: block; }
 .pf-map-sticky { padding-bottom: 1rem; }
 
-.pf-layer-toggles { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .6rem; margin-bottom: 1.1rem; }
-.pf-layer-label {
-  font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--pf-text-muted); white-space: nowrap; flex-shrink: 0; margin-right: .15rem;
-}
-.pf-layer-pills { display: flex; flex-wrap: wrap; gap: .35rem; }
-.pf-layer-pill {
-  padding: .22rem .65rem; border-radius: 50px; border: 1.5px solid var(--pf-border);
-  background: var(--pf-surface); color: var(--pf-text); font-family: var(--pf-font-ui);
-  font-size: .72rem; font-weight: 600; cursor: pointer; white-space: nowrap;
-  transition: background 150ms, border-color 150ms, color 150ms;
-}
-.pf-layer-pill:hover { border-color: var(--pf-primary); }
-.pf-layer-pill--active { background: var(--pf-primary); color: var(--pf-primary-contrast); border-color: var(--pf-primary); }
-.pf-layer-pill--active::before { content: "✓"; margin-right: .3rem; }
+.pf-map-toggle-row { display: flex; margin-bottom: 1.1rem; }
 .pf-map-toggle-btn { margin-left: auto; padding: .3rem .85rem; font-size: .78rem; }
 
-@container (max-width: 700px) {
-  .pf-layer-label { order: 1; }
-  .pf-map-toggle-btn { order: 2; }
-  .pf-layer-pills { order: 3; flex-basis: 100%; }
-}
-
-#pf-map { height: 320px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
+#pf-map { display: block; width: 100%; height: 480px; border-radius: var(--pf-radius-lg); border: 2px solid var(--pf-border); z-index: 1; }
 .pf-map-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-top: .6rem; }
 .pf-map-note { font-size: .78rem; color: var(--pf-text-faint); font-style: italic; margin: 0; }
-
-.pf-map-marker {
-  width: 28px; height: 28px; background: var(--pf-cta); color: var(--pf-cta-contrast); border-radius: 50%;
-  border: 2px solid var(--pf-bg); display: flex; align-items: center; justify-content: center;
-  font-family: var(--pf-font-display); font-weight: 800; font-size: 11px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.3); cursor: pointer; transition: background 150ms, transform 150ms;
-}
-.pf-map-marker:hover { background: var(--pf-primary); color: var(--pf-primary-contrast); transform: scale(1.1); }
-
-.pf-poi-marker {
-  width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--pf-bg);
-  display: flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3); cursor: pointer; transition: transform 150ms;
-}
-.pf-poi-marker svg { width: 14px; height: 14px; flex-shrink: 0; }
-.pf-poi-marker:hover { transform: scale(1.15); }
-.pf-poi-marker--food { background: var(--pf-food); color: var(--pf-food-contrast); }
-.pf-poi-marker--lemonade { background: var(--pf-lemonade); color: var(--pf-lemonade-contrast); }
-.pf-poi-marker--parking { background: var(--pf-parking); color: var(--pf-parking-contrast); }
-.pf-poi-marker--park { background: var(--pf-park); color: var(--pf-park-contrast); }
-.pf-poi-marker--amenity { background: var(--pf-amenity); color: var(--pf-amenity-contrast); }
-.pf-poi-marker--parade { background: var(--pf-parade); color: var(--pf-parade-contrast); }
-.pf-parade-route { stroke: var(--pf-parade); stroke-opacity: .85; }
-.pf-popup-details-link { display: inline-block; margin-top: 6px; color: var(--pf-primary); font-weight: 600; text-decoration: underline; }
 
 /* ---- view toggle row ---- */
 .pf-view-toggle-row {
@@ -521,8 +472,6 @@
   background: var(--pf-surface); border-radius: var(--pf-radius-lg); box-shadow: var(--pf-shadow-sm);
   overflow: hidden; transition: box-shadow 200ms, outline 150ms; scroll-margin-top: 1rem;
 }
-.pf-porch-card--highlighted { outline: 3px solid var(--pf-primary); box-shadow: var(--pf-shadow-md); }
-.pf-back-to-map-btn { align-self: flex-start; }
 .pf-porch-card-header {
   display: flex; align-items: center; justify-content: space-between; gap: 1.1rem; padding: 1.1rem 1.35rem .9rem;
   border-bottom: 1px solid var(--pf-border); background: var(--pf-surface-2);
@@ -601,7 +550,6 @@
 }
 </style>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function () {
   "use strict";
@@ -620,8 +568,6 @@
         "id": 1,
         "address": "2 Henry Place",
         "neighborhood_note": null,
-        "lat": 40.72036,
-        "lng": -74.254475,
         "performers": [
           {
             "name": "Jason Didner and the GSPs",
@@ -643,8 +589,6 @@
         "id": 2,
         "address": "18 Menzel Avenue",
         "neighborhood_note": null,
-        "lat": 40.717282,
-        "lng": -74.25561,
         "performers": [
           {
             "name": "Daniel Scanfeld",
@@ -666,8 +610,6 @@
         "id": 3,
         "address": "59 Schaefer Road",
         "neighborhood_note": null,
-        "lat": 40.715258,
-        "lng": -74.257966,
         "performers": [
           {
             "name": "Pegasus Meteor Fist",
@@ -696,8 +638,6 @@
         "id": 4,
         "address": "11 Field Road",
         "neighborhood_note": null,
-        "lat": 40.715484,
-        "lng": -74.261427,
         "performers": [
           {
             "name": "belikeAlice",
@@ -726,8 +666,6 @@
         "id": 5,
         "address": "29 Schaefer Road",
         "neighborhood_note": null,
-        "lat": 40.716125,
-        "lng": -74.259269,
         "performers": [
           {
             "name": "Rory D'Lasnow",
@@ -749,8 +687,6 @@
         "id": 6,
         "address": "211 Jacoby Street",
         "neighborhood_note": null,
-        "lat": 40.717583,
-        "lng": -74.256856,
         "performers": [
           {
             "name": "Breaknrecords band",
@@ -772,8 +708,6 @@
         "id": 7,
         "address": "172 Jacoby Street",
         "neighborhood_note": null,
-        "lat": 40.718039,
-        "lng": -74.255882,
         "performers": [
           {
             "name": "Mannekin Skywalker/Jessica Keuskamp",
@@ -802,8 +736,6 @@
         "id": 8,
         "address": "419 Boyden Avenue",
         "neighborhood_note": null,
-        "lat": 40.718133,
-        "lng": -74.255533,
         "performers": [
           {
             "name": "The Coverup",
@@ -832,8 +764,6 @@
         "id": 9,
         "address": "417 Boyden Avenue",
         "neighborhood_note": null,
-        "lat": 40.718101,
-        "lng": -74.255342,
         "performers": [
           {
             "name": "Alex Klint",
@@ -855,8 +785,6 @@
         "id": 10,
         "address": "30 Newark Way",
         "neighborhood_note": null,
-        "lat": 40.718253,
-        "lng": -74.258185,
         "performers": [
           {
             "name": "Smoove",
@@ -878,8 +806,6 @@
         "id": 11,
         "address": "21 Vermont Street",
         "neighborhood_note": null,
-        "lat": 40.721237,
-        "lng": -74.259636,
         "performers": [
           {
             "name": "Chris Mozy",
@@ -894,8 +820,6 @@
         "id": 12,
         "address": "17 Vermont Street",
         "neighborhood_note": null,
-        "lat": 40.721107,
-        "lng": -74.259521,
         "performers": [
           {
             "name": "Michael Glazier",
@@ -910,8 +834,6 @@
         "id": 13,
         "address": "11 Vermont Street",
         "neighborhood_note": null,
-        "lat": 40.721632,
-        "lng": -74.259718,
         "performers": [
           {
             "name": "Mag Electric",
@@ -926,8 +848,6 @@
         "id": 14,
         "address": "31 Tuscan Street",
         "neighborhood_note": null,
-        "lat": 40.720905,
-        "lng": -74.261637,
         "performers": [
           {
             "name": "Yeah Is What We Have",
@@ -942,8 +862,6 @@
         "id": 15,
         "address": "56 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.721089,
-        "lng": -74.262272,
         "performers": [
           {
             "name": "Useful Engines",
@@ -965,8 +883,6 @@
         "id": 16,
         "address": "58 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.721076,
-        "lng": -74.262358,
         "performers": [
           {
             "name": "The Refugee Dogs",
@@ -981,8 +897,6 @@
         "id": 17,
         "address": "78 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.720953,
-        "lng": -74.263221,
         "performers": [
           {
             "name": "The Spectrums",
@@ -997,8 +911,6 @@
         "id": 18,
         "address": "97 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.720634,
-        "lng": -74.264272,
         "performers": [
           {
             "name": "The Illars",
@@ -1020,8 +932,6 @@
         "id": 19,
         "address": "99 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.720622,
-        "lng": -74.264357,
         "performers": [
           {
             "name": "Paul Burroughs",
@@ -1043,8 +953,6 @@
         "id": 20,
         "address": "16 Princeton Street",
         "neighborhood_note": null,
-        "lat": 40.720344,
-        "lng": -74.267903,
         "performers": [
           {
             "name": "Somebody’s Uncle",
@@ -1066,8 +974,6 @@
         "id": 21,
         "address": "184 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.720219,
-        "lng": -74.268501,
         "performers": [
           {
             "name": "Flip Da Skrip",
@@ -1082,8 +988,6 @@
         "id": 22,
         "address": "194 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.72016,
-        "lng": -74.268929,
         "performers": [
           {
             "name": "Double A band",
@@ -1098,8 +1002,6 @@
         "id": 23,
         "address": "228 Hilton Avenue",
         "neighborhood_note": null,
-        "lat": 40.719948,
-        "lng": -74.270463,
         "performers": [
           {
             "name": "Bearded Jon’s Artless Commerce Laboratory",
@@ -1121,8 +1023,6 @@
         "id": 24,
         "address": "180 Indiana Street",
         "neighborhood_note": null,
-        "lat": 40.719514,
-        "lng": -74.272096,
         "performers": [
           {
             "name": "Paul Crane and the Overend Watts",
@@ -1144,8 +1044,6 @@
         "id": 25,
         "address": "169 Indiana Street",
         "neighborhood_note": null,
-        "lat": 40.71992,
-        "lng": -74.272415,
         "performers": [
           {
             "name": "oscar and the ladybugs",
@@ -1167,8 +1065,6 @@
         "id": 26,
         "address": "779 Prospect Street",
         "neighborhood_note": null,
-        "lat": 40.718855,
-        "lng": -74.269951,
         "performers": [
           {
             "name": "Paul Whitty/The Whitby",
@@ -1190,8 +1086,6 @@
         "id": 27,
         "address": "208 Franklin Avenue",
         "neighborhood_note": null,
-        "lat": 40.71947,
-        "lng": -74.268922,
         "performers": [
           {
             "name": "The Maybes",
@@ -1206,8 +1100,6 @@
         "id": 28,
         "address": "184 Franklin Avenue",
         "neighborhood_note": null,
-        "lat": 40.719565,
-        "lng": -74.268224,
         "performers": [
           {
             "name": "Içosery",
@@ -1229,8 +1121,6 @@
         "id": 29,
         "address": "29 Princeton Street",
         "neighborhood_note": null,
-        "lat": 40.719705,
-        "lng": -74.267964,
         "performers": [
           {
             "name": "DJ OP!",
@@ -1252,8 +1142,6 @@
         "id": 30,
         "address": "144 Franklin Avenue",
         "neighborhood_note": null,
-        "lat": 40.71982,
-        "lng": -74.26636,
         "performers": [
           {
             "name": "Crow Magnum",
@@ -1275,8 +1163,6 @@
         "id": 31,
         "address": "115 Franklin Avenue",
         "neighborhood_note": null,
-        "lat": 40.719854,
-        "lng": -74.264881,
         "performers": [
           {
             "name": "Meant to be",
@@ -1298,8 +1184,6 @@
         "id": 32,
         "address": "42 Tuscan Street",
         "neighborhood_note": null,
-        "lat": 40.72064,
-        "lng": -74.261356,
         "performers": [
           {
             "name": "The Mutts",
@@ -1328,8 +1212,6 @@
         "id": 33,
         "address": "45 Wellesley Street",
         "neighborhood_note": null,
-        "lat": 40.719616,
-        "lng": -74.263539,
         "performers": [
           {
             "name": "Big Train",
@@ -1344,8 +1226,6 @@
         "id": 34,
         "address": "121 Lexington Avenue",
         "neighborhood_note": null,
-        "lat": 40.718855,
-        "lng": -74.267003,
         "performers": [
           {
             "name": "Bern & the Brights",
@@ -1367,8 +1247,6 @@
         "id": 35,
         "address": "44 Princeton Street",
         "neighborhood_note": null,
-        "lat": 40.719114,
-        "lng": -74.267595,
         "performers": [
           {
             "name": "Harrison Clock Band",
@@ -1397,8 +1275,6 @@
         "id": 36,
         "address": "155 Lexington Avenue",
         "neighborhood_note": null,
-        "lat": 40.718615,
-        "lng": -74.268727,
         "performers": [
           {
             "name": "Sh*tburger",
@@ -1427,8 +1303,6 @@
         "id": 37,
         "address": "34 Revere Avenue",
         "neighborhood_note": null,
-        "lat": 40.718046,
-        "lng": -74.269033,
         "performers": [
           {
             "name": "My lost horse",
@@ -1450,8 +1324,6 @@
         "id": 38,
         "address": "16 Revere Avenue",
         "neighborhood_note": null,
-        "lat": 40.718155,
-        "lng": -74.268256,
         "performers": [
           {
             "name": "LAREDO and Friends",
@@ -1473,8 +1345,6 @@
         "id": 39,
         "address": "29 Concord Avenue",
         "neighborhood_note": null,
-        "lat": 40.7184,
-        "lng": -74.266894,
         "performers": [
           {
             "name": "In My Basement",
@@ -1496,8 +1366,6 @@
         "id": 40,
         "address": "75 Concord Avenue",
         "neighborhood_note": null,
-        "lat": 40.717519,
-        "lng": -74.26834,
         "performers": [
           {
             "name": "Just For Fun",
@@ -1517,294 +1385,6 @@
       }
     ]
   };
-
-  var PF_FOOD = [
-    {
-      "name": "Park Wood Diner",
-      "address": "1958 Springfield Avenue",
-      "description": "Classic American diner serving breakfast, lunch, and dinner all day, family-run since 2005.",
-      "lat": 40.72034,
-      "lng": -74.273811
-    },
-    {
-      "name": "El Rey Mexican Restaurant",
-      "address": "1908 Springfield Avenue",
-      "description": "Family-owned Mexican restaurant with made-from-scratch tortillas, salsas, and classic dishes like tacos and enchiladas.",
-      "lat": 40.720473,
-      "lng": -74.271784
-    },
-    {
-      "name": "Panda Kitchen Restaurant",
-      "address": "1906 Springfield Avenue",
-      "description": "Casual Chinese takeout and delivery spot with a broad menu of classic dishes.",
-      "lat": 40.720491,
-      "lng": -74.271665
-    },
-    {
-      "name": "The Sandwicheria Eatery - Peruvian Street Food",
-      "address": "738 Prospect Street",
-      "description": "Fast-casual Peruvian sandwich shop known for carne asada and pulled pork sandwiches and rice bowls.",
-      "lat": 40.720508,
-      "lng": -74.270131
-    },
-    {
-      "name": "Woulibam Restaurant - Fine Haitian & Caribbean Cuisine",
-      "address": "1878 Springfield Avenue",
-      "description": "Haitian and Caribbean restaurant serving hearty dishes like conch sauté and fried goat.",
-      "lat": 40.720755,
-      "lng": -74.269867
-    },
-    {
-      "name": "Grandma Emma's",
-      "address": "1876 Springfield Avenue",
-      "description": "Bakery offering pastries, cobblers, and sweet treats, many vegan.",
-      "lat": 40.720767,
-      "lng": -74.269781
-    },
-    {
-      "name": "HLS Juice Bar & Grill",
-      "address": "1869 Springfield Avenue",
-      "description": "Fast-casual juice bar and grill serving smoothies, wraps, and health-focused soul food bites.",
-      "lat": 40.720711,
-      "lng": -74.26899
-    },
-    {
-      "name": "Avenue Pub",
-      "address": "1790 Springfield Avenue",
-      "description": "Neighborhood pub with a seafood-focused menu from Freeman's Fish Market, plus classic wings and burgers.",
-      "lat": 40.721347,
-      "lng": -74.265605
-    },
-    {
-      "name": "Hunan Wok",
-      "address": "1755 Springfield Avenue",
-      "description": "Longtime neighborhood Chinese restaurant offering dine-in, takeout, and delivery since 2001.",
-      "lat": 40.721325,
-      "lng": -74.264563
-    },
-    {
-      "name": "Sabor Catracho Restaurant",
-      "address": "3 Wellesley Street",
-      "description": "Honduran and Central American restaurant serving breakfast, grilled meats, and traditional specialties.",
-      "lat": 40.721303,
-      "lng": -74.263933
-    },
-    {
-      "name": "Cielo's Final Touch",
-      "address": "1673 Springfield Avenue",
-      "description": "Mexican deli and sandwich shop also serving American comfort food, known for birria dishes.",
-      "lat": 40.721925,
-      "lng": -74.260247
-    },
-    {
-      "name": "Honey & Hive Artisanal Ice Cream",
-      "address": "1611 Springfield Avenue",
-      "description": "Artisanal ice cream and sorbet shop with a large rotating menu of house-made flavors.",
-      "lat": 40.722383,
-      "lng": -74.25697
-    },
-    {
-      "name": "Majestic Smoothie and Juice Bar",
-      "address": "1611 Springfield Avenue Suite C",
-      "description": "Juice and smoothie bar offering fresh juices, smoothies, and fruit bowls.",
-      "lat": 40.722233,
-      "lng": -74.25709
-    },
-    {
-      "name": "Cornbread Maplewood",
-      "address": "1573 Springfield Avenue",
-      "description": "Soul food restaurant known for fried chicken, catfish, and Southern sides, BYOB.",
-      "lat": 40.722593,
-      "lng": -74.255478
-    },
-    {
-      "name": "Bradfords Barr",
-      "address": "1553 Springfield Avenue",
-      "description": "Upscale soul food restaurant and catering business known for lobster mac and cheese and ribeye.",
-      "lat": 40.722703,
-      "lng": -74.254693
-    },
-    {
-      "name": "ARTIE'S",
-      "address": "15 Newark Way",
-      "description": "Italian wood-fired pizzeria and bakery serving bread, pastries, and house-made pasta.",
-      "lat": 40.719016,
-      "lng": -74.257908
-    },
-    {
-      "name": "Pallet Brewing Company",
-      "address": "30 Newark Way",
-      "description": "Family-friendly local craft brewery and taproom with rotating food vendors and live music.",
-      "lat": 40.718403,
-      "lng": -74.258065
-    },
-    {
-      "name": "Porta Rossa Pasta & Provisions",
-      "address": "160 Jacoby Street",
-      "description": "Counter-service Italian shop for handmade pasta, sandwiches, focaccia, and sauces to go.",
-      "lat": 40.718221,
-      "lng": -74.255621
-    },
-    {
-      "name": "Perla Oyster Bar",
-      "address": "415 Boyden Avenue",
-      "description": "Small seafood and raw bar restaurant specializing in oysters and New England-style dishes.",
-      "lat": 40.718244,
-      "lng": -74.255502
-    },
-    {
-      "name": "Wheelhouse Cheese & More",
-      "address": "417 Boyden Avenue",
-      "description": "Specialty cheese shop and cafe offering charcuterie, sandwiches, and cheese plates.",
-      "lat": 40.718251,
-      "lng": -74.255222
-    },
-    {
-      "name": "Corner Slice",
-      "address": "419 Boyden Avenue",
-      "description": "Brooklyn-style square-slice pizzeria known for its garlic knots and Upside Down Pie.",
-      "lat": 40.718283,
-      "lng": -74.255413
-    }
-  ];
-
-  var PF_LEMONADE = [
-    {
-      "address": "75 Concord Avenue",
-      "charity": "WWF https://www.worldwildlife.org/",
-      "lat": 40.717669,
-      "lng": -74.26822
-    },
-    {
-      "address": "779 Prospect Street",
-      "charity": "Maplewood Foundation",
-      "lat": 40.719005,
-      "lng": -74.269831
-    },
-    {
-      "address": "194 Hilton Avenue",
-      "charity": "CHS Marching Band",
-      "lat": 40.72031,
-      "lng": -74.268809
-    },
-    {
-      "address": "228 Hilton Avenue",
-      "charity": "Loeys Dietz Syndrome Foundation",
-      "lat": 40.720098,
-      "lng": -74.270343
-    },
-    {
-      "address": "169 Indiana Street",
-      "charity": "Dolly Parton’s Imagination Library",
-      "lat": 40.72007,
-      "lng": -74.272295
-    },
-    {
-      "address": "44 Princeton Street",
-      "charity": "Miles - East Orange Animal Alliance",
-      "lat": 40.719264,
-      "lng": -74.267475
-    },
-    {
-      "address": "33 Concord Avenue",
-      "charity": "Associated Humane Societies",
-      "lat": 40.718322,
-      "lng": -74.26702
-    },
-    {
-      "address": "182 Franklin Avenue",
-      "charity": "Together We Bloom",
-      "lat": 40.719573,
-      "lng": -74.268166
-    },
-    {
-      "address": "27 Wellesley Street",
-      "charity": "Soma Shares",
-      "lat": 40.720352,
-      "lng": -74.263711
-    },
-    {
-      "address": "31 Hilton Avenue",
-      "charity": "MEND",
-      "lat": 40.721108,
-      "lng": -74.260971
-    }
-  ];
-
-  var PF_SERVICES = [
-    {
-      "name": "Honk Parade Start -120 Burnet Ave",
-      "address": "120 Burnet Avenue",
-      "category": "Parade Marker",
-      "description": "Meet at DeHart Community Center at 12 Noon for rehearsal. Honk Parade kicks off at 12:30pm",
-      "lat": 40.719335,
-      "lng": -74.262029
-    },
-    {
-      "name": "Honk Parade End -121 Lexington Ave",
-      "address": "121 Lexington Avenue",
-      "category": "Parade Marker",
-      "description": "Honk Parade ends at 121 Lexington Ave",
-      "lat": 40.718995,
-      "lng": -74.267042
-    },
-    {
-      "name": "Maplewood Community Center at DeHart Park",
-      "address": "120 Burnet Avenue",
-      "category": "Community Center",
-      "description": "",
-      "lat": 40.719044,
-      "lng": -74.261827
-    },
-    {
-      "name": "Restrooms at DeHart Community Center",
-      "address": "114 Burnet Avenue",
-      "category": "Restroom",
-      "description": "Bathrooms (Inside DeHart Center)",
-      "lat": 40.719132,
-      "lng": -74.261617
-    },
-    {
-      "name": "Municipal Parking DeHart Park",
-      "address": "106 Burnet Avenue",
-      "category": "Parking",
-      "description": "Parking",
-      "lat": 40.719308,
-      "lng": -74.261435
-    },
-    {
-      "name": "DeHart Park",
-      "address": "120 Burnet Avenue",
-      "category": "Park",
-      "description": "",
-      "lat": 40.718577,
-      "lng": -74.261014
-    },
-    {
-      "name": "DeHart Park Playground",
-      "address": "120 Burnet Avenue",
-      "category": "Playground",
-      "description": "",
-      "lat": 40.718796,
-      "lng": -74.261977
-    },
-    {
-      "name": "Together We Bloom - St Joes Church - 767 Prospect St",
-      "address": "767 Prospect Street",
-      "category": "Quiet Room",
-      "description": "Together We Bloom sensory-friendly quiet room; If needed, please ask to use the restrooms.",
-      "lat": 40.719381,
-      "lng": -74.270225
-    },
-    {
-      "name": "Municipal Parking on Prospect Street",
-      "address": "747-751 Prospect Street",
-      "category": "Parking",
-      "description": "747-751 Prospect Street",
-      "lat": 40.720152,
-      "lng": -74.270285
-    }
-  ];
 
   var TIME_SLOTS = [
     { label: "1:00 – 2:00 PM", hourStart: 13, hourEnd: 14 },
@@ -1990,125 +1570,6 @@
 
   porchViewEl.innerHTML = porchViewHtml;
 
-  /* ===================== MAP ===================== */
-  var map = L.map(root.querySelector("#pf-map"), { center: [40.7193, -74.2643], zoom: 15, scrollWheelZoom: false, zoomControl: true });
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19
-  }).addTo(map);
-
-  var markers = {};
-  var porchesLayer = L.layerGroup();
-  PF_DATA.porches.forEach(function (porch) {
-    var icon = L.divIcon({ html: '<div class="pf-map-marker">' + porch.id + '</div>', className: "", iconSize: [28, 28], iconAnchor: [14, 14] });
-    var marker = L.marker([porch.lat, porch.lng], { icon: icon }).addTo(porchesLayer).bindPopup(
-      '<strong>#' + porch.id + ' — ' + mapsLink(porch.address) + '</strong><br/>' +
-      porch.performers.map(function (p) { return escapeHtml(p.time_start) + '–' + escapeHtml(p.time_end) + ' ' + escapeHtml(p.name) + ' (' + escapeHtml(p.genre) + ')'; }).join('<br/>') +
-      '<br/><a href="#" class="pf-popup-details-link" data-porch-id="' + porch.id + '">More details</a>'
-    );
-    marker.on("popupopen", function (e) {
-      var link = e.popup.getElement().querySelector(".pf-popup-details-link");
-      if (!link) return;
-      link.addEventListener("click", function (evt) {
-        evt.preventDefault();
-        marker.closePopup();
-        goToPorchCard(porch.id);
-      });
-    });
-    markers[porch.id] = marker;
-  });
-  porchesLayer.addTo(map);
-
-  /* ---- Food / Lemonade / Services layers (on by default — toggled via the map-layer chips) ----
-     POI icons are real Lucide (lucide.dev, ISC-licensed) SVG paths, copied from the actual
-     library rather than hand-drawn — the same source as the download/chevron/map-toggle icons
-     already elsewhere in this file. Kept as inline SVG, not an icon font, so nothing loads over
-     the network and every icon renders identically everywhere, unlike the emoji they replace
-     (platform-inconsistent, and unreadable at 26px — e.g. the old fork-and-knife). Parade Marker
-     is the one exception, keeping its 🏁 emoji: that one already reads fine everywhere and was
-     deliberately chosen over a real flag / red-flag emoji for the color-clash reasons noted by
-     --pf-parade below. */
-  var ICON_SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
-  var ICON_SVGS = {
-    utensils: ICON_SVG_OPEN + '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>',
-    cupSoda: ICON_SVG_OPEN + '<path d="m6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.54a2 2 0 0 0 2-1.72L18 8"/><path d="M5 8h14"/><path d="M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/><path d="m12 8 1-6h2"/></svg>',
-    toilet: ICON_SVG_OPEN + '<path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"/><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/></svg>',
-    squareParking: ICON_SVG_OPEN + '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>',
-    landmark: ICON_SVG_OPEN + '<path d="M10 18v-7"/><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/></svg>',
-    trees: ICON_SVG_OPEN + '<path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"/><path d="M7 16v6"/><path d="M13 19v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/></svg>',
-    ferrisWheel: ICON_SVG_OPEN + '<circle cx="12" cy="12" r="2"/><path d="M12 2v4"/><path d="m6.8 15-3.5 2"/><path d="m20.7 7-3.5 2"/><path d="M6.8 9 3.3 7"/><path d="m20.7 17-3.5-2"/><path d="m9 22 3-8 3 8"/><path d="M8 22h8"/><path d="M18 18.7a9 9 0 1 0-12 0"/></svg>',
-    volumeX: ICON_SVG_OPEN + '<path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>'
-  };
-
-  /* Category → icon + color-tier. Blue=Parking (highest search-intent), green=Park/Playground
-     ("head outside"), slate=Restroom/Community Center/Quiet Room ("functional stop"). */
-  var SERVICE_CATEGORY_META = {
-    "Restroom":         { icon: ICON_SVGS.toilet,         cls: "pf-poi-marker--amenity" },
-    "Parking":          { icon: ICON_SVGS.squareParking,  cls: "pf-poi-marker--parking" },
-    "Community Center": { icon: ICON_SVGS.landmark,       cls: "pf-poi-marker--amenity" },
-    "Park":             { icon: ICON_SVGS.trees,          cls: "pf-poi-marker--park" },
-    "Playground":       { icon: ICON_SVGS.ferrisWheel,    cls: "pf-poi-marker--park" },
-    "Quiet Room":       { icon: ICON_SVGS.volumeX,        cls: "pf-poi-marker--amenity" }
-  };
-
-  function poiIcon(content, modifierClass) {
-    return L.divIcon({
-      html: '<div class="pf-poi-marker ' + modifierClass + '">' + content + '</div>',
-      className: "", iconSize: [26, 26], iconAnchor: [13, 13]
-    });
-  }
-
-  function linkifyCharity(text) {
-    return escapeHtml(text).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
-  }
-
-  /* POI markers always render above porches (which swing between
-     zIndexOffset 0 and 1000 depending on the genre filter) — they're
-     rarer and more specific, so they shouldn't get buried under the
-     more numerous, larger porch dots. */
-  var POI_Z_INDEX = 2000;
-
-  var foodLayer = L.layerGroup();
-  PF_FOOD.forEach(function (spot) {
-    L.marker([spot.lat, spot.lng], { icon: poiIcon(ICON_SVGS.utensils, "pf-poi-marker--food"), zIndexOffset: POI_Z_INDEX })
-      .addTo(foodLayer)
-      .bindPopup('<strong>' + escapeHtml(spot.name) + '</strong><br/>' + mapsLink(spot.address) + '<br/>' + escapeHtml(spot.description));
-  });
-
-  var lemonadeLayer = L.layerGroup();
-  PF_LEMONADE.forEach(function (stand) {
-    L.marker([stand.lat, stand.lng], { icon: poiIcon(ICON_SVGS.cupSoda, "pf-poi-marker--lemonade"), zIndexOffset: POI_Z_INDEX })
-      .addTo(lemonadeLayer)
-      .bindPopup('<strong>Lemonade Stand</strong><br/>' + mapsLink(stand.address) + '<br/>Supporting: ' + linkifyCharity(stand.charity));
-  });
-
-  var servicesLayer = L.layerGroup();
-  PF_SERVICES.forEach(function (svc) {
-    var isParade = svc.category === "Parade Marker";
-    var targetLayer = isParade ? porchesLayer : servicesLayer;
-    var meta = SERVICE_CATEGORY_META[svc.category];
-    var content = isParade ? "🏁" : (meta ? meta.icon : ICON_SVGS.landmark);
-    var modifierClass = isParade ? "pf-poi-marker--parade" : (meta ? meta.cls : "pf-poi-marker--amenity");
-    L.marker([svc.lat, svc.lng], { icon: poiIcon(content, modifierClass), zIndexOffset: POI_Z_INDEX })
-      .addTo(targetLayer)
-      .bindPopup('<strong>' + escapeHtml(svc.name) + '</strong><br/>' + escapeHtml(svc.category) + (svc.description ? '<br/>' + escapeHtml(svc.description) : ''));
-  });
-
-  /* Honk Parade route, traced from the committee's own Google My Maps route
-     (Maplewood Porchfest 2026.kmz) — grouped with Porches since the parade
-     kicks off the schedule, not a standing amenity like the Services pins. */
-  L.polyline([
-    [40.71936, -74.261959],
-    [40.719801, -74.261022],
-    [40.7194, -74.263942],
-    [40.719011, -74.266883]
-  ], { className: "pf-parade-route", weight: 4, dashArray: "8 8" }).addTo(porchesLayer);
-
-  var MAP_LAYERS = { porches: porchesLayer, food: foodLayer, lemonade: lemonadeLayer, services: servicesLayer };
-  foodLayer.addTo(map);
-  lemonadeLayer.addTo(map);
-  servicesLayer.addTo(map);
-
   /* ===================== STATE + FILTERS ===================== */
   var activeGenres = new Set(["all"]);
   var activeTime = "all";
@@ -2222,27 +1683,8 @@
     if (noResults) noResults.hidden = visibleCount > 0;
   }
 
-  function syncMapMarkers() {
-    PF_DATA.porches.forEach(function (porch) {
-      var marker = markers[porch.id];
-      if (!marker) return;
-      var visible;
-      if (activeView === "time") {
-        var cards = root.querySelectorAll('.pf-time-act-card[data-porch-id="' + porch.id + '"]');
-        visible = Array.prototype.some.call(cards, function (c) { return c.style.display !== "none"; });
-      } else {
-        var card = root.querySelector("#pf-porch-" + porch.id);
-        visible = card ? card.style.display !== "none" : false;
-      }
-      var el = marker.getElement();
-      if (el) el.style.opacity = visible ? "1" : "0.35";
-      marker.setZIndexOffset(visible ? 1000 : 0);
-    });
-  }
-
   function applyFilters() {
     if (activeView === "time") applyTimeViewFilters(); else applyPorchViewFilters();
-    syncMapMarkers();
   }
 
   function updateGenreSummary() {
@@ -2295,36 +1737,6 @@
     btn.addEventListener("click", function () { setView(btn.dataset.view); });
   });
 
-  var backToMapBtn = null;
-
-  function goToPorchCard(porchId) {
-    setView("porch");
-    var card = root.querySelector("#pf-porch-" + porchId);
-    if (!card || card.style.display === "none") return;
-    card.scrollIntoView({ behavior: "smooth", block: "start" });
-    card.classList.add("pf-porch-card--highlighted");
-    setTimeout(function () { card.classList.remove("pf-porch-card--highlighted"); }, 2000);
-
-    if (backToMapBtn) backToMapBtn.remove();
-    backToMapBtn = document.createElement("button");
-    backToMapBtn.type = "button";
-    backToMapBtn.className = "pf-btn pf-btn--outline pf-back-to-map-btn";
-    backToMapBtn.textContent = "↑ Back to map";
-    backToMapBtn.addEventListener("click", function () {
-      if (!mapCol.classList.contains("pf-map-col--open")) {
-        mapCol.classList.add("pf-map-col--open");
-        mapToggleLabel.textContent = "Hide Map";
-        layerLabel.style.display = "";
-        layerPills.style.display = "";
-        setTimeout(function () { map.invalidateSize(); }, 350);
-      }
-      var scrollTarget = root.querySelector("#pf-map");
-      scrollTarget.scrollIntoView({ behavior: "smooth", block: "start" });
-      backToMapBtn.remove();
-      backToMapBtn = null;
-    });
-    card.parentNode.insertBefore(backToMapBtn, card);
-  }
 
   /* ---- genre pills ---- */
   genreFiltersEl.addEventListener("click", function (e) {
@@ -2504,42 +1916,17 @@
     if (e.target.closest("#pf-no-results-clear-time, #pf-no-results-clear-porch")) resetFilters();
   });
 
-  /* ---- map layer toggles ---- */
-  var layerToggles = root.querySelector("#pf-layer-toggles");
-  layerToggles.addEventListener("click", function (e) {
-    var btn = e.target.closest(".pf-layer-pill");
-    if (!btn) return;
-    var layer = MAP_LAYERS[btn.dataset.layer];
-    if (!layer) return;
-    var active = btn.classList.toggle("pf-layer-pill--active");
-    if (active) map.addLayer(layer); else map.removeLayer(layer);
-  });
-
   /* ---- mobile map toggle ---- */
   var mapToggleBtn = root.querySelector("#pf-map-toggle");
   var mapToggleLabel = root.querySelector("#pf-map-toggle-label");
   var mapCol = root.querySelector("#pf-map-col");
-  var layerLabel = root.querySelector(".pf-layer-label");
-  var layerPills = root.querySelector(".pf-layer-pills");
   mapToggleBtn.addEventListener("click", function () {
     var open = mapCol.classList.toggle("pf-map-col--open");
     mapToggleLabel.textContent = open ? "Hide Map" : "Show Map";
-    layerLabel.style.display = open ? "" : "none";
-    layerPills.style.display = open ? "" : "none";
-    setTimeout(function () { map.invalidateSize(); }, 350);
   });
-
-  var backToMapObserver = new IntersectionObserver(function (entries) {
-    if (entries[0].isIntersecting && backToMapBtn) {
-      backToMapBtn.remove();
-      backToMapBtn = null;
-    }
-  });
-  backToMapObserver.observe(root.querySelector("#pf-map"));
 
   /* initial paint */
   applyFilters();
-  setTimeout(function () { map.invalidateSize(); }, 200);
 })();
 </script>
 
