@@ -114,8 +114,7 @@
         ></iframe>
         <div class="pf-map-footer">
           <p class="pf-map-note">Tap a pin on the map for details</p>
-          <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
-          <a class="pf-btn pf-btn--ghost pf-download-btn" id="pf-map-pdf-link" href="#printable-map-pending">
+          <a class="pf-btn pf-btn--primary pf-download-btn" id="pf-map-pdf-link" href="https://www.maplewoodporchfest.com/s/Maplewood-Porchfest-Printable-Map-2026.jpg" target="_blank" rel="noopener">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
             <span class="pf-download-btn-label">Printable Map</span>
           </a>
@@ -143,6 +142,7 @@
           <div class="pf-view-toggle" role="group" aria-label="View mode">
             <button class="pf-view-btn pf-view-btn--active" data-view="time" type="button">By Time</button>
             <button class="pf-view-btn" data-view="porch" type="button">By Porch</button>
+            <button class="pf-view-btn pf-view-btn--grid-only" data-view="grid" type="button">Grid</button>
           </div>
           <select class="pf-filter-select" id="pf-time-filter" aria-label="Filter by time slot">
             <option value="all">All times</option>
@@ -175,8 +175,8 @@
       </div>
 
       <div class="pf-schedule-actions-row">
-        <!-- TODO: swap in the real 2026 PDF URL once the committee finalizes it -->
-        <a class="pf-btn pf-btn--ghost pf-download-btn" id="pf-schedule-pdf-link" href="#printable-schedule-pending">
+        <button class="pf-btn pf-btn--ghost" id="pf-clear-filters-btn" type="button">Clear Filters</button>
+        <a class="pf-btn pf-btn--primary pf-download-btn" id="pf-schedule-pdf-link" href="https://static1.squarespace.com/static/62c07123d4144621a5a33ba1/t/6a9cda4ef87e8e14916ef84a/1788664416273/Maplewood+Porchfest+%E2%80%94+Printable+Schedule+2026+Porches+and+Performers+List.pdf" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M20 19H4"/></svg>
           <span class="pf-download-btn-label">Printable Schedule</span>
         </a>
@@ -184,6 +184,7 @@
 
       <div id="pf-time-view"></div>
       <div id="pf-porch-view" hidden></div>
+      <div id="pf-grid-view" hidden></div>
 
     </div>
 
@@ -230,7 +231,7 @@
   border-radius: var(--pf-radius-lg);
   padding: 1.25rem;
   width: 100%;
-  max-width: 960px;
+  max-width: 1100px;
   margin-inline: auto;
   container-type: inline-size;
 }
@@ -329,16 +330,14 @@
 .pf-btn--outline { background: transparent; border: 1.5px solid var(--pf-border); color: var(--pf-text); }
 .pf-btn--ghost { background: transparent; color: var(--pf-primary); }
 .pf-btn--ghost:hover { background: var(--pf-primary-soft); }
+.pf-btn--primary { background: var(--pf-primary); color: var(--pf-primary-contrast); }
 
-/* ---- printable-PDF links: secondary/low-frequency, so they reuse the
-   ghost-button language instead of a bespoke style, just smaller than a
-   primary ghost button. margin-left: auto docks them to the trailing edge
-   of their row even if flex-wrap kicks in, instead of snapping to the
-   row's leading edge (which used to read as an orphaned leftover line).
-   Below 480px they drop to icon-only entirely — see the shared 480px
-   @container block below — so their row stops wrapping in the first
-   place rather than needing the trailing-edge fallback at all. ---- */
-.pf-download-btn { margin-left: auto; font-size: .78rem; padding: .4rem .85rem; }
+/* ---- printable-PDF links: primary treatment (filled purple, 44px tall)
+   since both are meant to read as a prominent action, not a secondary one.
+   margin-left: auto docks them to the trailing edge of their row even if
+   flex-wrap kicks in, instead of snapping to the row's leading edge (which
+   used to read as an orphaned leftover line). ---- */
+.pf-download-btn { margin-left: auto; height: 44px; padding: 0 1.1rem; }
 .pf-download-btn-label { white-space: nowrap; }
 
 /* ---- layout ---- */
@@ -364,7 +363,7 @@
    whole controls cluster (toggle+select+search+print) as one visual group
    rather than cutting between two rows that both belong together. */
 .pf-schedule-actions-row {
-  display: flex;
+  display: flex; justify-content: space-between; align-items: center;
   padding-block: 0 .7rem; border-bottom: 1px solid var(--pf-border); margin-bottom: .6rem;
 }
 
@@ -413,7 +412,7 @@
    toggle didn't need — one rule, not a breakpoint-specific override. */
 .pf-view-toggle { display: inline-flex; flex: 1 1 0%; min-width: max-content; border: 1.5px solid var(--pf-border); border-radius: 50px; overflow: hidden; }
 .pf-view-btn {
-  display: flex; align-items: center; justify-content: center; flex: 1 1 0%; height: 41px; padding: 0 1rem;
+  display: flex; align-items: center; justify-content: center; flex: 1 1 0%; min-width: 6rem; height: 41px; padding: 0 1rem;
   font-size: .85rem; font-weight: 600; background: var(--pf-surface);
   color: var(--pf-text); border: none; cursor: pointer; white-space: nowrap; letter-spacing: .02em;
 }
@@ -499,6 +498,51 @@
 .pf-performer-name { font-family: var(--pf-font-display); font-weight: 600; font-size: .96rem; }
 .pf-performer-desc { font-family: var(--pf-font-body); font-size: .86rem; color: var(--pf-text); line-height: 1.5; }
 
+/* ---- grid view ----
+   Row height is left to flex to content on purpose: no height/min-height is
+   set anywhere below, and the container gets no display:flex/grid override
+   (unlike #pf-time-view/#pf-porch-view) — a plain <table> already makes each
+   row as tall as its tallest cell, which is the whole point of this view. */
+.pf-visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+#pf-grid-view:not([hidden]) { overflow-x: auto; }
+.pf-grid-table { width: 100%; border-collapse: collapse; table-layout: fixed; border: 1px solid var(--pf-border); }
+
+.pf-grid-header-row { background: var(--pf-primary); }
+.pf-grid-header-cell {
+  color: var(--pf-primary-contrast); font-family: var(--pf-font-ui); font-weight: 700;
+  font-size: .88rem; text-align: left; padding: .5rem .65rem;
+}
+
+.pf-grid-porch-cell {
+  background: var(--pf-primary-faint); text-align: left; font-weight: normal;
+  padding: .5rem .65rem; vertical-align: middle; border-bottom: 1px solid var(--pf-border);
+  transition: opacity 150ms;
+}
+.pf-grid-porch-cell-inner { display: flex; align-items: center; gap: .75rem; }
+.pf-grid-porch-badge {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--pf-primary); color: var(--pf-primary-contrast);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-family: var(--pf-font-ui); font-weight: 700; font-size: .68rem;
+}
+.pf-grid-porch-address { font-family: var(--pf-font-ui); font-weight: 600; font-size: .88rem; }
+.pf-grid-porch-cell--dim { opacity: .5; }
+
+.pf-grid-cell {
+  background: var(--pf-surface); border-left: 1px solid var(--pf-border); border-bottom: 1px solid var(--pf-border);
+  padding: .5rem .65rem; vertical-align: middle; transition: opacity 150ms, box-shadow 150ms;
+}
+.pf-grid-cell[data-name] { background: rgba(0,0,0,.035); }
+.pf-grid-act-name { font-weight: 700; font-size: .88rem; color: var(--pf-text); }
+.pf-grid-act-desc { font-size: .78rem; color: var(--pf-text-muted); margin-top: .15rem; }
+.pf-grid-cell--match {
+  box-shadow: inset 0 0 0 2px var(--pf-primary), 0 0 0 3px var(--pf-primary-soft);
+  position: relative; z-index: 1;
+}
+.pf-grid-cell--dim { opacity: .35; }
+
 /* ---- no results ---- */
 .pf-no-results { padding: 3rem 1rem; text-align: center; }
 .pf-no-results-inner { display: flex; flex-direction: column; align-items: center; gap: .85rem; }
@@ -519,6 +563,8 @@
      this needs a substantial cut, not a small nudge, to fit on one line at
      typical phone widths. Adjust if it's still wrapping or has room to grow. */
   .pf-hero-title { font-size: 3.2rem; }
+  /* Grid view is desktop-only — mobile keeps just By Time / By Porch. */
+  .pf-view-btn--grid-only { display: none; }
   .pf-performer-row { grid-template-columns: 1fr; gap: .35rem; }
   .pf-performer-time { flex-direction: row; align-items: center; gap: .3rem; }
   .pf-porch-card-header { gap: .8rem; padding: 1rem; }
@@ -710,7 +756,7 @@
         "neighborhood_note": null,
         "performers": [
           {
-            "name": "Mannekin Skywalker/Jessica Keuskamp",
+            "name": "Mannekin Skywalker",
             "genre": "Indie",
             "time_start": "1:00 PM",
             "time_end": "2:00 PM",
@@ -724,7 +770,7 @@
             "description": "18-year-old homegrown singer-songwriter riding the wake of her debut album, Ebbs and Flows."
           },
           {
-            "name": "Max Kravitz",
+            "name": "The Max Kravitz Experience",
             "genre": "Indie",
             "time_start": "3:00 PM",
             "time_end": "4:00 PM",
@@ -1067,7 +1113,7 @@
         "neighborhood_note": null,
         "performers": [
           {
-            "name": "Paul Whitty/The Whitby",
+            "name": "The Whitby",
             "genre": "Singer-Songwriter",
             "time_start": "1:00 PM",
             "time_end": "2:00 PM",
@@ -1315,7 +1361,7 @@
             "name": "Sarah Hodd + The Drive",
             "genre": "Soul/R&B/Funk",
             "time_start": "3:00 PM",
-            "time_end": "4:00 PM",
+            "time_end": "5:00 PM",
             "description": "8-piece Maplewood band mixing explosive covers with bluesy, soulful originals."
           }
         ]
@@ -1435,6 +1481,7 @@
   var genreDisclosureEl = root.querySelector("#pf-genre-disclosure");
   var timeViewEl = root.querySelector("#pf-time-view");
   var porchViewEl = root.querySelector("#pf-porch-view");
+  var gridViewEl = root.querySelector("#pf-grid-view");
   var timeFilterEl = root.querySelector("#pf-time-filter");
   var bandSearchInput = root.querySelector("#pf-band-search-input");
   var bandListboxEl = root.querySelector("#pf-band-search-listbox");
@@ -1570,6 +1617,135 @@
 
   porchViewEl.innerHTML = porchViewHtml;
 
+  /* Same hand-curated short blurbs used by the printable poster table
+     (print/build-poster.mjs), so the two stay in sync — keyed "porchId|name",
+     falling back to the raw genre when a porch/performer has no override. */
+  var SHORT_DESCRIPTIONS = {
+    "1|Jason Didner and the GSPs": "Jersey rock with a side of humor",
+    "1|Lorraine": "High-energy pop-rock from Summit, NJ",
+    "2|Daniel Scanfeld": "Solo folk-rock: originals + Tweedy/Petty/Prine covers",
+    "2|HEEL STRIKE": "Live modular-synth ambient/industrial/techno",
+    "3|Pegasus Meteor Fist": "Power trio: classic rock, emo, punk & metal",
+    "3|The Melancholy Kings": "Jangly indie rock, Teenage Fanclub/R.E.M. vein",
+    "3|Tri-State": "Big hooks & tight harmonies, post-youth stories",
+    "4|belikeAlice": "Rock/New Wave/punk spanning the 60s-2000s",
+    "4|Cassette Tape Ministry": "Improvised rock with original poetry",
+    "4|Schplinkus": "Upbeat, genre-bending alt rock",
+    "5|Rory D'Lasnow": "Folk-Americana storytelling singer-songwriter",
+    "5|Delta": "Fiery teen blues trio",
+    "6|Breaknrecords band": "High-energy soul-funk with a twist",
+    "6|Bangarang": "Dad band blasting 90s grunge/alt-rock",
+    "7|Mannekin Skywalker": "Deadpan lyrics, saucy guitar riffs",
+    "7|Avery Sinclair": "Homegrown teen singer-songwriter, debut album",
+    "7|The Max Kravitz Experience": "Pop/indie/electronic crossover",
+    "8|The Coverup": "Straight-up classic rock, no gimmicks",
+    "8|Tiger Bomb": "Dad-band 90s alt-rock & classics",
+    "8|Over My Dad Body": "Self-described “sad-dad rock”",
+    "9|Alex Klint": "Maplewood local singer-songwriter",
+    "9|Michael Sorensen": "Electronic rock & experimental soundscapes",
+    "10|Smoove": "Classic reggae/lovers rock, laid-back groove",
+    "10|Carnival Dogs": "Acoustic chill to rock-and-roll party",
+    "11|Chris Mozy": "Pop/rock/alt-country multi-instrumentalist",
+    "12|Michael Glazier": "Acoustic covers & originals, crowd-pleasing",
+    "13|Mag Electric": "Full-volume hard rock, Hendrix/Mountain covers",
+    "14|Yeah Is What We Have": "Power pop, hooks that stick",
+    "15|Useful Engines": "Original funk/classic-rock/alt jams",
+    "15|The Accelerators": "Power pop trio: British Invasion to New Wave",
+    "16|The Refugee Dogs": "Original rock, insightful to off-color",
+    "17|The Spectrums": "Teen rock: alt/grunge/metal influences",
+    "18|The Illars": "Ukulele/bass indie-folk “reggae-folk-hop”",
+    "18|mombrain.": "Moms-turned-band: 90s grunge/punk/indie",
+    "19|Paul Burroughs": "Guitar-drums duo, heartfelt folk rock",
+    "19|Triskele NJ": "Traditional Irish jigs, reels & hornpipes",
+    "20|Somebody’s Uncle": "High-energy classic/alt-rock sing-alongs",
+    "20|Travel Team": "All-star dad-band rock debut",
+    "21|Flip Da Skrip": "R&B/hip-hop/soul, uptempo to smooth",
+    "22|Double A band": "12-year-old duo, Apollo Amateur Night winners",
+    "23|Bearded Jon’s Artless Commerce Laboratory": "Solo bass, psychedelic ambient loops",
+    "23|Jay Daniels": "Piano & vocals: Songbook, pop, Broadway",
+    "24|Paul Crane and the Overend Watts": "Americana-infused power-pop",
+    "24|Not Nothing But Something": "Self-styled “Minimalist 90s Midwest Emo Talkcore”",
+    "25|oscar and the ladybugs": "Intimate indie-folk, Sufjan/Lenker vein",
+    "25|Catch Me If You Can": "Narrative acoustic folk with an edge",
+    "26|The Whitby": "Acoustic guitar & mandolin, covers/originals",
+    "26|ZööS": "High-energy classic rock covers",
+    "27|The Maybes": "Family band: pop, folk & rock",
+    "28|Içosery": "Teen covers: Linkin Park to Olivia Rodrigo",
+    "28|Rebecca KellyG": "Solo vocal looping, guttural to ethereal",
+    "29|DJ OP!": "DJ set: house, disco, funk & soul",
+    "29|EvrDream": "“Beats, Synths & Riffs” alt-rock/electronica",
+    "30|Crow Magnum": "Hard-hitting rock anthems",
+    "30|Dizzy Lizard": "Teen band: classic rock to pop hits",
+    "31|Meant to be": "Jazz standards, Latin/R&B edge",
+    "31|Gina Royale": "High-energy pop, Paramore/Taylor Swift vibes",
+    "32|The Mutts": "Rock debut: originals & classic covers",
+    "32|Tweezer": "Middle-schoolers’ Weezer tribute",
+    "32|Foggy Family (Foggy Minded Boys and Foggettes)": "Bluegrass, country & comedy mix",
+    "33|Big Train": "Horn-infused R&B/soul block-party grooves",
+    "34|Bern & the Brights": "Melodic indie duo, Jeff Buckley vein",
+    "34|The Nightly Noodle": "Instrumental lo-fi guitar, Khruangbin-esque",
+    "35|Harrison Clock Band": "Indie rock, “strangely moving”",
+    "35|The Resolve": "Heavy rock trio, originals & covers",
+    "35|DC & the Desperados": "Loud, straight-up rock and roll",
+    "36|Sh*tburger": "Old-school country/rock antidote",
+    "36|The Third Project": "Family band’s Beatles-covers set",
+    "36|Unheard Of": "Fuzzy, noisy art rock",
+    "37|My lost horse": "Duo playing 80s/90s radio favorites",
+    "37|Sarah Hodd + The Drive": "8-piece band: bluesy soul originals",
+    "38|LAREDO and Friends": "Neighborhood favorites’ Americana smorgasbord",
+    "38|Ziggy Grover": "Life-stories-into-song singer-songwriter",
+    "39|In My Basement": "High-energy indie rock, catchy riffs",
+    "39|The Burrhead Ramblers": "High-energy bluegrass & folk debut",
+    "40|Just For Fun": "Soul/R&B/pop-rock covers",
+    "40|No Left Turn": "Alt-rock: Pearl Jam meets Radiohead"
+  };
+  function shortDescriptor(porchId, name) {
+    return SHORT_DESCRIPTIONS[porchId + "|" + name] || null;
+  }
+
+  var gridHeaderCellsHtml = TIME_SLOTS.map(function (slot) {
+    return '<th scope="col" class="pf-grid-header-cell">' + escapeHtml(slot.label) + '</th>';
+  }).join('');
+
+  var gridColsHtml = TIME_SLOTS.map(function () { return '<col>'; }).join('');
+
+  var gridRowsHtml = PF_DATA.porches.map(function (porch) {
+    var cells = TIME_SLOTS.map(function (slot, slotIndex) {
+      var act = porch.performers.find(function (p) {
+        return parseHour(p.time_start) < slot.hourEnd && parseHour(p.time_end) > slot.hourStart;
+      });
+      if (!act) return '<td class="pf-grid-cell" data-slot-index="' + slotIndex + '"></td>';
+      return '<td class="pf-grid-cell" data-slot-index="' + slotIndex + '" data-genre="' + escapeHtml(act.genre) + '" data-name="' + escapeHtml(act.name.toLowerCase()) + '">' +
+        '<div class="pf-grid-act-name">' + escapeHtml(act.name) + '</div>' +
+        '<div class="pf-grid-act-desc">' + escapeHtml(shortDescriptor(porch.id, act.name) || act.genre) + '</div>' +
+      '</td>';
+    }).join('');
+    return '<tr class="pf-grid-row" data-porch-id="' + porch.id + '">' +
+      '<th scope="row" class="pf-grid-porch-cell">' +
+        '<div class="pf-grid-porch-cell-inner">' +
+          '<span class="pf-grid-porch-badge" aria-hidden="true">' + porch.id + '</span>' +
+          '<span class="pf-grid-porch-address">' + escapeHtml(porch.address) + '</span>' +
+        '</div>' +
+      '</th>' + cells + '</tr>';
+  }).join('');
+
+  var gridViewHtml =
+    '<table class="pf-grid-table">' +
+      '<caption class="pf-visually-hidden">Porchfest schedule by porch and time slot</caption>' +
+      '<colgroup><col>' + gridColsHtml + '</colgroup>' +
+      '<thead><tr class="pf-grid-header-row">' +
+        '<th scope="col" class="pf-grid-header-cell">Porch / Address</th>' +
+        gridHeaderCellsHtml +
+      '</tr></thead>' +
+      '<tbody>' + gridRowsHtml + '</tbody>' +
+    '</table>' +
+    '<div class="pf-no-results" id="pf-no-results-grid" hidden aria-live="polite">' +
+      '<div class="pf-no-results-inner"><span class="pf-no-results-icon" aria-hidden="true">🎵</span>' +
+      '<h3>No performers found</h3><p>Try clearing the filters to see the full schedule.</p>' +
+      '<button class="pf-btn pf-btn--outline" id="pf-no-results-clear-grid" type="button">Clear all filters</button></div></div>';
+
+  gridViewEl.innerHTML = gridViewHtml;
+
   /* ===================== STATE + FILTERS ===================== */
   var activeGenres = new Set(["all"]);
   var activeTime = "all";
@@ -1683,8 +1859,34 @@
     if (noResults) noResults.hidden = visibleCount > 0;
   }
 
+  function applyGridViewFilters() {
+    var filtersActive = !activeGenres.has("all") || activeTime !== "all" || !!activeBand;
+    var anyMatch = false;
+    root.querySelectorAll(".pf-grid-cell").forEach(function (cell) {
+      cell.classList.remove("pf-grid-cell--match", "pf-grid-cell--dim");
+      if (!filtersActive) return;
+      var hasAct = cell.hasAttribute("data-name");
+      var genreMatch = hasAct && (activeGenres.has("all") || activeGenres.has(cell.dataset.genre));
+      var timeMatch = activeTime === "all" || parseInt(cell.dataset.slotIndex, 10) === parseInt(activeTime, 10) - 1;
+      var nameMatch = !activeBand || cell.dataset.name === activeBand;
+      var isMatch = hasAct && genreMatch && timeMatch && nameMatch;
+      cell.classList.toggle("pf-grid-cell--match", isMatch);
+      cell.classList.toggle("pf-grid-cell--dim", !isMatch);
+      if (isMatch) anyMatch = true;
+    });
+    root.querySelectorAll(".pf-grid-row").forEach(function (row) {
+      var porchCell = row.querySelector(".pf-grid-porch-cell");
+      var rowHasMatch = filtersActive && row.querySelector(".pf-grid-cell--match");
+      porchCell.classList.toggle("pf-grid-porch-cell--dim", filtersActive && !rowHasMatch);
+    });
+    var noResults = root.querySelector("#pf-no-results-grid");
+    if (noResults) noResults.hidden = !filtersActive || anyMatch;
+  }
+
   function applyFilters() {
-    if (activeView === "time") applyTimeViewFilters(); else applyPorchViewFilters();
+    if (activeView === "time") applyTimeViewFilters();
+    else if (activeView === "porch") applyPorchViewFilters();
+    else applyGridViewFilters();
   }
 
   function updateGenreSummary() {
@@ -1717,6 +1919,7 @@
   function resetFilters() {
     resetGenreAndTime();
     clearBandSearch();
+    genreDisclosureEl.open = false;
     applyFilters();
   }
 
@@ -1730,6 +1933,7 @@
     });
     timeViewEl.hidden = view !== "time";
     porchViewEl.hidden = view !== "porch";
+    gridViewEl.hidden = view !== "grid";
     applyFilters();
   }
 
@@ -1913,7 +2117,7 @@
 
   /* ---- clear-filters buttons (delegated, rendered dynamically) ---- */
   root.addEventListener("click", function (e) {
-    if (e.target.closest("#pf-no-results-clear-time, #pf-no-results-clear-porch")) resetFilters();
+    if (e.target.closest("#pf-no-results-clear-time, #pf-no-results-clear-porch, #pf-no-results-clear-grid, #pf-clear-filters-btn")) resetFilters();
   });
 
   /* ---- mobile map toggle ---- */

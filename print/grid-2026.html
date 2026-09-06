@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Maplewood Porchfest 2026 — Poster</title>
+<title>Maplewood Porchfest 2026 — Schedule Grid</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --pf-bg: #ffffff;
-    --pf-surface: #ffffff;
     --pf-surface-2: #eeeeef;
     --pf-border: #e7e7e8;
     --pf-text: #000000;
@@ -19,126 +18,79 @@
     --pf-primary-contrast: #ffffff;
     --pf-cta: #ff5d00;
     --pf-cta-contrast: #000000;
-    --pf-cta-soft: rgba(255,93,0,.14);
     --pf-font-display: 'kepler-std', Georgia, serif;
     --pf-font-body: 'DM Sans', -apple-system, sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    width: 3300px;
+    width: 11in;
     background: var(--pf-bg);
     color: var(--pf-text);
     font-family: var(--pf-font-body);
   }
-  .poster { width: 3300px; height: 5100px; padding: 100px; position: relative; }
+  .page { width: 11in; height: 17in; padding: .32in .55in; }
 
-  /* ---- header ---- */
-  .header { text-align: center; margin-bottom: 44px; }
-  .title { font-family: var(--pf-font-display); font-weight: 400; font-size: 150px; margin: 0; line-height: 1; }
-  .subtitle { font-size: 42px; margin: 22px 0 0; }
+  .header { text-align: center; margin-bottom: .14in; }
+  .title { font-family: var(--pf-font-display); font-weight: 400; font-size: 32px; margin: 0; line-height: 1; }
+  .subtitle { font-size: 15px; margin: 8px 0 0; }
   .subtitle .date { color: var(--pf-primary); font-weight: 700; }
-  .subtitle .dot { color: var(--pf-cta); margin: 0 18px; }
+  .subtitle .dot { color: var(--pf-cta); margin: 0 8px; }
   .subtitle .hours { color: var(--pf-text-muted); }
-  .raindate { font-size: 30px; color: var(--pf-text-faint); font-style: italic; margin: 14px 0 0; }
-
-  /* ---- map ---- */
-  .map-wrap {
-    border-radius: 36px; border: 5px solid var(--pf-border); overflow: hidden;
-    margin-bottom: 48px; line-height: 0;
-  }
-  .map-wrap img { width: 100%; display: block; }
-
-  /* ---- body: table + rail ---- */
-  .body-row { display: flex; gap: 56px; }
-  .schedule-col { flex: 1 1 68%; min-width: 0; }
-  .rail-col { flex: 0 0 30%; display: flex; flex-direction: column; gap: 36px; justify-content: space-between; }
 
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  col.col-porch { width: 30%; }
+  thead { display: table-header-group; }
+  tr { page-break-inside: avoid; }
+  col.col-porch { width: 27%; }
   thead th {
     background: var(--pf-primary); color: var(--pf-primary-contrast);
-    font-size: 26px; font-weight: 700; padding: 14px 10px; text-align: left;
+    font-size: 12px; font-weight: 700; padding: 5px 8px; text-align: left;
   }
   tbody tr:nth-child(even) { background: var(--pf-surface-2); }
-  tbody td { padding: 10px; border-bottom: 1px solid var(--pf-border); vertical-align: middle; font-size: 22px; }
+  tbody td { padding: 2px 8px; border-bottom: 1px solid var(--pf-border); vertical-align: middle; font-size: 10px; line-height: 1.1; }
   td.col-porch { white-space: nowrap; }
   .porch-badge {
     display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
-    width: 46px; height: 46px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
-    font-family: var(--pf-font-display); font-weight: 800; font-size: 22px;
+    width: 19px; height: 19px; border-radius: 50%; background: var(--pf-cta); color: var(--pf-cta-contrast);
+    font-family: var(--pf-font-display); font-weight: 800; font-size: 10px;
   }
   .porch-address {
-    display: inline-block; vertical-align: middle; margin-left: 14px;
-    font-family: var(--pf-font-display); font-weight: 600; font-size: 22px; white-space: normal;
+    display: inline-block; vertical-align: middle; margin-left: 8px;
+    font-family: var(--pf-font-display); font-weight: 600; font-size: 10px; white-space: normal; line-height: 1.1;
   }
-  td.cell { font-size: 20px; line-height: 1.25; }
-  .act-name { font-weight: 700; }
-  .act-genre { color: var(--pf-text-muted); font-size: 17px; }
+  td.cell { font-size: 10px; line-height: 1.1; }
+  .act-name { font-weight: 700; line-height: 1.1; }
+  .act-genre { color: var(--pf-text-muted); font-size: 9px; line-height: 1.1; }
 
-  /* ---- rail ---- */
-  .wordmark {
-    text-align: center; font-family: var(--pf-font-body); font-size: 24px; font-weight: 700;
-    letter-spacing: .12em; text-transform: uppercase; color: var(--pf-primary);
-  }
-
-  .card {
-    background: var(--pf-surface); border-radius: 24px; padding: 32px;
-  }
-  .card--parade { border: 4px solid var(--pf-cta); }
-  .card--refresh { border: 1.5px solid var(--pf-border); }
-  .card-title { display: flex; align-items: center; gap: 14px; font-family: var(--pf-font-display); font-weight: 700; font-size: 34px; margin: 0 0 14px; }
-  .card-icon { font-size: 40px; line-height: 1; }
-  .card-body { font-size: 22px; line-height: 1.5; }
-  .card-body strong { font-weight: 700; }
-
-  .refresh-list { list-style: none; margin: 0; padding: 0; font-size: 19px; line-height: 1.7; }
-  .refresh-list li { padding: 6px 0; border-bottom: 1px solid var(--pf-border); }
-  .refresh-list li:last-child { border-bottom: none; }
-  .refresh-address { font-weight: 700; }
-  .refresh-charity { color: var(--pf-text-muted); }
-
-  .qr-card { text-align: center; }
-  .qr-card img { width: 260px; height: 260px; display: block; margin: 0 auto 16px; }
-  .qr-caption { font-size: 20px; color: var(--pf-text-muted); }
-
-  /* ---- footer ---- */
   .footer {
-    margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--pf-border);
-    text-align: center; font-size: 20px; color: var(--pf-text-faint); font-style: italic;
+    margin-top: .1in; padding-top: .06in; border-top: 1px solid var(--pf-border);
+    text-align: center; font-size: 9px; color: var(--pf-text-faint); font-style: italic;
   }
 </style>
 </head>
 <body>
-<div class="poster">
+<div class="page">
 
   <div class="header">
-    <h1 class="title">Maplewood Porchfest 2026</h1>
+    <h1 class="title">Maplewood Porchfest 2026 — Schedule</h1>
     <p class="subtitle">
       <span class="date">Sunday, September 6, 2026</span>
       <span class="dot">•</span>
       <span class="hours">1:00 PM – 5:00 PM</span>
     </p>
-    <p class="raindate">Rain date: Monday, September 7, 2026</p>
   </div>
 
-  <div class="map-wrap">
-    <img src="map-2026.png" alt="Map of Porchfest porches, lemonade stands, services, and the Honk Parade route">
-  </div>
-
-  <div class="body-row">
-    <div class="schedule-col">
-      <table>
-        <colgroup>
-          <col class="col-porch"><col><col><col><col>
-        </colgroup>
-        <thead>
-          <tr>
-            <th class="col-porch">Porch / Address</th>
-            <th>1–2 PM</th><th>2–3 PM</th><th>3–4 PM</th><th>4–5 PM</th>
-          </tr>
-        </thead>
-        <tbody>
+  <table>
+    <colgroup>
+      <col class="col-porch"><col><col><col><col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="col-porch">Porch / Address</th>
+        <th>1–2 PM</th><th>2–3 PM</th><th>3–4 PM</th><th>4–5 PM</th>
+      </tr>
+    </thead>
+    <tbody>
 <tr><td class="col-porch"><span class="porch-badge">1</span> <span class="porch-address">2 Henry Place</span></td><td class="cell"></td><td class="cell"><div class="act-name">Jason Didner and the GSPs</div><div class="act-genre">Jersey rock with a side of humor</div></td><td class="cell"><div class="act-name">Lorraine</div><div class="act-genre">High-energy pop-rock from Summit, NJ</div></td><td class="cell"><div class="act-name">Lorraine</div><div class="act-genre">High-energy pop-rock from Summit, NJ</div></td></tr>
 <tr><td class="col-porch"><span class="porch-badge">2</span> <span class="porch-address">18 Menzel Avenue</span></td><td class="cell"></td><td class="cell"><div class="act-name">Daniel Scanfeld</div><div class="act-genre">Solo folk-rock: originals + Tweedy/Petty/Prine covers</div></td><td class="cell"><div class="act-name">Daniel Scanfeld</div><div class="act-genre">Solo folk-rock: originals + Tweedy/Petty/Prine covers</div></td><td class="cell"><div class="act-name">HEEL STRIKE</div><div class="act-genre">Live modular-synth ambient/industrial/techno</div></td></tr>
 <tr><td class="col-porch"><span class="porch-badge">3</span> <span class="porch-address">59 Schaefer Road</span></td><td class="cell"><div class="act-name">Pegasus Meteor Fist</div><div class="act-genre">Power trio: classic rock, emo, punk &amp; metal</div></td><td class="cell"><div class="act-name">Pegasus Meteor Fist</div><div class="act-genre">Power trio: classic rock, emo, punk &amp; metal</div></td><td class="cell"><div class="act-name">The Melancholy Kings</div><div class="act-genre">Jangly indie rock, Teenage Fanclub/R.E.M. vein</div></td><td class="cell"><div class="act-name">Tri-State</div><div class="act-genre">Big hooks &amp; tight harmonies, post-youth stories</div></td></tr>
@@ -179,49 +131,10 @@
 <tr><td class="col-porch"><span class="porch-badge">38</span> <span class="porch-address">16 Revere Avenue</span></td><td class="cell"><div class="act-name">LAREDO and Friends</div><div class="act-genre">Neighborhood favorites’ Americana smorgasbord</div></td><td class="cell"><div class="act-name">Ziggy Grover</div><div class="act-genre">Life-stories-into-song singer-songwriter</div></td><td class="cell"></td><td class="cell"></td></tr>
 <tr><td class="col-porch"><span class="porch-badge">39</span> <span class="porch-address">29 Concord Avenue</span></td><td class="cell"><div class="act-name">In My Basement</div><div class="act-genre">High-energy indie rock, catchy riffs</div></td><td class="cell"><div class="act-name">The Burrhead Ramblers</div><div class="act-genre">High-energy bluegrass &amp; folk debut</div></td><td class="cell"></td><td class="cell"></td></tr>
 <tr><td class="col-porch"><span class="porch-badge">40</span> <span class="porch-address">75 Concord Avenue</span></td><td class="cell"><div class="act-name">Just For Fun</div><div class="act-genre">Soul/R&amp;B/pop-rock covers</div></td><td class="cell"><div class="act-name">No Left Turn</div><div class="act-genre">Alt-rock: Pearl Jam meets Radiohead</div></td><td class="cell"></td><td class="cell"></td></tr>
-        </tbody>
-      </table>
-    </div>
+    </tbody>
+  </table>
 
-    <div class="rail-col">
-      <div class="wordmark">Maplewood Porchfest</div>
-
-      <div class="card card--parade">
-        <p class="card-title"><span class="card-icon">🏁</span> Honk Parade</p>
-        <p class="card-body">
-          Gather at DeHart Community Center: rehearsal
-          <strong>12:00 PM</strong>, kickoff
-          <strong>12:30 PM</strong>.
-          Marches through the Hilton neighborhood down Lexington Ave. All welcome to march or watch.
-        </p>
-      </div>
-
-      <div class="card card--refresh">
-        <p class="card-title"><span class="card-icon">🍋</span> Refreshments for a Good Cause</p>
-        <ul class="refresh-list">
-<li><span class="refresh-address">75 Concord Avenue</span> — <span class="refresh-charity">WWF https://www.worldwildlife.org/</span></li>
-<li><span class="refresh-address">779 Prospect Street</span> — <span class="refresh-charity">Maplewood Foundation</span></li>
-<li><span class="refresh-address">194 Hilton Avenue</span> — <span class="refresh-charity">CHS Marching Band</span></li>
-<li><span class="refresh-address">228 Hilton Avenue</span> — <span class="refresh-charity">Loeys Dietz Syndrome Foundation</span></li>
-<li><span class="refresh-address">169 Indiana Street</span> — <span class="refresh-charity">Dolly Parton’s Imagination Library</span></li>
-<li><span class="refresh-address">44 Princeton Street</span> — <span class="refresh-charity">Miles - East Orange Animal Alliance</span></li>
-<li><span class="refresh-address">33 Concord Avenue</span> — <span class="refresh-charity">Associated Humane Societies</span></li>
-<li><span class="refresh-address">182 Franklin Avenue</span> — <span class="refresh-charity">Together We Bloom</span></li>
-<li><span class="refresh-address">27 Wellesley Street</span> — <span class="refresh-charity">Soma Shares</span></li>
-<li><span class="refresh-address">31 Hilton Avenue</span> — <span class="refresh-charity">MEND</span></li>
-        </ul>
-      </div>
-
-      <div class="card card--refresh qr-card">
-        <img src="data:image/png;base64,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" alt="QR code to the interactive map">
-        <p class="qr-caption">Scan for the live interactive map</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">
-    Welcome! Several streets will be closed to car traffic during Porchfest — these streets remain open to pedestrians and bicyclists. On other streets, please be mindful of traffic.
-  </div>
+  <div class="footer">Rain date: Monday, September 7, 2026</div>
 
 </div>
 </body>
